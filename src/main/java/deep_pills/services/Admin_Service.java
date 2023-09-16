@@ -20,3 +20,8 @@ public interface Admin_Service {
     void listAppointments() throws Exception;
     void listAppointmentsFromPhysician() throws Exception;
 }
+
+
+
+
+
