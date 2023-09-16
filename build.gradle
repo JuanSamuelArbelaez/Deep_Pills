@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'co.edu.uniquindio'
 version '1.0-SNAPSHOT'
 description 'EPS KillSanitas: Empresa Prestadora de Salud para usuarios del Partido Maiz'
 
