@@ -1,4 +1,7 @@
 package deep_pills.model.entities.accounts;
+import jakarta.persistence.*;
 
-public class Admin {
+@Entity
+@Table(name = "Admin")
+public class Admin extends Account {
 }

@@ -1,8 +1,33 @@
 package deep_pills.model.entities.accounts.users;
-
 import deep_pills.model.entities.accounts.Account;
 
-import java.io.Serializable;
+import deep_pills.model.enums.City;
+import jakarta.persistence.*;
+import lombok.*;
 
-public class User extends Account implements Serializable {
+@Entity
+@Getter
+@Setter
+@Table(name = "User")
+public class User extends Account {
+    @Column(name = "personal_id", unique = true)
+    private String personalId;
+
+    @Column(name = "name", length = 20)
+    private String name;
+
+    @Column(name = "lastName", length = 20)
+    private String lastName;
+
+    @Column(name = "phone", length = 15)
+    private String phone;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id", referencedColumnName = "id_City")
+    private City city;
+
+    @Column(name = "picture_Url", columnDefinition = "TINYTEXT")
+    private String pictureUrl;
+
+    // Getters and setters
 }
