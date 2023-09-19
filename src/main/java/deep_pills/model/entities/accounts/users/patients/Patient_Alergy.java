@@ -14,6 +14,7 @@ public class Patient_Alergy {
 
     @Id
     @ManyToOne
+    @Enumerated(EnumType.STRING)
     @JoinColumn(name = "alergy_ID")
     private Allergy alergy;
 

@@ -2,6 +2,8 @@ package deep_pills.model.entities.memberships;
 import jakarta.persistence.*;
 import lombok.*;
 @Entity
+@Getter
+@Setter
 @Table(name = "Policy")
 public class Policy {
     @Id

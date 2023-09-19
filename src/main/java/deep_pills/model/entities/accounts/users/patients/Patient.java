@@ -21,6 +21,5 @@ public class Patient extends User{
     private Blood_Type bloodType;
 
 
-
     // Additional patient-specific attributes and methods
 }

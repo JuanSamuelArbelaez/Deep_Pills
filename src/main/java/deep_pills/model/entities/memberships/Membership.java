@@ -7,6 +7,8 @@ import lombok.*;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "Membership")
 public class Membership {
     @Id
@@ -27,6 +29,7 @@ public class Membership {
     private Policy policy;
 
     @ManyToOne
+    @Enumerated
     @JoinColumn(name = "state", referencedColumnName = "id_Membership_State")
     private Membership_State state;
 

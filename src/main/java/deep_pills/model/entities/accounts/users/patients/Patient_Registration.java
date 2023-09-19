@@ -15,8 +15,8 @@ public class Patient_Registration {
     @Column(name = "register_ID")
     private Long registerId;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_ID")
+    @OneToOne(mappedBy = "patient")
+    @Column(name = "patient_ID")
     private Patient patient;
 
     @Column(name = "date")

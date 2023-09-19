@@ -4,6 +4,7 @@ import deep_pills.model.enums.Claim_Type;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -13,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Table(name = "claims")
 
-public class Claim {
+public class Claim implements Serializable {
     @Id
     @Column(name = "claimId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
