@@ -1,10 +1,9 @@
 package deep_pills.model.entities.appointments;
-
+import jakarta.persistence.*;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "Appointment")
