@@ -1,67 +1,42 @@
 package deep_pills.model.entities.claims;
+import deep_pills.model.enums.Claim_State;
+import deep_pills.model.enums.Claim_Type;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "claims")
+
 public class Claim {
     @Id
+    @Column(name = "claimId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "claim_id")
-    private String claimId;
+    private Long claimId;
+
+    @ManyToOne
+    @Enumerated
     @Column(name = "claim_type")
-    private String claimType;
+    private Claim_Type claimType;
     @Column(name = "claim_date")
     private Date claimDate;
-    @Column(name = "claim_amount")
-    private Double claimAmount;
+
+    @Column(name = "details")
+    private String details;
+
+    @Enumerated
     @Column(name = "claim_status")
-    private String claimStatus;
-    public Claim() {
-    }
-    public Claim(String claimId, String claimType, Date claimDate, Double claimAmount, String claimStatus) {
-        this.claimId = claimId;
-        this.claimType = claimType;
-        this.claimDate = claimDate;
-        this.claimAmount = claimAmount;
-        this.claimStatus = claimStatus;
-    }
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getClaimId() {
-        return claimId;
-    }
-    public void setClaimId(String claimId) {
-        this.claimId = claimId;
-    }
-    public String getClaimType() {
-        return claimType;
-    }
-    public void setClaimType(String claimType) {
-        this.claimType = claimType;
-    }
-    public Date getClaimDate() {
-        return claimDate;
-    }
-    public void setClaimDate(Date claimDate) {
-        this.claimDate = claimDate;
-    }
-    public Double getClaimAmount() {
-        return claimAmount;
-    }
-    public void setClaimAmount(Double claimAmount) {
-        this.claimAmount = claimAmount;
-    }
-    public String getClaimStatus() {
-        return claimStatus;
-    }
-    public void setClaimStatus(String claimStatus) {
-        this.claimStatus = claimStatus;
-    }
+    private Claim_State claimStatus;
+
+    /*  Class rework
+
+        Getters, Setters and Constructors defined by Annotations above Class declaration
+        Unnecesary columns/attributes removed
+        Required columns/attributes added
+     */
 }

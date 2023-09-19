@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group 'co.edu.uniquindio'
+group 'deep_pills'
 version '1.0-SNAPSHOT'
 description 'DeepPills: Modern Times, Requiers Modern Technologies'
 
