@@ -1,6 +1,7 @@
 package deep_pills.services;
 
+import deep_pills.dto.EMailDTO;
+
 public interface EMail_Service {
-    String publicID = "100.A1", token  = "000";
-    void sendEmail(String address, String message) throws Exception;
+    String sendEmail(EMailDTO emailDTO) throws Exception;
 }
