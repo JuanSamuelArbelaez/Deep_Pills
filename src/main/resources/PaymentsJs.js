@@ -1,7 +1,4 @@
-async function createSubscription() {
-    const stripe = Stripe('your_publishable_key');
-    const { token } = await stripe.createToken(cardElement);
-
+async function createSubscription(token) {
     const response = await fetch('/create-subscription', {
         method: 'POST',
         headers: {
