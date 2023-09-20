@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @Table(name = "User")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User extends Account {
     @Column(name = "personal_id", unique = true)
     private String personalId;

@@ -1,6 +1,6 @@
 package deep_pills.model.entities.accounts.users.physicians;
 
-import deep_pills.model.entities.accounts.users.patients.Patient;
+import deep_pills.model.entities.accounts.users.User_Registration;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,17 +11,8 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @Table(name = "Physician_Registration")
-public class Physician_Registration {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "register_ID")
-    private Long registerId;
-
+public class Physician_Registration extends User_Registration {
     @ManyToOne
-    @JoinColumn(name = "patient_ID")
+    @Column(name = "patient_ID")
     private Physician physician;
-
-    @Column(name = "date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
 }

@@ -13,7 +13,7 @@ public class Symptom {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "symtpomId")
-    private Long id;
+    private Long symptomId;
 
     @Column(name = "symptomName")
     private String symptomName;

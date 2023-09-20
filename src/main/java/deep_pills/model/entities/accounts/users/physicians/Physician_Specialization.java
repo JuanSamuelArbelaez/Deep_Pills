@@ -1,6 +1,5 @@
 package deep_pills.model.entities.accounts.users.physicians;
 
-import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.enums.Specialization;
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -30,6 +30,7 @@ public class Claim implements Serializable {
     @Column(name = "details")
     private String details;
 
+    @ManyToOne
     @Enumerated
     @Column(name = "claim_status")
     private Claim_State claimStatus;

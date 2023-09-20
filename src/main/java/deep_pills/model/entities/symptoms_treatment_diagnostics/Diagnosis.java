@@ -12,7 +12,7 @@ public class Diagnosis {
     @Id
     @Column(name = "diagnosisId")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long symptomId;
     @Column(name = "diagnosisName")
     private String diagnosisName;
     @Column(name = "diagnosisDescription")
