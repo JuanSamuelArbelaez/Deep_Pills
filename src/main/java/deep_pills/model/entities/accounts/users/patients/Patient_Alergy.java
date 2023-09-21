@@ -8,14 +8,17 @@ import lombok.*;
 @Table(name = "Patient_Alergy")
 public class Patient_Alergy {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "patient_allergy_Id")
+    private long patient_allergy_Id;
+
     @ManyToOne
-    @JoinColumn(name = "patient_ID")
+    @JoinColumn(name = "patient_Id")
     private Patient patient;
 
-    @Id
-    @ManyToOne
+
     @Enumerated(EnumType.STRING)
-    @JoinColumn(name = "alergy_ID")
+    @Column(name = "alergy_ID")
     private Allergy alergy;
 
     // Getters and setters

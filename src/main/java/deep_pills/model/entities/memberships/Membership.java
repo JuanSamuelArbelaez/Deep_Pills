@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,8 +18,11 @@ public class Membership {
     private Long membershipId;
 
     @OneToOne
-    @JoinColumn(name = "patient_ID")
+    @JoinColumn(name = "owner_Id")
     private Patient patient;
+
+    @OneToMany
+    private List<Patient> beneficiaries;
 
     @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)

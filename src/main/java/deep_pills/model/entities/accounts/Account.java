@@ -1,9 +1,11 @@
 package deep_pills.model.entities.accounts;
 
+import deep_pills.model.entities.claims.Message;
 import jakarta.persistence.*;
 import lombok.*;
 import deep_pills.model.enums.Account_State;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,8 +25,10 @@ public class Account implements Serializable {
     @Column(name = "pswd", length = 15, nullable = false)
     private String password;
 
-    @ManyToOne
+    @Enumerated
     @JoinColumn(name = "state", referencedColumnName = "id_UserState")
     private Account_State state;
+
+    private List<Message> messageList;
 
 }

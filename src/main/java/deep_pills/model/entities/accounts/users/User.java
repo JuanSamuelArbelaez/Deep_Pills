@@ -23,7 +23,7 @@ public class User extends Account {
     @Column(name = "phone", length = 15)
     private String phone;
 
-    @ManyToOne
+    @Enumerated
     @JoinColumn(name = "city_id", referencedColumnName = "id_City")
     private City city;
 

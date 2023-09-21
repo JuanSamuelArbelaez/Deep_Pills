@@ -20,7 +20,6 @@ public class Claim implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long claimId;
 
-    @ManyToOne
     @Enumerated
     @Column(name = "claim_type")
     private Claim_Type claimType;
@@ -29,8 +28,6 @@ public class Claim implements Serializable {
 
     @Column(name = "details")
     private String details;
-
-    @ManyToOne
     @Enumerated
     @Column(name = "claim_status")
     private Claim_State claimStatus;

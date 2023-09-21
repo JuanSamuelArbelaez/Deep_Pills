@@ -1,37 +1,27 @@
 package deep_pills.model.entities.appointments;
+import deep_pills.model.entities.symptoms_treatment_diagnostics.Symptom;
 import jakarta.persistence.*;
+import lombok.*;
+
+import java.io.Serializable;
+
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "appointment_symptoms")
-public class Appointment_Symptoms extends Appointment {
+public class Appointment_Symptoms implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "appointment_symptom_Id")
+    private long appointment_symptom_Id;
+
+    @ManyToOne
     @Column(name = "appointment_id")
-    private Long appointmentId;
+    private Appointment appointment;
+
+    @ManyToOne
     @Column(name = "symptom_id")
-    private Long symptomId;
-    public Appointment_Symptoms() {
-    }
-    public Appointment_Symptoms(Long appointmentId, Long symptomId) {
-        this.appointmentId = appointmentId;
-        this.symptomId = symptomId;
-    }
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Long getAppointmentId() {
-        return appointmentId;
-    }
-    public void setAppointmentId(Long appointmentId) {
-        this.appointmentId = appointmentId;
-    }
-    public Long getSymptomId() {
-        return symptomId;
-    }
-    public void setSymptomId(Long symptomId) {
-        this.symptomId = symptomId;
-    }
+    private Symptom symptom;
 }

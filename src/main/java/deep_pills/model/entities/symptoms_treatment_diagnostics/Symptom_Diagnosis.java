@@ -11,12 +11,16 @@ import lombok.*;
 @Table(name = "Symptom_Diagnosis")
 public class Symptom_Diagnosis {
     @Id
-    @JoinColumn(name = "diagnosisId")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "symptom_diagnosis_Id")
+    private long symptom_diagnosis_id;
+
+    @Column(name = "diagnosisId")
     @ManyToOne()
     private Diagnosis diagnosis;
 
-    @Id
-    @JoinColumn(name = "SymtomId")
+
+    @Column(name = "SymtomId")
     @ManyToOne
-    private Symptom Symtom;
+    private Symptom Symptom;
 }

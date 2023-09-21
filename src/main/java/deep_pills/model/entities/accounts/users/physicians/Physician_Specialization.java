@@ -11,12 +11,15 @@ import lombok.Setter;
 @Table(name = "Physician_Specialization")
 public class Physician_Specialization {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long physician_specialization_Id;
+
     @ManyToOne
     @JoinColumn(name = "physician_ID")
     private Physician physician;
 
-    @Id
     @ManyToOne
-    @JoinColumn(name = "specialization_ID")
+    @Enumerated
+    @Column(name = "specialization_ID")
     private Specialization specialization;
 }

@@ -1,5 +1,6 @@
 package deep_pills.model.entities.accounts.users.physicians;
 
+import deep_pills.model.entities.accounts.Admin;
 import deep_pills.model.entities.accounts.users.User_Registration;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,6 +14,10 @@ import java.util.Date;
 @Table(name = "Physician_Registration")
 public class Physician_Registration extends User_Registration {
     @ManyToOne
-    @Column(name = "patient_ID")
+    @Column(name = "patient_Id")
     private Physician physician;
+
+    @ManyToOne
+    @Column(name = "admin_Id")
+    private Admin admin;
 }

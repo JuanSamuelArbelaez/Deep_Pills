@@ -1,4 +1,5 @@
 package deep_pills.model.entities.appointments;
+import deep_pills.model.entities.accounts.users.patients.Patient;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -6,16 +7,19 @@ import lombok.*;
 
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "Appointment")
 public class Appointment {
     @Id
-    private Long id;
+    @Column(name = "appointment_Id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long appointmentId;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne
+    @Column(name = "patient_Id")
+    private Patient patient;
 
-    public Long getId() {
-        return id;
-    }
 }

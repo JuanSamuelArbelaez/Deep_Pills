@@ -3,8 +3,6 @@ import deep_pills.model.entities.accounts.users.User_Registration;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
-
 @Entity
 @Getter
 @Setter
