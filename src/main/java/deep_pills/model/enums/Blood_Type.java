@@ -1,8 +1,5 @@
 package deep_pills.model.enums;
 
-import jakarta.persistence.Entity;
-
-@Entity
 public enum Blood_Type {
     O_POSITIVE("O+"),
     O_NEGATIVE("O-"),

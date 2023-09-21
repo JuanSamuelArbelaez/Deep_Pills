@@ -1,5 +1,8 @@
 package deep_pills.model.enums;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 public enum Specialization {
     Internal_Medicine("Diagnosis and treatment of adult diseases"),
     Pediatrics("Medical care for infants, children, and adolescents"),
@@ -54,12 +57,6 @@ public enum Specialization {
 
     private final String description;
 
-    Specialization(String description) {
-        this.description = description;
-    }
-
-    // Getter method to access the description
-    public String getDescription() {
-        return description;
-    }
+    Specialization(String description) { this.description = description; }
+    public String getDescription() {return description;}
 }
