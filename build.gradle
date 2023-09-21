@@ -24,9 +24,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    implementation 'com.stripe:stripe-android:19.3.0'
-    implementation 'com.stripe:stripe-java:20.10.0'
 }
 test {
     useJUnitPlatform()
