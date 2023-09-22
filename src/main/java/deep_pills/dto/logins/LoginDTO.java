@@ -1,6 +1,6 @@
 package deep_pills.dto.logins;
 
-public record Login_DTO(
+public record LoginDTO(
         String email,
         String password){
 

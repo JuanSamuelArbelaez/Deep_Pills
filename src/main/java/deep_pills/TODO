@@ -51,7 +51,16 @@ Diagnosis = OK
 Symptom = OK
 
 --------------------------------------------------------------------------------------------------------------------------------
-Interfaces:
+Interfaces: 1/8
+
+AuthenticationService = OK
+ClaimsService = OK
+EMailService = OK
+PicturesService = OK
+RegistrationService = OK
+AdminService
+PatientService
+PhysicianService
 
 --------------------------------------------------------------------------------------------------------------------------------
 DTOs:

@@ -1,6 +1,6 @@
-package deep_pills.services;
+package deep_pills.services.roleServices;
 
-public interface Patient_Service {
+public interface PatientService {
     void updateProfile() throws Exception;
     void register() throws Exception;
     void disableAccount() throws Exception;
