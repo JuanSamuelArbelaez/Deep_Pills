@@ -4,7 +4,7 @@ import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.claims.ClaimInfo;
 import deep_pills.model.entities.notifications.EMail;
 import deep_pills.model.entities.schedule.PhysicianAppointmentSchedule;
-import deep_pills.model.entities.symptoms_treatment_diagnostics.TreatmentPlan;
+import deep_pills.model.entities.symptomsTreatmentDiagnosis.TreatmentPlan;
 import deep_pills.model.enums.states.AppointmentState;
 import jakarta.persistence.*;
 import lombok.*;

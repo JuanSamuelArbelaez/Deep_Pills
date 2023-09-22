@@ -29,4 +29,8 @@ public class ClaimInfo implements Serializable {
     @ManyToOne
     @JoinColumn(name = "appointment_Id")
     private Appointment appointment;
+
+    @OneToOne
+    @JoinColumn(name = "claim")
+    private Claim claim;
 }

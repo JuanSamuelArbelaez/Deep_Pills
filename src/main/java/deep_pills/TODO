@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------------------------------------------------------
-Entities: 21/28
+Entities: 26/26
 
 Patient = OK
 PatientAllergy = OK
@@ -22,16 +22,14 @@ MembershipPayment = OK
 Policy = OK
 EMail = OK
 PasswordRecoveryRequest = OK
-PhysicianAppointmentSchedule
-Schedule
-Diagnosis
-Symptom
-SymptomDiagnosis
-Treatment
-TreatmentPlan
+PhysicianAppointmentSchedule = OK
+Schedule = OK
+SymptomDiagnosis = OK
+Treatment = OK
+TreatmentPlan = OK
 
 --------------------------------------------------------------------------------------------------------------------------------
-Enums: 16/16
+Enums: 18/18
 
 AccountState = OK
 Allergy = OK
@@ -49,3 +47,11 @@ PaymentState = OK
 Specialization = OK
 TreatmentState = OK
 PasswordRecoveryRequestState = OK
+Diagnosis = OK
+Symptom = OK
+
+--------------------------------------------------------------------------------------------------------------------------------
+Interfaces:
+
+--------------------------------------------------------------------------------------------------------------------------------
+DTOs:

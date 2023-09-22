@@ -1,6 +1,6 @@
 package deep_pills.model.entities.appointments;
 
-import deep_pills.model.entities.symptoms_treatment_diagnostics.Symptom;
+import deep_pills.model.enums.lists.Symptom;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serializable;
@@ -21,7 +21,7 @@ public class AppointmentSymptoms implements Serializable {
     @JoinColumn(name = "appointmentId")
     private Appointment appointment;
 
-    @ManyToOne
-    @JoinColumn(name = "symptomId")
+    @Enumerated
+    @Column(name = "symptomId")
     private Symptom symptom;
 }

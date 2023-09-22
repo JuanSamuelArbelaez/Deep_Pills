@@ -5,6 +5,8 @@ import deep_pills.model.entities.notifications.EMail;
 import deep_pills.model.enums.states.PasswordRecoveryRequestState;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="passwordRecoveryRequest")
-public class PasswordRecoveryRequest {
+public class PasswordRecoveryRequest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "passwordRecoveryRequestId")

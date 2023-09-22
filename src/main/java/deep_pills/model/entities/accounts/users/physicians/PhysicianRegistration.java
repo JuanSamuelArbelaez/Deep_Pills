@@ -12,10 +12,10 @@ import lombok.*;
 @Table(name = "PhysicianRegistration")
 public class PhysicianRegistration extends UserRegistration {
     @OneToOne
-    @Column(name = "patientId")
+    @JoinColumn(name = "physicianId")
     private Physician physician;
 
     @ManyToOne
-    @Column(name = "adminId")
+    @JoinColumn(name = "adminId")
     private Admin admin;
 }

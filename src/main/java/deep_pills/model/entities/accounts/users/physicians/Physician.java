@@ -2,7 +2,7 @@ package deep_pills.model.entities.accounts.users.physicians;
 
 import deep_pills.model.entities.accounts.users.User;
 import deep_pills.model.entities.schedule.PhysicianAppointmentSchedule;
-import deep_pills.model.entities.symptoms_treatment_diagnostics.TreatmentPlan;
+import deep_pills.model.entities.symptomsTreatmentDiagnosis.TreatmentPlan;
 import jakarta.persistence.*;
 import lombok.*;
 

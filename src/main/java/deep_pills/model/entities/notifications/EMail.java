@@ -8,13 +8,15 @@ import deep_pills.model.enums.types.EMailType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "email")
-public class EMail {
+public class EMail implements Serializable {
     @Id
     @Column(name = "emailId")
     @GeneratedValue(strategy = GenerationType.AUTO)
