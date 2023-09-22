@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "Physician")
 public class Physician extends User {
     @OneToMany(mappedBy = "physician")
-    private PhysicianSpecialization physicianSpecialization;
+    private List<PhysicianSpecialization> physicianSpecialization;
 
     @OneToMany(mappedBy = "physician")
     private List<TreatmentPlan> treatmentPlanList;

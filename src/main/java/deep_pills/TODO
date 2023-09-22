@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------------------------------------------------------
-Entities: 13/30
+Entities: 21/28
 
 Patient = OK
 PatientAllergy = OK
@@ -12,18 +12,16 @@ UserRegistration = OK
 Account = OK
 Admin = OK
 Appointment = OK
-AppointmentSymptoms
+AppointmentSymptoms = OK
 Claim = OK
-ClaimInfo
-Membership
-MembershipCharge
-MembershipPayment
+ClaimInfo = OK
+Message = OK
+Membership = OK
+MembershipCharge = OK
+MembershipPayment = OK
 Policy = OK
-AppointmentNotifEmail
-EMail
-PatientRegistrationEmail
-PswdRecoveryEmail
-PasswordRecoveryRequest
+EMail = OK
+PasswordRecoveryRequest = OK
 PhysicianAppointmentSchedule
 Schedule
 Diagnosis
@@ -33,7 +31,7 @@ Treatment
 TreatmentPlan
 
 --------------------------------------------------------------------------------------------------------------------------------
-Enums: 15/15
+Enums: 16/16
 
 AccountState = OK
 Allergy = OK
@@ -50,4 +48,4 @@ MessageType = OK
 PaymentState = OK
 Specialization = OK
 TreatmentState = OK
-
+PasswordRecoveryRequestState = OK

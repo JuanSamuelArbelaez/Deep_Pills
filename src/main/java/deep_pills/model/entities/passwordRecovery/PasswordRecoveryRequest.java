@@ -1,19 +1,37 @@
 package deep_pills.model.entities.passwordRecovery;
 
+import deep_pills.model.entities.accounts.users.User;
+import deep_pills.model.entities.notifications.EMail;
+import deep_pills.model.enums.states.PasswordRecoveryRequestState;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="passwordRecoveryRequest")
 public class PasswordRecoveryRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "passwordRecoveryRequestId")
     private long passwordRecoveryRequestId;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+
+    @Column(name = "dateTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateTime;
+
+    @Enumerated
+    @Column(name = "state")
+    private PasswordRecoveryRequestState passwordRecoveryRequestState;
+
+    @OneToMany(mappedBy = "passwordRecoveryRequest")
+    private List<EMail> emails;
 }

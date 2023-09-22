@@ -1,8 +1,8 @@
 package deep_pills.model.entities.appointments;
+
 import deep_pills.model.entities.symptoms_treatment_diagnostics.Symptom;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.io.Serializable;
 
 @Entity
@@ -10,18 +10,18 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "appointment_symptoms")
+@Table(name = "appointmentSymptoms")
 public class AppointmentSymptoms implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "appointment_symptom_Id")
-    private long appointment_symptom_Id;
+    @Column(name = "appointmentSymptomId")
+    private long appointmentSymptomId;
 
     @ManyToOne
-    @Column(name = "appointment_id")
+    @JoinColumn(name = "appointmentId")
     private Appointment appointment;
 
     @ManyToOne
-    @Column(name = "symptom_id")
+    @JoinColumn(name = "symptomId")
     private Symptom symptom;
 }

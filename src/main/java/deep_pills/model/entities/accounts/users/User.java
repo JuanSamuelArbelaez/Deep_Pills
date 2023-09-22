@@ -35,6 +35,6 @@ public class User extends Account {
     @Column(name = "pictureUrl", columnDefinition = "TINYTEXT")
     private String pictureUrl;
 
-    @OneToMany(mappedBy = "accountId")
+    @OneToMany(mappedBy = "user")
     private List<PasswordRecoveryRequest> passwordRecoveryRequestList;
 }

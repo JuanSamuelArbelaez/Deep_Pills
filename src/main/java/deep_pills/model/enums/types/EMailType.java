@@ -1,6 +1,6 @@
 package deep_pills.model.enums.types;
 
-public enum MailType {
+public enum EMailType {
     PSSWD_RECOVERY,
     APPOINT_SCHEDULED,
     REGISTRATION;

@@ -2,6 +2,7 @@ package deep_pills.model.entities.memberships;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -10,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Policy")
-public class Policy { //Policy finished
+public class Policy implements Serializable { //Policy finished
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "policy_ID")
@@ -27,6 +28,4 @@ public class Policy { //Policy finished
 
     @OneToMany(mappedBy = "policy")
     private List<Membership> memberships;
-
-    // Getters and setters
 }

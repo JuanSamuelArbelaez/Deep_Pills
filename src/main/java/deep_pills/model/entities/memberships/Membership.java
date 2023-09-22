@@ -1,24 +1,27 @@
 package deep_pills.model.entities.memberships;
+
 import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.enums.states.MembershipState;
 import jakarta.persistence.*;
 import lombok.*;
-
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Membership")
-public class Membership {
+public class Membership implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "membership_ID")
+    @Column(name = "membershipID")
     private Long membershipId;
 
     @OneToOne
-    @JoinColumn(name = "owner_Id")
+    @JoinColumn(name = "ownerId")
     private Patient owner;
 
     @OneToMany(mappedBy = "beneficiaryMembership")
@@ -29,13 +32,13 @@ public class Membership {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "policy_ID")
+    @JoinColumn(name = "policyId")
     private Policy policy;
 
-
     @Enumerated
-    @JoinColumn(name = "state", referencedColumnName = "id_Membership_State")
+    @Column(name = "state")
     private MembershipState state;
 
-    // Getters and setters
+    @OneToMany(mappedBy = "membership")
+    private List<MembershipCharge> membershipCharges;
 }

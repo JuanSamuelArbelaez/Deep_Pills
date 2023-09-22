@@ -25,6 +25,7 @@ public class Claim implements Serializable { //Entity finished
     private ClaimType claimType;
 
     @Column(name = "claim_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date claimDate;
 
     @Column(name = "details")

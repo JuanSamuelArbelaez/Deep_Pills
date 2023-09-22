@@ -1,10 +1,15 @@
 package deep_pills.model.entities.appointments;
 
 import deep_pills.model.entities.accounts.users.patients.Patient;
+import deep_pills.model.entities.claims.ClaimInfo;
+import deep_pills.model.entities.notifications.EMail;
+import deep_pills.model.entities.schedule.PhysicianAppointmentSchedule;
+import deep_pills.model.entities.symptoms_treatment_diagnostics.TreatmentPlan;
 import deep_pills.model.enums.states.AppointmentState;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -46,4 +51,19 @@ public class Appointment {
     @Enumerated
     @Column(name = "state")
     private AppointmentState appointmentState;
+
+    @OneToMany(mappedBy = "appointment")
+    private List<ClaimInfo> claimInfoList;
+
+    @OneToMany(mappedBy = "appointment")
+    private List<TreatmentPlan> treatmentPlanList;
+
+    @OneToMany(mappedBy = "appointment")
+    private List<EMail> emails;
+
+    @OneToOne(mappedBy = "appointment")
+    private PhysicianAppointmentSchedule physicianAppointmentSchedule;
+
+    @OneToMany(mappedBy = "appointment")
+    private List<AppointmentSymptoms> appointmentSymptoms;
 }

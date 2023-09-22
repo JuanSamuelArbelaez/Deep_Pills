@@ -4,7 +4,7 @@ import deep_pills.model.entities.accounts.Account;
 import deep_pills.model.enums.types.MessageType;
 import jakarta.persistence.*;
 import lombok.*;
-
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Message")
-public class Message {
+public class Message implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "messageId")
@@ -33,8 +33,8 @@ public class Message {
     @Column(name = "message")
     private String message;
 
-    @Column(name = "messageType")
     @Enumerated
+    @Column(name = "messageType")
     private MessageType messageType;
 
     @ManyToOne
