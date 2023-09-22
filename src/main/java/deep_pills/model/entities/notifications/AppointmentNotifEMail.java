@@ -1,4 +1,4 @@
 package deep_pills.model.entities.notifications;
 
-public class AppointmentNotif_EMail {
+public class AppointmentNotifEMail {
 }

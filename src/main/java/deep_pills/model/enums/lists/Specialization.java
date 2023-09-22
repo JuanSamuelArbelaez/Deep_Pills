@@ -1,4 +1,4 @@
-package deep_pills.model.enums;
+package deep_pills.model.enums.lists;
 
 import jakarta.persistence.*;
 import lombok.*;

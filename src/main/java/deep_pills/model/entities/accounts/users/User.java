@@ -1,17 +1,22 @@
 package deep_pills.model.entities.accounts.users;
 import deep_pills.model.entities.accounts.Account;
 
-import deep_pills.model.enums.City;
+import deep_pills.model.entities.passwordRecovery.PasswordRecoveryRequest;
+import deep_pills.model.enums.lists.City;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "User")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User extends Account {
-    @Column(name = "personal_id", unique = true)
+    @Column(name = "personalId", unique = true)
     private String personalId;
 
     @Column(name = "name", length = 20)
@@ -24,11 +29,12 @@ public class User extends Account {
     private String phone;
 
     @Enumerated
-    @JoinColumn(name = "city_id", referencedColumnName = "id_City")
+    @Column(name = "city")
     private City city;
 
-    @Column(name = "picture_Url", columnDefinition = "TINYTEXT")
+    @Column(name = "pictureUrl", columnDefinition = "TINYTEXT")
     private String pictureUrl;
 
-    // Getters and setters
+    @OneToMany(mappedBy = "accountId")
+    private List<PasswordRecoveryRequest> passwordRecoveryRequestList;
 }

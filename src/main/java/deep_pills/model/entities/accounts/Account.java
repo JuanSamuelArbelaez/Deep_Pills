@@ -3,7 +3,7 @@ package deep_pills.model.entities.accounts;
 import deep_pills.model.entities.claims.Message;
 import jakarta.persistence.*;
 import lombok.*;
-import deep_pills.model.enums.Account_State;
+import deep_pills.model.enums.states.AccountState;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,12 +11,15 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Account")
 @Inheritance(strategy = InheritanceType.JOINED)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Account implements Serializable {
     @Id
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_Account", length = 10, nullable = false)
+    @Column(name = "accountId", length = 10, nullable = false)
     private int id;
 
     @Column(name = "email", unique = true, length = 25, nullable = false)
@@ -27,9 +30,11 @@ public class Account implements Serializable {
 
     @Enumerated
     @JoinColumn(name = "state", referencedColumnName = "id_UserState")
-    private Account_State state;
+    private AccountState state;
 
-    @OneToOne(mappedBy = "recieptant")
-    private List<Message> messageList;
+    @OneToMany(mappedBy = "recipient")
+    private List<Message> messagesReceived;
 
+    @OneToMany(mappedBy = "sender")
+    private List<Message> messagesSent;
 }

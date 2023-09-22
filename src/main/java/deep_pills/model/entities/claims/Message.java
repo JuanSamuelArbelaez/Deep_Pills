@@ -1,7 +1,7 @@
 package deep_pills.model.entities.claims;
 
 import deep_pills.model.entities.accounts.Account;
-import deep_pills.model.enums.Message_Type;
+import deep_pills.model.enums.types.MessageType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,15 +16,15 @@ import java.util.Date;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "message_Id")
+    @Column(name = "messageId")
     private Long messageId;
 
-    @OneToOne
-    @JoinColumn(name = "sender_Id")
+    @ManyToOne
+    @JoinColumn(name = "senderId")
     private Account sender;
 
-    @OneToOne
-    @JoinColumn(name = "recipient_Id")
+    @ManyToOne
+    @JoinColumn(name = "recipientId")
     private Account recipient;
 
     @Column(name = "date")
@@ -33,12 +33,12 @@ public class Message {
     @Column(name = "message")
     private String message;
 
-    @Column(name = "message_Type")
+    @Column(name = "messageType")
     @Enumerated
-    private Message_Type messageType;
+    private MessageType messageType;
 
     @ManyToOne
-    @JoinColumn(name = "claim_Id")
+    @JoinColumn(name = "claimId")
     private Claim claim;
 
 }

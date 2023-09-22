@@ -1,6 +1,6 @@
 package deep_pills.model.entities.accounts.users.physicians;
 
-import deep_pills.model.enums.Specialization;
+import deep_pills.model.enums.lists.Specialization;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,18 +8,18 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "Physician_Specialization")
-public class Physician_Specialization {
+@Table(name = "PhysicianSpecialization")
+public class PhysicianSpecialization {
     @Id
+    @Column(name = "physicianSpecializationId")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long physician_specialization_Id;
+    private long physicianSpecializationId;
 
     @ManyToOne
-    @JoinColumn(name = "physician_ID")
+    @JoinColumn(name = "physicianID")
     private Physician physician;
 
-    @ManyToOne
     @Enumerated
-    @Column(name = "specialization_ID")
+    @Column(name = "specializationID")
     private Specialization specialization;
 }

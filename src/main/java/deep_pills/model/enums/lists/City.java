@@ -1,4 +1,4 @@
-package deep_pills.model.enums;
+package deep_pills.model.enums.lists;
 
 public enum City {
     NEW_YORK_CITY,

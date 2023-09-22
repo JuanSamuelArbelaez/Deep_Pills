@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Symptom_Diagnosis")
-public class Symptom_Diagnosis {
+public class SymptomDiagnosis {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "symptom_diagnosis_Id")

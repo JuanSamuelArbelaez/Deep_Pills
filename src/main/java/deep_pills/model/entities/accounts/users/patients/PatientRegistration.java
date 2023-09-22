@@ -7,9 +7,10 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "Patient_Registration")
+@AllArgsConstructor
+@Table(name = "PatientRegistration")
 public class PatientRegistration extends UserRegistration {
-    @OneToOne(mappedBy = "patient")
-    @Column(name = "patient_ID")
+    @OneToOne
+    @JoinColumn(name = "patientId")
     private Patient patient;
 }

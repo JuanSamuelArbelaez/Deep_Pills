@@ -1,4 +1,4 @@
 package deep_pills.model.entities.symptoms_treatment_diagnostics;
 
-public class Treatment_Plan {
+public class TreatmentPlan {
 }

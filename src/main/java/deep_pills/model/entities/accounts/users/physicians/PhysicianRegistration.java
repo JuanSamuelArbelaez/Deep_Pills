@@ -9,13 +9,13 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "Physician_Registration")
-public class Physician_Registration extends UserRegistration {
-    @ManyToOne
-    @Column(name = "patient_Id")
+@Table(name = "PhysicianRegistration")
+public class PhysicianRegistration extends UserRegistration {
+    @OneToOne
+    @Column(name = "patientId")
     private Physician physician;
 
     @ManyToOne
-    @Column(name = "admin_Id")
+    @Column(name = "adminId")
     private Admin admin;
 }

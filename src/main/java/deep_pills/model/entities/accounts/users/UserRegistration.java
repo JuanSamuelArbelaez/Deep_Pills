@@ -1,9 +1,7 @@
 package deep_pills.model.entities.accounts.users;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,11 +10,12 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "User_Registration")
+@AllArgsConstructor
+@Table(name = "UserRegistration")
 public class UserRegistration implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "register_ID")
+    @Column(name = "registerId")
     private Long registerId;
 
     @Column(name = "date")

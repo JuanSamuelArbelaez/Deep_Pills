@@ -1,8 +1,9 @@
 package deep_pills.model.entities.accounts.users.patients;
 import deep_pills.model.entities.accounts.users.User;
+import deep_pills.model.entities.appointments.Appointment;
 import deep_pills.model.entities.claims.ClaimInfo;
 import deep_pills.model.entities.memberships.Membership;
-import deep_pills.model.enums.BloodType;
+import deep_pills.model.enums.lists.BloodType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Patient")
 public class Patient extends User{
     @Column(name = "dateBirth")
@@ -24,7 +26,7 @@ public class Patient extends User{
     private BloodType bloodType;
 
     @OneToMany(mappedBy = "patient")
-    private List<PatientAlergy> patientAlergies;
+    private List<PatientAllergy> patientAlergies;
 
     @OneToMany(mappedBy = "patient")
     private List<ClaimInfo> claimInfo;
@@ -35,7 +37,9 @@ public class Patient extends User{
     @ManyToOne
     private Membership beneficiaryMembership;
 
+    @OneToOne(mappedBy = "patient")
+    private PatientRegistration patientRegistration;
 
-
-    // Additional patient-specific attributes and methods
+    @OneToMany(mappedBy = "patient")
+    private List<Appointment> appointmentList;
 }

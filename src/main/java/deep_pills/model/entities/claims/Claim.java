@@ -1,7 +1,7 @@
 package deep_pills.model.entities.claims;
 
-import deep_pills.model.enums.Claim_State;
-import deep_pills.model.enums.Claim_Type;
+import deep_pills.model.enums.states.ClaimState;
+import deep_pills.model.enums.types.ClaimType;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serializable;
@@ -22,7 +22,7 @@ public class Claim implements Serializable { //Entity finished
 
     @Enumerated
     @Column(name = "claim_type")
-    private Claim_Type claimType;
+    private ClaimType claimType;
 
     @Column(name = "claim_date")
     private Date claimDate;
@@ -32,7 +32,7 @@ public class Claim implements Serializable { //Entity finished
 
     @Enumerated
     @Column(name = "claim_status")
-    private Claim_State claimStatus;
+    private ClaimState claimStatus;
 
     @OneToOne(mappedBy = "claim")
     private ClaimInfo claimInfo;

@@ -1,6 +1,6 @@
 package deep_pills.model.entities.memberships;
 import deep_pills.model.entities.accounts.users.patients.Patient;
-import deep_pills.model.enums.Membership_State;
+import deep_pills.model.enums.states.MembershipState;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,7 +35,7 @@ public class Membership {
 
     @Enumerated
     @JoinColumn(name = "state", referencedColumnName = "id_Membership_State")
-    private Membership_State state;
+    private MembershipState state;
 
     // Getters and setters
 }

@@ -1,4 +1,4 @@
-package deep_pills.model.enums;
+package deep_pills.model.enums.lists;
 
 public enum BloodType {
     O_POSITIVE("O+"),

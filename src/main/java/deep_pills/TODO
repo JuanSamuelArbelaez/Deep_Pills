@@ -1,0 +1,53 @@
+--------------------------------------------------------------------------------------------------------------------------------
+Entities: 13/30
+
+Patient = OK
+PatientAllergy = OK
+PatientRegistration = OK
+Physician = OK
+PhysicianRegistration = OK
+PhysicianSpecialization = OK
+User = OK
+UserRegistration = OK
+Account = OK
+Admin = OK
+Appointment = OK
+AppointmentSymptoms
+Claim = OK
+ClaimInfo
+Membership
+MembershipCharge
+MembershipPayment
+Policy = OK
+AppointmentNotifEmail
+EMail
+PatientRegistrationEmail
+PswdRecoveryEmail
+PasswordRecoveryRequest
+PhysicianAppointmentSchedule
+Schedule
+Diagnosis
+Symptom
+SymptomDiagnosis
+Treatment
+TreatmentPlan
+
+--------------------------------------------------------------------------------------------------------------------------------
+Enums: 15/15
+
+AccountState = OK
+Allergy = OK
+AppointmentState = OK
+BloodType = OK
+ChargeState = OK
+City = OK
+ClaimState = OK
+ClaimType = OK
+EmailState = OK
+EmailType = OK
+MembershipState = OK
+MessageType = OK
+PaymentState = OK
+Specialization = OK
+TreatmentState = OK
+
