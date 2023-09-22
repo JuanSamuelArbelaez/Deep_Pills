@@ -19,12 +19,12 @@ public class Message {
     @Column(name = "message_Id")
     private Long messageId;
 
-    @ManyToOne
-    @Column(name = "sender_Id")
+    @OneToOne
+    @JoinColumn(name = "sender_Id")
     private Account sender;
 
-    @ManyToOne
-    @Column(name = "recipient_Id")
+    @OneToOne
+    @JoinColumn(name = "recipient_Id")
     private Account recipient;
 
     @Column(name = "date")
@@ -38,7 +38,7 @@ public class Message {
     private Message_Type messageType;
 
     @ManyToOne
-    @Column(name = "claim_Id")
+    @JoinColumn(name = "claim_Id")
     private Claim claim;
 
 }

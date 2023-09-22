@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @Table(name = "Patient_Alergy")
-public class Patient_Alergy {
+public class PatientAlergy {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "patient_allergy_Id")

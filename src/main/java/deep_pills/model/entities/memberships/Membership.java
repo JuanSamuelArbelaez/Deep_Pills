@@ -19,9 +19,9 @@ public class Membership {
 
     @OneToOne
     @JoinColumn(name = "owner_Id")
-    private Patient patient;
+    private Patient owner;
 
-    @OneToMany
+    @OneToMany(mappedBy = "beneficiaryMembership")
     private List<Patient> beneficiaries;
 
     @Column(name = "date")
@@ -32,7 +32,7 @@ public class Membership {
     @JoinColumn(name = "policy_ID")
     private Policy policy;
 
-    @ManyToOne
+
     @Enumerated
     @JoinColumn(name = "state", referencedColumnName = "id_Membership_State")
     private Membership_State state;

@@ -6,7 +6,7 @@ import deep_pills.model.entities.appointments.Appointment;
 import jakarta.persistence.*;
 
 @Entity
-public class Claim_Info {
+public class ClaimInfo {
     @Id
     @Column(name = "claim_Info_Id")
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,6 +1,6 @@
 package deep_pills.model.enums;
 
-public enum Blood_Type {
+public enum BloodType {
     O_POSITIVE("O+"),
     O_NEGATIVE("O-"),
     A_POSITIVE("A+"),
@@ -10,7 +10,7 @@ public enum Blood_Type {
     AB_POSITIVE("AB+"),
     AB_NEGATIVE("AB-");
 
-    Blood_Type(String bloodType){
+    BloodType(String bloodType){
         this.bloodType = bloodType;
     }
     private String bloodType;

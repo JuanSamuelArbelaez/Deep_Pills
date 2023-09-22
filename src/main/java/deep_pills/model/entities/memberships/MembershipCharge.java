@@ -1,4 +1,4 @@
 package deep_pills.model.entities.memberships;
 
-public class Membership_Charge {
+public class MembershipCharge {
 }

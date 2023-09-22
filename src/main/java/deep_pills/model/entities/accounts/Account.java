@@ -29,6 +29,7 @@ public class Account implements Serializable {
     @JoinColumn(name = "state", referencedColumnName = "id_UserState")
     private Account_State state;
 
+    @OneToOne(mappedBy = "recieptant")
     private List<Message> messageList;
 
 }

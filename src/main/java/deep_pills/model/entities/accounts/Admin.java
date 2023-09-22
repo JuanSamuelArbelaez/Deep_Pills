@@ -1,6 +1,6 @@
 package deep_pills.model.entities.accounts;
 import deep_pills.model.entities.accounts.users.physicians.Physician_Registration;
-import deep_pills.model.entities.claims.Claim_Info;
+import deep_pills.model.entities.claims.ClaimInfo;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -9,6 +9,6 @@ import java.util.List;
 @Table(name = "Admin")
 public class Admin extends Account {
     private List<Physician_Registration> physicianRegistrationList;
-    private List<Claim_Info> claimInfoList;
+    private List<ClaimInfo> claimInfoList;
 
 }

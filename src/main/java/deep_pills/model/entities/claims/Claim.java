@@ -1,11 +1,12 @@
 package deep_pills.model.entities.claims;
+
 import deep_pills.model.enums.Claim_State;
 import deep_pills.model.enums.Claim_Type;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -13,8 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "claims")
-
-public class Claim implements Serializable {
+public class Claim implements Serializable { //Entity finished
     @Id
     @Column(name = "claimId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,19 +23,20 @@ public class Claim implements Serializable {
     @Enumerated
     @Column(name = "claim_type")
     private Claim_Type claimType;
+
     @Column(name = "claim_date")
     private Date claimDate;
 
     @Column(name = "details")
     private String details;
+
     @Enumerated
     @Column(name = "claim_status")
     private Claim_State claimStatus;
 
-    /*  Class rework
+    @OneToOne(mappedBy = "claim")
+    private ClaimInfo claimInfo;
 
-        Getters, Setters and Constructors defined by Annotations above Class declaration
-        Unnecesary columns/attributes removed
-        Required columns/attributes added
-     */
+    @OneToMany(mappedBy = "claim")
+    private List<Message> messages;
 }

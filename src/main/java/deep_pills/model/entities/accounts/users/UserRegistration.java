@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @Table(name = "User_Registration")
-public class User_Registration implements Serializable {
+public class UserRegistration implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "register_ID")
