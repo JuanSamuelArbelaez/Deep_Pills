@@ -42,6 +42,9 @@ public class Appointment {
     @Column(name = "duration")
     private Long duration;
 
+    @Column(name = "requestTime", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Date requestTime;
+
     @Column(name = "detailedReasons")
     private String detailedReasons;
 

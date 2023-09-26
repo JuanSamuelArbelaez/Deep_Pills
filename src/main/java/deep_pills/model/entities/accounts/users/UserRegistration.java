@@ -20,7 +20,7 @@ public class UserRegistration implements Serializable {
     @Column(name = "registerId")
     private Long registerId;
 
-    @Column(name = "date")
+    @Column(name = "date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 

@@ -1,4 +1,4 @@
-package deep_pills.services.concreteServices;
+package deep_pills.services.interfaces;
 
 import deep_pills.dto.logins.*;
 

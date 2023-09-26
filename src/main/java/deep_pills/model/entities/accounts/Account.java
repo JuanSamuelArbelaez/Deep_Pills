@@ -20,7 +20,7 @@ public class Account implements Serializable {
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "accountId", length = 10, nullable = false)
-    private int id;
+    private Long id;
 
     @Column(name = "email", unique = true, length = 25, nullable = false)
     private String email;
