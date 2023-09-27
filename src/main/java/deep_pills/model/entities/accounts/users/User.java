@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name = "User")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User extends Account {
-    @Column(name = "personalId", unique = true)
+    @Column(name = "personalId", unique = true, length = 15)
     private String personalId;
 
     @Column(name = "name", length = 20)

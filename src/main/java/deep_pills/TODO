@@ -51,16 +51,16 @@ Diagnosis = OK
 Symptom = OK
 
 --------------------------------------------------------------------------------------------------------------------------------
-Interfaces: 1/8
+Service Implementations: C = Created; FI = Fully_Implemented; PI = Partially_Implemented;
 
-AuthenticationService = OK
-ClaimsService = OK
-EMailService = OK
-PicturesService = OK
-RegistrationService = OK
-AdminService
-PatientService
-PhysicianService
+AppointmentsService = C
+AuthenticationService = FI
+ClaimsService = C
+EMailService = C
+PicturesService = C
+RegistrationService = PI
+UserListingService = C
+UserManagementService = C
 
 --------------------------------------------------------------------------------------------------------------------------------
 DTOs:

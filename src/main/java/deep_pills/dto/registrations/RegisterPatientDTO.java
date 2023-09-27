@@ -8,7 +8,9 @@ public record RegisterPatientDTO(
         @NotNull @Length(max = 25) @Email
         String email,
 
-        @NotNull
+        @NotNull @Length(min = 6, max = 20)
         String password,
+
+        @NotNull @Length(max = 15)
         String personalId) {
 }

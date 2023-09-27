@@ -1,11 +1,13 @@
 package deep_pills.model.entities.schedule;
 
 
+import deep_pills.model.enums.types.ShiftType;
 import deep_pills.model.enums.states.ScheduleState;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 
@@ -25,13 +27,9 @@ public class Schedule implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @Column(name = "startTime")
-    @Temporal(TemporalType.TIME)
-    private Date startTime;
-
-    @Column(name = "endTime")
-    @Temporal(TemporalType.TIME)
-    private Date endTime;
+    @ManyToOne
+    @JoinColumn(name = "shift")
+    private Shift shift;
 
     @Enumerated
     @Column(name = "state")
