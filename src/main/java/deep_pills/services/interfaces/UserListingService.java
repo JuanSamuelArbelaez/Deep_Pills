@@ -1,6 +1,11 @@
 package deep_pills.services.interfaces;
 
-import deep_pills.dto.accounts.*;
+import deep_pills.dto.accounts.patient.AccountDetailsPatientDTO;
+import deep_pills.dto.accounts.patient.PatientListingItemDTO;
+import deep_pills.dto.accounts.patient.PatientSearchDTO;
+import deep_pills.dto.accounts.physician.AccountDetailsPhysicianDTO;
+import deep_pills.dto.accounts.physician.PhysicianListingItemDTO;
+import deep_pills.dto.accounts.physician.PhysicianSearchDTO;
 
 import java.util.List;
 

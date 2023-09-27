@@ -1,4 +1,4 @@
-package deep_pills.dto.claims;
+package deep_pills.dto.claims.admin;
 
 public record ClaimListingAdminDTO() {
 }

@@ -1,6 +1,10 @@
 package deep_pills.services.implementations;
 
-import deep_pills.dto.claims.*;
+import deep_pills.dto.claims.admin.*;
+import deep_pills.dto.claims.patient.ClaimDetailedItemPatientDTO;
+import deep_pills.dto.claims.patient.ClaimItemPatientDTO;
+import deep_pills.dto.claims.patient.ClaimListingPatientDTO;
+import deep_pills.dto.claims.patient.ClaimRegisterDTO;
 import deep_pills.services.interfaces.ClaimsService;
 import org.springframework.stereotype.Service;
 

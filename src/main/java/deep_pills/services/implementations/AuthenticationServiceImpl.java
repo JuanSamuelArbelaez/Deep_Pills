@@ -4,6 +4,7 @@ import deep_pills.dto.logins.LoginDTO;
 import deep_pills.model.entities.accounts.Account;
 import deep_pills.repositories.accounts.AccountRepository;
 import deep_pills.services.interfaces.AuthenticationService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +22,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     @Override
     @Transactional
-    public Long login(LoginDTO loginDto) throws Exception {
-        //Pre-validation of dto and attributes
-        if(loginDto == null) throw new IllegalArgumentException("loginDto cannot be null");
-        if(loginDto.email() == null) throw new IllegalArgumentException("email cannot be null");
-        if(loginDto.password() == null) throw new IllegalArgumentException("password cannot be null");
-
+    public Long login(@NotNull LoginDTO loginDto) throws Exception {
         Account account = accountRepository.searchByEmail(loginDto.email()); //Query for account search by email
 
         if(account == null) throw new Exception("Wrong Email, account not found"); //Validation of query results

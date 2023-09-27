@@ -13,8 +13,5 @@ public record ShiftDTO(
         Time startTime,
 
         @NotNull
-        Time endTime,
-
-        @NotNull
-        Integer shiftId) {
+        Time endTime){
 }

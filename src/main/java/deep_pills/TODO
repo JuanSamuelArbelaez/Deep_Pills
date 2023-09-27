@@ -1,5 +1,5 @@
---------------------------------------------------------------------------------------------------------------------------------
-Entities: 26/26
+-----------------------------------------------------------------------------------------------------------------------
+Entities: 100%
 
 Patient = OK
 PatientAllergy = OK
@@ -24,12 +24,13 @@ EMail = OK
 PasswordRecoveryRequest = OK
 PhysicianAppointmentSchedule = OK
 Schedule = OK
+Shift = OK
 SymptomDiagnosis = OK
 Treatment = OK
 TreatmentPlan = OK
 
---------------------------------------------------------------------------------------------------------------------------------
-Enums: 18/18
+-----------------------------------------------------------------------------------------------------------------------
+Enums: 100%
 
 AccountState = OK
 Allergy = OK
@@ -49,18 +50,41 @@ TreatmentState = OK
 PasswordRecoveryRequestState = OK
 Diagnosis = OK
 Symptom = OK
+ShiftType = OK
 
---------------------------------------------------------------------------------------------------------------------------------
-Service Implementations: C = Created; FI = Fully_Implemented; PI = Partially_Implemented;
+-----------------------------------------------------------------------------------------------------------------------
+Service Implementations: 23.08%
 
-AppointmentsService = C
-AuthenticationService = FI
-ClaimsService = C
-EMailService = C
-PicturesService = C
-RegistrationService = PI
-UserListingService = C
-UserManagementService = C
+AppointmentsService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:0%
+AuthenticationService = Complexity:Low(Ponderation:7.69%), progress:100%, totalProgress:7.69%
+ClaimsService = Complexity:High(Ponderation:7.69%), progress:0%, totalProgress:0%
+EMailService = Complexity:Low(Ponderation:7.69%), progress:0%, totalProgress:0%
+PicturesService = Complexity:Low(Ponderation:7.69%), progress:0%, totalProgress:0%
+RegistrationService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:15.38%
+UserListingService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:0%
+UserManagementService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:0%
 
---------------------------------------------------------------------------------------------------------------------------------
-DTOs:
+-----------------------------------------------------------------------------------------------------------------------
+DTOs: 33.33%
+
+AccountDetailsPatientDTO =
+PatientListingItemDTO =
+PatientSearchDTO =
+AccountDetailsPhysicianDTO =
+PhysicianListingItemDTO =
+PhysicianSearchDTO =
+AppointmentPatientDTO =
+AppointmentPhysicianDTO =
+ClaimAnswerDTO =
+ClaimDetailedItemAdminDTO = OK
+ClaimItemAdminDTO = OK
+ClaimListingAdminDTO =
+ClaimDetailedItemPatientDTO =
+ClaimItemPatientDTO =
+ClaimListingPatientDTO =
+ClaimRegisterDTO =
+EMailDTO = OK
+LoginDTO = OK
+RegisterPatientDTO = OK
+RegisterPhysicianDTO = OK
+ShiftDTO = OK

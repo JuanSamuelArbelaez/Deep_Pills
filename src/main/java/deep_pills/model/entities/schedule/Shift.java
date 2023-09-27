@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "shift")
 public class Shift {
     @Id
-    @Column(name = "shiftId")
+    @Column(name = "shiftTypeId")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long shiftId;
 

@@ -1,4 +1,4 @@
-package deep_pills.dto.accounts;
+package deep_pills.dto.accounts.patient;
 
 public record PatientListingItemDTO() {
 }
