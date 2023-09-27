@@ -57,7 +57,7 @@ Service Implementations: 23.08%
 
 AppointmentsService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:0%
 AuthenticationService = Complexity:Low(Ponderation:7.69%), progress:100%, totalProgress:7.69%
-ClaimsService = Complexity:High(Ponderation:7.69%), progress:0%, totalProgress:0%
+ClaimsService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:0%
 EMailService = Complexity:Low(Ponderation:7.69%), progress:0%, totalProgress:0%
 PicturesService = Complexity:Low(Ponderation:7.69%), progress:0%, totalProgress:0%
 RegistrationService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:15.38%
