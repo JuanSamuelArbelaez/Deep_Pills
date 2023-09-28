@@ -12,7 +12,8 @@ import deep_pills.model.enums.states.AccountState;
 import deep_pills.repositories.accounts.*;
 import deep_pills.repositories.accounts.users.*;
 import deep_pills.repositories.accounts.users.registrations.*;
-import deep_pills.repositories.appointments.*;
+import deep_pills.repositories.schedules.ScheduleRepository;
+import deep_pills.repositories.schedules.ShiftRepository;
 import deep_pills.repositories.specializations.*;
 import deep_pills.services.interfaces.RegistrationService;
 import jakarta.validation.constraints.NotNull;
@@ -51,7 +52,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         PhysicianRegistration registration = new PhysicianRegistration();
         registration.setPhysician(registeredPhysician);
-        registration.setAdmin(adminRepository.getReferenceById(physicianForm.adminId()));
+        registration.setAdmin(adminRepository.findById(physicianForm.adminId()).get());
         physicianRegistrationRepository.save(registration);
         physicianSpecializationRepository.saveAll(physicianSpecializations);
 
@@ -115,7 +116,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     private Physician physicianSetUp(RegisterPhysicianDTO physicianForm) throws Exception {
         if(emailExists(physicianForm.email())) throw new Exception("Email already in use");
         if(personalPhysicianIdExists(physicianForm.personalId())) throw new Exception("Personal ID already in use");
-        if(adminRepository.getReferenceById(physicianForm.adminId()) == null) throw new Exception("Admin not found");
+        if(adminRepository.findById(physicianForm.adminId()).isEmpty()) throw new Exception("Admin not found");
 
         Physician physicianEntity = new Physician();
         physicianEntity.setName(physicianForm.name());
@@ -130,10 +131,14 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     @Transactional
     public Long registerPatient(RegisterPatientDTO patientForm) throws Exception {
+        if(emailExists(patientForm.email())) throw new Exception("Email already in use");
+        if(personalPatientIdExists(patientForm.personalId()))throw new Exception("Personal ID already in use");
+
         Patient patientEntity =  new Patient();
         patientEntity.setPassword(patientForm.password());
         patientEntity.setEmail(patientForm.email());
         patientEntity.setPersonalId(patientForm.personalId());
+        patientEntity.setState(AccountState.ACTIVE);
         Patient registeredPatient = patientRepository.save(patientEntity);
         PatientRegistration registration = new PatientRegistration();
         registration.setPatient(registeredPatient);
@@ -144,10 +149,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     private boolean emailExists(String email){
         return accountRepository.searchByEmail(email)!=null;
     }
-    private boolean personalPatientIdExists(String personalId){
-        return patientRepository.searchByPersonalId(personalId) != null;
-    }
-    private boolean personalPhysicianIdExists(String personalId){
-        return physicianRepository.searchByPersonalId(personalId) != null;
-    }
+    private boolean personalPatientIdExists(String personalId){return patientRepository.findByPersonalId(personalId) != null;}
+    private boolean personalPhysicianIdExists(String personalId) {return physicianRepository.findByPersonalId(personalId) != null;}
 }

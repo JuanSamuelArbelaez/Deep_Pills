@@ -88,3 +88,17 @@ LoginDTO = OK
 RegisterPatientDTO = OK
 RegisterPhysicianDTO = OK
 ShiftDTO = OK
+
+-----------------------------------------------------------------------------------------------------------------------
+Repositories:
+
+PatientRegistrationRepository
+PhysicianRegistrationRepository
+PatientRepository
+PhysicianRepository
+AccountRepository
+AdminRepository
+PhysicianAppointmentScheduleRepository
+ScheduleRepository
+ShiftRepository
+PhysicianSpecializationRepository

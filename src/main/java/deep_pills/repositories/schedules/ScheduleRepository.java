@@ -1,13 +1,11 @@
-package deep_pills.repositories.appointments;
+package deep_pills.repositories.schedules;
 
-import deep_pills.model.entities.accounts.Account;
 import deep_pills.model.entities.schedule.Schedule;
 import deep_pills.model.entities.schedule.Shift;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Time;
 import java.util.Date;
 
 @Repository
