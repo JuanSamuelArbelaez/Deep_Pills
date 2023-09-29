@@ -19,18 +19,18 @@ public class ClaimInfo implements Serializable {
     private Long claimInfoId;
 
     @ManyToOne
-    @JoinColumn(name = "patient_Id")
+    @JoinColumn(name = "patientId")
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name = "admin_Id")
+    @JoinColumn(name = "adminId")
     private Admin admin;
 
     @ManyToOne
-    @JoinColumn(name = "appointment_Id")
+    @JoinColumn(name = "appointmentId")
     private Appointment appointment;
 
     @OneToOne
-    @JoinColumn(name = "claim")
+    @JoinColumn(name = "claimId")
     private Claim claim;
 }

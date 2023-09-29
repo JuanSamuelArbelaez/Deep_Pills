@@ -1,13 +1,9 @@
 package deep_pills.model.entities.schedule;
 
-
-import deep_pills.model.enums.types.ShiftType;
 import deep_pills.model.enums.states.ScheduleState;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 

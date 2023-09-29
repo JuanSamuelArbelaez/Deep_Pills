@@ -99,14 +99,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     private List<PhysicianSpecialization> specializationSetUp(Physician physicianEntity, RegisterPhysicianDTO physicianForm) throws Exception {
         List<PhysicianSpecialization> specializations = new ArrayList<>();
 
-        for(Integer specializationId: physicianForm.specializationsId()){
-            if(specializationId<0 || specializationId>=physicianForm.specializationsId().size())throw new Exception("Invalid specialization ID: " + specializationId);
-        }
-
-        for(Integer specializationId : physicianForm.specializationsId()){
+        for(Specialization specialization : physicianForm.specializations()){
             PhysicianSpecialization physicianSpecialization = new PhysicianSpecialization();
             physicianSpecialization.setPhysician(physicianEntity);
-            physicianSpecialization.setSpecialization(Specialization.values()[specializationId]);
+            physicianSpecialization.setSpecialization(specialization);
             specializations.add(physicianSpecialization);
         }
 

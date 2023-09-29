@@ -28,7 +28,35 @@ public class UserListingServiceImpl implements UserListingService {
 
     @Override
     @Transactional
-    public List<PhysicianListingItemDTO> listPhysicians(@NotNull PhysicianSearchDTO physicianSearchDTO) throws Exception {
+    public List<PhysicianListingItemDTO> listPhysiciansForAdmin(@NotNull PhysicianSearchDTO physicianSearchDTO) throws Exception {
+        List<Physician> physicianList = new ArrayList<>();
+        switch (physicianSearchDTO.searchParameter()) {
+            case 0 -> physicianList.addAll(physicianRepository.findAll());
+            case 1 -> physicianList.add(physicianRepository.getReferenceById(Long.parseLong(physicianSearchDTO.searchValue())));
+            case 2 -> physicianList.addAll(physicianRepository.findByName(physicianSearchDTO.searchValue()));
+            case 3 -> physicianList.addAll(physicianRepository.findByLastName(physicianSearchDTO.searchValue()));
+            case 4 -> physicianList.addAll(physicianRepository.findByShift(shiftRepository.getReferenceById(Long.parseLong(physicianSearchDTO.searchValue()))));
+            default -> new ArrayList<>();
+        }
+        if(physicianList.isEmpty()) throw new Exception("No matches found");
+
+        List<PhysicianListingItemDTO> physicianItemList = new ArrayList<>();
+        for(Physician physician: physicianList){
+            PhysicianListingItemDTO item = new PhysicianListingItemDTO(
+                    physician.getId(),
+                    physician.getPersonalId(),
+                    physician.getName(),
+                    physician.getLastName(),
+                    physician.getShift().getShiftId());
+
+            physicianItemList.add(item);
+        }
+        return physicianItemList;
+    }
+
+    @Override
+    @Transactional
+    public List<PhysicianListingItemDTO> listPhysiciansForPatient(@NotNull PhysicianSearchDTO physicianSearchDTO) throws Exception {
         List<Physician> physicianList = new ArrayList<>();
         switch (physicianSearchDTO.searchParameter()) {
             case 0 -> physicianList.addAll(physicianRepository.findAll());

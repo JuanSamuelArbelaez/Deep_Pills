@@ -1,6 +1,7 @@
 package deep_pills.dto.registrations;
 
 import deep_pills.dto.schedule.ShiftDTO;
+import deep_pills.model.enums.lists.Specialization;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public record RegisterPhysicianDTO(
         Long adminId,
 
         @NotNull
-        List<Integer> specializationsId,
+        List<Specialization> specializations,
 
         @NotNull
         ShiftDTO shift) {
