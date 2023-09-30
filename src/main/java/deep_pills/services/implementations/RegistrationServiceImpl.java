@@ -1,19 +1,16 @@
 package deep_pills.services.implementations;
 
 import deep_pills.dto.registrations.*;
-import deep_pills.model.entities.accounts.users.patients.Patient;
-import deep_pills.model.entities.accounts.users.patients.PatientRegistration;
+import deep_pills.model.entities.accounts.users.patients.*;
 import deep_pills.model.entities.accounts.users.physicians.*;
-import deep_pills.model.entities.schedule.Schedule;
-import deep_pills.model.entities.schedule.Shift;
+import deep_pills.model.entities.schedule.*;
 import deep_pills.model.enums.types.ShiftType;
 import deep_pills.model.enums.lists.Specialization;
 import deep_pills.model.enums.states.AccountState;
 import deep_pills.repositories.accounts.*;
 import deep_pills.repositories.accounts.users.*;
 import deep_pills.repositories.accounts.users.registrations.*;
-import deep_pills.repositories.schedules.ScheduleRepository;
-import deep_pills.repositories.schedules.ShiftRepository;
+import deep_pills.repositories.schedules.*;
 import deep_pills.repositories.specializations.*;
 import deep_pills.services.interfaces.RegistrationService;
 import jakarta.validation.constraints.NotNull;
