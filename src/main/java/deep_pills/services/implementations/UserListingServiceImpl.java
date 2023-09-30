@@ -60,7 +60,6 @@ public class UserListingServiceImpl implements UserListingService {
         List<Physician> physicianList = new ArrayList<>();
         switch (physicianSearchDTO.searchParameter()) {
             case 0 -> physicianList.addAll(physicianRepository.findAll());
-            case 1 -> physicianList.add(physicianRepository.getReferenceById(Long.parseLong(physicianSearchDTO.searchValue())));
             case 2 -> physicianList.addAll(physicianRepository.findByName(physicianSearchDTO.searchValue()));
             case 3 -> physicianList.addAll(physicianRepository.findByLastName(physicianSearchDTO.searchValue()));
             case 4 -> physicianList.addAll(physicianRepository.findByShift(shiftRepository.getReferenceById(Long.parseLong(physicianSearchDTO.searchValue()))));

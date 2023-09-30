@@ -20,7 +20,7 @@ public interface PhysicianRepository extends JpaRepository<Physician, Long> {
     List<Physician> findByName(String name);
 
     @Query("select ph from Physician ph where ph.lastName = :lastName")
-    List<Physician> findByLastName(String name);
+    List<Physician> findByLastName(String lastName);
 
     @Query("select ph from Physician ph where ph.shift = :shift")
     List<Physician> findByShift(Shift shift);

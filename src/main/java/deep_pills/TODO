@@ -92,13 +92,11 @@ ShiftDTO = OK
 -----------------------------------------------------------------------------------------------------------------------
 Repositories:
 
-PatientRegistrationRepository
-PhysicianRegistrationRepository
-PatientRepository
-PhysicianRepository
-AccountRepository
-AdminRepository
-PhysicianAppointmentScheduleRepository
-ScheduleRepository
-ShiftRepository
-PhysicianSpecializationRepository
+AppointmentService =
+AuthenticationService = 100%
+ClaimsService =
+EMailService =
+PicturesService =
+RegistrationService = 100%
+UserListingService =
+UserManagementService =
