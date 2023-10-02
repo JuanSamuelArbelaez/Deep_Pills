@@ -1,16 +1,19 @@
 package deep_pills.dto.accounts.physician;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
 
 public record PhysicianSearchDTO(
-        @NotNull @Length(max = 4) Integer searchParameter,
+        @NotNull @Min(0) @Max(6) Integer searchParameter,
 
         @NotNull String searchValue) {
     // None = 0,
     // ID = 1,
-    // Name = 2,
-    // LastName = 3,
-    // Shift = 4,
-    // Specialization.name = 5
+    // Personal ID = 2,
+    // Name = 3,
+    // LastName = 4,
+    // Shift = 5,
+    // Specialization.name = 6,
+    // City = 7
 }
