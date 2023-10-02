@@ -11,4 +11,7 @@ import java.sql.Time;
 public interface ShiftRepository extends JpaRepository<Shift, Long> {
     @Query("SELECT s.shiftId FROM Shift s WHERE s.startTime = :startTime AND s.endTime = :endTime")
     Long findShiftIdByStartTimeAndEndTime(Time startTime,Time endTime);
+
+    @Query("SELECT s.shiftId FROM Shift s WHERE s.startTime = :startTime AND s.endTime = :endTime AND s.days = :days")
+    Long findShiftIdByStartTimeAndEndTimeAndDays(Time startTime, Time endTime, String days);
 }

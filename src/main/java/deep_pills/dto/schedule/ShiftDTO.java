@@ -7,7 +7,7 @@ import java.util.List;
 
 public record ShiftDTO(
         @NotNull
-        List<String> days,
+        String days,
 
         @NotNull
         Time startTime,

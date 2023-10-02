@@ -18,10 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -57,19 +55,22 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     private void shiftSetUp(Physician physicianEntity, RegisterPhysicianDTO physicianForm) {
-        Long shiftId = shiftRepository.findShiftIdByStartTimeAndEndTime(physicianForm.shift().startTime(), physicianForm.shift().endTime());
+        Long shiftId = shiftRepository.findShiftIdByStartTimeAndEndTimeAndDays(physicianForm.shift().startTime(), physicianForm.shift().endTime(), physicianForm.shift().days());
         Shift shift;
         if(shiftId == null){
             Shift newShift = new Shift();
             newShift.setStartTime(physicianForm.shift().startTime());
             newShift.setEndTime(physicianForm.shift().endTime());
             newShift.setShiftType(ShiftType.CUSTOM_SHIFT);
+            newShift.setDays(physicianForm.shift().days());
             shift = shiftRepository.save(newShift);
             createInitialSchedulesForShif(shift);
         } else shift = shiftRepository.getReferenceById(shiftId);
         physicianEntity.setShift(shift);
     }
     private void createInitialSchedulesForShif(Shift shift) {
+        String[] dayTokens = shift.getDays().split(" ");
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.MONTH, 2); // Move to two months ahead
@@ -81,10 +82,16 @@ public class RegistrationServiceImpl implements RegistrationService {
         // Create Schedule entities for each day from today to the last day of the following month
         Date currentDate = new Date();
         while (currentDate.before(lastDayOfFollowingMonth)) {
-            Schedule schedule = new Schedule();
-            schedule.setShift(shift);
-            schedule.setDate(currentDate);
-            schedulerRepository.save(schedule);
+
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            String dayOfWeekString = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(currentDate);
+
+            if (Arrays.asList(dayTokens).contains(dayOfWeekString)) {
+                Schedule schedule = new Schedule();
+                schedule.setShift(shift);
+                schedule.setDate(currentDate);
+                schedulerRepository.save(schedule);
+            }
 
             // Move to the next day
             calendar.setTime(currentDate);

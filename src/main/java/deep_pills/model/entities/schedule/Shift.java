@@ -31,6 +31,9 @@ public class Shift {
     @Temporal(TemporalType.TIME)
     private Time endTime;
 
+    @Column(name = "days")
+    private String days; //Format: Monday Tuesday Wednesday Friday
+
     @Enumerated
     @Column(name = "shiftType")
     private ShiftType shiftType;
