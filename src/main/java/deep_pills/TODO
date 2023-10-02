@@ -90,7 +90,7 @@ RegisterPhysicianDTO = OK
 ShiftDTO = OK
 
 -----------------------------------------------------------------------------------------------------------------------
-Repositories: 43%
+Repositories: 49%
 
 AppointmentService =
 AuthenticationService = 100%
@@ -98,5 +98,5 @@ ClaimsService =
 EMailService =
 PicturesService =
 RegistrationService = 100%
-UserListingService = 30%
+UserListingService = 42%
 UserManagementService = 100%

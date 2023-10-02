@@ -2,10 +2,13 @@ package deep_pills.repositories.accounts.users;
 
 import deep_pills.model.entities.accounts.users.physicians.Physician;
 import deep_pills.model.entities.schedule.Shift;
+import deep_pills.model.enums.lists.Specialization;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.awt.*;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -24,4 +27,7 @@ public interface PhysicianRepository extends JpaRepository<Physician, Long> {
 
     @Query("select ph from Physician ph where ph.shift = :shift")
     List<Physician> findByShift(Shift shift);
+
+    @Query("SELECT DISTINCT p FROM Physician p JOIN p.physicianSpecialization s WHERE s = :targetSpecialization")
+    List<Physician> findBySpecialization(Specialization specialization);
 }
