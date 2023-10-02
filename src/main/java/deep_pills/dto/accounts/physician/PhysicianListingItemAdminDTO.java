@@ -2,7 +2,7 @@ package deep_pills.dto.accounts.physician;
 
 import jakarta.validation.constraints.NotNull;
 
-public record PhysicianListingItemDTO(
+public record PhysicianListingItemAdminDTO(
         @NotNull Long physicianId,
 
         @NotNull String personalId,
