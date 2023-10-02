@@ -53,26 +53,28 @@ Symptom = OK
 ShiftType = OK
 
 -----------------------------------------------------------------------------------------------------------------------
-Service Implementations: 23.08%
+Service Implementations: 42.5%
 
-AppointmentsService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:0%
-AuthenticationService = Complexity:Low(Ponderation:7.69%), progress:100%, totalProgress:7.69%
-ClaimsService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:0%
-EMailService = Complexity:Low(Ponderation:7.69%), progress:0%, totalProgress:0%
-PicturesService = Complexity:Low(Ponderation:7.69%), progress:0%, totalProgress:0%
-RegistrationService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:15.38%
-UserListingService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:0%
-UserManagementService = Complexity:High(Ponderation:15.38%), progress:0%, totalProgress:0%
+AppointmentsService = Complexity:High(Ponderation:12.5%), progress:0%, totalProgress:0%
+AuthenticationService = Complexity:Low(Ponderation:6.25%), progress:100%, totalProgress:6.25%
+ClaimsService = Complexity:High(Ponderation:12.5%), progress:0%, totalProgress:0%
+EMailService = Complexity:Low(Ponderation:6.25%), progress:0%, totalProgress:0%
+ManagementService = Complexity:High(Ponderation: 12.5%)), progress:0%, totalProgress: 0%
+PicturesService = Complexity:Low(Ponderation:6.25%), progress:0%, totalProgress:0%
+RegistrationService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
+UserListingService = Complexity:High(Ponderation:12.5%), progress:90%, totalProgress:11.25%
+UserManagementService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 
 -----------------------------------------------------------------------------------------------------------------------
-DTOs: 33.33%
+DTOs: 56.52%
 
 AccountDetailsPatientDTO =
-PatientListingItemDTO =
-PatientSearchDTO =
+PatientListingItemDTO = OK
+PatientSearchDTO = OK
 AccountDetailsPhysicianDTO =
-PhysicianListingItemDTO =
-PhysicianSearchDTO =
+PhysicianListingItemAdminDTO = OK
+PhysicianListingItemPatientDTO = OK
+PhysicianSearchDTO = OK
 AppointmentPatientDTO =
 AppointmentPhysicianDTO =
 ClaimAnswerDTO =
@@ -84,6 +86,7 @@ ClaimItemPatientDTO =
 ClaimListingPatientDTO =
 ClaimRegisterDTO =
 EMailDTO = OK
+MembershipDTO = OK
 LoginDTO = OK
 RegisterPatientDTO = OK
 RegisterPhysicianDTO = OK
