@@ -1,6 +1,6 @@
 package deep_pills.services.implementations;
 
-import deep_pills.dto.Emails.EMailDTO;
+import deep_pills.dto.emails.EMailDTO;
 import deep_pills.services.interfaces.EMailService;
 import org.springframework.stereotype.Service;
 

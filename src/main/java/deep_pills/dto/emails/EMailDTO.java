@@ -1,4 +1,4 @@
-package deep_pills.dto.Emails;
+package deep_pills.dto.emails;
 
 import deep_pills.model.entities.accounts.Account;
 import deep_pills.model.enums.states.EmailState;
