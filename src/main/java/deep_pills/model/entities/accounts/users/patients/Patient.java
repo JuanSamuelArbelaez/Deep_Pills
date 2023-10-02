@@ -26,7 +26,7 @@ public class Patient extends User{
     private BloodType bloodType;
 
     @OneToMany(mappedBy = "patient")
-    private List<PatientAllergy> patientAlergies;
+    private List<PatientAllergy> patientAllergies;
 
     @OneToMany(mappedBy = "patient")
     private List<ClaimInfo> claimInfo;

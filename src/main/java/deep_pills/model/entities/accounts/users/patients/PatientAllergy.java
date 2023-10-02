@@ -15,7 +15,7 @@ public class PatientAllergy implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "patientAllergyId")
-    private long patient_allergy_Id;
+    private long patientAllergyId;
 
     @ManyToOne
     @JoinColumn(name = "patientId")
