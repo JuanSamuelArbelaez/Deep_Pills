@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 public record RegisterPatientDTO(
-        @NotNull @Length(max = 25) @Email
+        @NotNull @Length(max = 50) @Email
         String email,
 
         @NotNull @Length(min = 6, max = 20)

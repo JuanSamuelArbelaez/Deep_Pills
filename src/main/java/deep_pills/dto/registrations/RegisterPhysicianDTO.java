@@ -2,7 +2,9 @@ package deep_pills.dto.registrations;
 
 import deep_pills.dto.schedule.ShiftDTO;
 import deep_pills.model.enums.lists.Specialization;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public record RegisterPhysicianDTO(
         @NotNull
         String lastName,
 
-        @NotNull
+        @Email @Length(max = 50)
         String email,
 
         @NotNull

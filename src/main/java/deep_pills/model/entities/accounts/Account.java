@@ -18,11 +18,11 @@ import java.util.List;
 public class Account implements Serializable {
     @Id
     @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "accountId", length = 10, nullable = false)
     private Long id;
 
-    @Column(name = "email", unique = true, length = 25, nullable = false)
+    @Column(name = "email", unique = true, length = 50, nullable = false)
     private String email;
 
     @Column(name = "pswd", length = 15, nullable = false)

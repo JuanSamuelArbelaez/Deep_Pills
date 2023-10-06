@@ -46,6 +46,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         Physician registeredPhysician  = physicianRepository.save(physicianEntity);
 
         PhysicianRegistration registration = new PhysicianRegistration();
+        registration.setDate(new Date());
         registration.setPhysician(registeredPhysician);
         registration.setAdmin(adminRepository.findById(physicianForm.adminId()).get());
         physicianRegistrationRepository.save(registration);
@@ -139,9 +140,13 @@ public class RegistrationServiceImpl implements RegistrationService {
         patientEntity.setEmail(patientForm.email());
         patientEntity.setPersonalId(patientForm.personalId());
         patientEntity.setState(AccountState.ACTIVE);
+
         Patient registeredPatient = patientRepository.save(patientEntity);
+
         PatientRegistration registration = new PatientRegistration();
         registration.setPatient(registeredPatient);
+        registration.setDate(new Date());
+
         patientRegistrationRepository.save(registration);
         return registeredPatient.getId();
     }
