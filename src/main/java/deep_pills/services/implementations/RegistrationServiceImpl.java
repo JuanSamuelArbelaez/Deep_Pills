@@ -1,6 +1,7 @@
 package deep_pills.services.implementations;
 
 import deep_pills.dto.registrations.*;
+import deep_pills.model.entities.accounts.Account;
 import deep_pills.model.entities.accounts.users.patients.*;
 import deep_pills.model.entities.accounts.users.physicians.*;
 import deep_pills.model.entities.schedule.*;
@@ -152,7 +153,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     private boolean emailExists(String email){
-        return accountRepository.searchByEmail(email)!=null;
+        Optional<Account> optional = accountRepository.fingByEmail(email);
+        return optional.isPresent();
     }
     private boolean personalPatientIdExists(String personalId){return patientRepository.findByPersonalId(personalId) != null;}
     private boolean personalPhysicianIdExists(String personalId) {return physicianRepository.findByPersonalId(personalId) != null;}

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -23,9 +25,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public Long login(@NotNull LoginDTO loginDto) throws Exception {
-        Account account = accountRepository.searchByEmail(loginDto.email()); //Query for account search by email
+        Optional<Account> optional = accountRepository.fingByEmail(loginDto.email()); //Query for account search by email
+        Account account = null;
 
-        if(account == null) throw new Exception("Wrong Email, account not found"); //Validation of query results
+        if(optional.isEmpty()) throw new Exception("Wrong Email, account not found"); //Validation of query results
+        else account = optional.get();
 
         if(!account.getPassword().equals(loginDto.password())) throw new Exception("Wrong Password"); //Account authentication
 

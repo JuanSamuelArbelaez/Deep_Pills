@@ -53,25 +53,28 @@ Symptom = OK
 ShiftType = OK
 
 -----------------------------------------------------------------------------------------------------------------------
-Service Implementations: 42.5%
+Service Implementations: 51.036%
 
+AccountUpdateService = Complexity:High(Ponderation: 12.5%), progress:100%, totalProgress: 12.5%
 AppointmentsService = Complexity:High(Ponderation:12.5%), progress:0%, totalProgress:0%
-AuthenticationService = Complexity:Low(Ponderation:6.25%), progress:100%, totalProgress:6.25%
+AuthenticationService = Complexity:Low(Ponderation:4.16%), progress:100%, totalProgress:4.16%
 ClaimsService = Complexity:High(Ponderation:12.5%), progress:0%, totalProgress:0%
-EMailService = Complexity:Low(Ponderation:6.25%), progress:0%, totalProgress:0%
-ManagementService = Complexity:High(Ponderation: 12.5%)), progress:0%, totalProgress: 0%
-PicturesService = Complexity:Low(Ponderation:6.25%), progress:0%, totalProgress:0%
+EMailService = Complexity:Low(Ponderation:4.16%), progress:0%, totalProgress:0%
+MembershipService = Complexity:High(Ponderation: 12.5%)), progress:0%, totalProgress: 0%
+PicturesService = Complexity:Low(Ponderation:4.16%), progress:0%, totalProgress:0%
 RegistrationService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
-UserListingService = Complexity:High(Ponderation:12.5%), progress:90%, totalProgress:11.25%
+UserListingService = Complexity:High(Ponderation:12.5%), progress:75%, totalProgress:9.375%
 UserManagementService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 
 -----------------------------------------------------------------------------------------------------------------------
-DTOs: 56.52%
+DTOs: 61.52%
 
 AccountDetailsPatientDTO =
+InfoUpdatePatientDTO = OK
 PatientListingItemDTO = OK
 PatientSearchDTO = OK
 AccountDetailsPhysicianDTO =
+InfoUpdatePatientDTO = OK
 PhysicianListingItemAdminDTO = OK
 PhysicianListingItemPatientDTO = OK
 PhysicianSearchDTO = OK
@@ -93,13 +96,45 @@ RegisterPhysicianDTO = OK
 ShiftDTO = OK
 
 -----------------------------------------------------------------------------------------------------------------------
-Repositories: 49%
+Repositories: 80% (Sujeto a la cantidad de Repos)
 
-AppointmentService =
-AuthenticationService = 100%
-ClaimsService =
-EMailService =
-PicturesService =
-RegistrationService = 100%
-UserListingService = 42%
-UserManagementService = 100%
+PatientRegistrationRepository = OK
+PhysicianRegistrationRepository = OK
+PatientRepository = OK
+PhysicianRepository = OK
+AccountRepository = OK
+PhysicianAppointmentScheduleRepository =
+MembershipRepository =
+ScheduleRepository = OK
+ShiftRepository = OK
+PhysicianSpecializationRepository = OK
+
+-----------------------------------------------------------------------------------------------------------------------
+
+Para hacer (ASTAIZA):
+1. getPatientDetails(Long patientId) [UserListingServiceImpl].
+    Se debe implementar el metodo. Este debe retornar el DTO (poblar el DTO con los
+    argumentos previstos en el mockup de verdetalle/perfil de paciente), cuyos datos
+    deben ser trazados desde el Paciente buscado por el argumento (Long) patientId.
+
+2. getPhysicianDetails(Long physicianId) [UserListingServiceImpl].
+    Se debe implementar el metodo. Este debe retornar el DTO (poblar el DTO con los
+    argumentos previstos en el mockup de verdetalle/perfil de medico), cuyos datos
+    deben ser trazados desde el Medico buscado por el argumento (Long) physicianId.
+
+3. Indicar las funcionalidades en la interfaz MembershipService (no la Impl).
+    Es necesario ver las funcionalidades reflejadas como un método. Este método
+    puede usar o devolver un DTO, si existe y no esta poblado, poblelo. Si este DTO
+    no existe, creelo. Actualize la seccion de progreso de DTO's
+
+4. Anotaciones: De ser posible, revisar cada entidad y añadirle anotaciones de
+    restriccion de parámetros. Ej: @Length(max=25).
+
+    Nota: El @NotNull debe usarse solo en los casos en los que se esté seguro de que
+    siempre que se vaya a agregar una tupla a la DB, este dato estará.
+    Ej: nombre (registro).
+
+    Nota2: Al colocar las anotaciones en la entidad, por favor trazar la antocacion
+    hasta el/los DTO(s) en los que el atributo en particular intervenga.
+
+Al final, actualizar el archivo "To-Do" para visualizar el proceso realizado.

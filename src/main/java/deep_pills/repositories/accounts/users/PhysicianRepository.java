@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.awt.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PhysicianRepository extends JpaRepository<Physician, Long> {
@@ -34,4 +35,7 @@ public interface PhysicianRepository extends JpaRepository<Physician, Long> {
 
     @Query("SELECT DISTINCT p FROM Physician p JOIN p.city c WHERE c = :city")
     List<Physician> findByCity(City city);
+
+    @Query("SELECT p from Physician p where p.phone = :phone")
+    Optional<Physician> findByPhone(String phone);
 }
