@@ -10,12 +10,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     @Query("select p from Patient p where p.personalId = :personalId")
-    Patient findByPersonalId(String personalId);
+    Optional<Patient> findByPersonalId(String personalId);
 
     @Query("select p from Patient p where p.name = :name")
     List<Patient> findByName(String name);

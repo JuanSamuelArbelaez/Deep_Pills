@@ -2,7 +2,7 @@ package deep_pills.dto.appointments;
 
 import jakarta.validation.constraints.NotNull;
 
-public record AppointmentPatientDTO(
+public record AppointmentGenericDTO(
         @NotNull Long appointmentId,
         @NotNull String personalId,
         @NotNull java.util.Date date,

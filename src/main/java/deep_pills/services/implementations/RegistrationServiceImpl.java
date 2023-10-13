@@ -156,6 +156,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         Optional<Account> optional = accountRepository.fingByEmail(email);
         return optional.isPresent();
     }
-    private boolean personalPatientIdExists(String personalId){return patientRepository.findByPersonalId(personalId) != null;}
-    private boolean personalPhysicianIdExists(String personalId) {return physicianRepository.findByPersonalId(personalId) != null;}
+    private boolean personalPatientIdExists(String personalId){return patientRepository.findByPersonalId(personalId).isPresent();}
+    private boolean personalPhysicianIdExists(String personalId) {return physicianRepository.findByPersonalId(personalId).isPresent();}
 }

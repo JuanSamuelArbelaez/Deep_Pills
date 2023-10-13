@@ -78,7 +78,11 @@ public class UserListingServiceImpl implements UserListingService {
             case 1 -> {
                 if(admin) physicianList.add(physicianRepository.getReferenceById(Long.parseLong(searchValue)));}
             case 2 -> {
-                if(admin) physicianList.add(physicianRepository.findByPersonalId(searchValue));
+                if(admin){
+                    Optional<Physician> optional = physicianRepository.findByPersonalId(searchValue);
+                    if(optional.isEmpty()) throw new Exception("No physician found for ID: "+searchValue);
+                    physicianList.add(optional.get());
+                }
             }
             case 3 -> physicianList.addAll(physicianRepository.findByName(searchValue));
             case 4 -> physicianList.addAll(physicianRepository.findByLastName(searchValue));
@@ -132,7 +136,11 @@ public class UserListingServiceImpl implements UserListingService {
         switch (searchParameter) {
             case 0 -> patientList.addAll(patientRepository.findAll());
             case 1 -> patientList.add(patientRepository.getReferenceById(Long.parseLong(searchValue)));
-            case 2 -> patientList.add(patientRepository.findByPersonalId(searchValue));
+            case 2 -> {
+                Optional<Patient> optional = patientRepository.findByPersonalId(searchValue);
+                if(optional.isEmpty())throw new Exception("No patient found by personalID: "+searchValue);
+                else patientList.add(optional.get());
+            }
             case 3 -> patientList.addAll(patientRepository.findByName(searchValue));
             case 4 -> patientList.addAll(patientRepository.findByLastName(searchValue));
             case 5 -> patientList.add(patientRepository.findByEmail(searchValue));

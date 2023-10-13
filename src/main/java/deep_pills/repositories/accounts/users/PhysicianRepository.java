@@ -19,7 +19,7 @@ public interface PhysicianRepository extends JpaRepository<Physician, Long> {
     List<Physician> findAll();
 
     @Query("select ph from Physician ph where ph.personalId = :personalId")
-    Physician findByPersonalId(String personalId);
+    Optional<Physician> findByPersonalId(String personalId);
 
     @Query("select ph from Physician ph where ph.name = :name")
     List<Physician> findByName(String name);

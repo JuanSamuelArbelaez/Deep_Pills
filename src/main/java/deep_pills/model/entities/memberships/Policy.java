@@ -23,6 +23,9 @@ public class Policy implements Serializable { //Policy finished
     @Column(name = "description")
     private String description;
 
+    @Column(name = "maxAppointments")
+    private Integer maxAppointments;
+
     @Column(name = "cost")
     private double cost;
 

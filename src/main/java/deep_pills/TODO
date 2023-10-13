@@ -56,7 +56,7 @@ ShiftType = OK
 Service Implementations: 51.036%
 
 AccountUpdateService = Complexity:High(Ponderation: 12.5%), progress:100%, totalProgress: 12.5%
-AppointmentsService = Complexity:High(Ponderation:12.5%), progress:0%, totalProgress:0%
+AppointmentsService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 AuthenticationService = Complexity:Low(Ponderation:4.16%), progress:100%, totalProgress:4.16%
 ClaimsService = Complexity:High(Ponderation:12.5%), progress:0%, totalProgress:0%
 EMailService = Complexity:Low(Ponderation:4.16%), progress:0%, totalProgress:0%
@@ -67,19 +67,23 @@ UserListingService = Complexity:High(Ponderation:12.5%), progress:75%, totalProg
 UserManagementService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 
 -----------------------------------------------------------------------------------------------------------------------
-DTOs: 61.52%
+DTOs: 72.41%
 
-AccountDetailsPatientDTO =
+AccountDetailsPatientDTO = *
 InfoUpdatePatientDTO = OK
 PatientListingItemDTO = OK
 PatientSearchDTO = OK
-AccountDetailsPhysicianDTO =
+AccountDetailsPhysicianDTO = *
 InfoUpdatePatientDTO = OK
 PhysicianListingItemAdminDTO = OK
 PhysicianListingItemPatientDTO = OK
 PhysicianSearchDTO = OK
-AppointmentPatientDTO =
-AppointmentPhysicianDTO =
+AppointmentCancellationDTO = OK
+AppointmentGenericDTO = OK
+AppointmentPatientDTO = OK
+AppointmentRescheduleDTO = OK
+AppointmentScheduleDTO = OK
+AppointmentSearchDTO = OK
 ClaimAnswerDTO =
 ClaimDetailedItemAdminDTO = OK
 ClaimItemAdminDTO = OK
@@ -96,14 +100,15 @@ RegisterPhysicianDTO = OK
 ShiftDTO = OK
 
 -----------------------------------------------------------------------------------------------------------------------
-Repositories: 80% (Sujeto a la cantidad de Repos)
+Repositories: 90.90% (Sujeto a la cantidad de Repos)
 
 PatientRegistrationRepository = OK
 PhysicianRegistrationRepository = OK
 PatientRepository = OK
 PhysicianRepository = OK
 AccountRepository = OK
-PhysicianAppointmentScheduleRepository =
+AppointmentRepository = OK
+PhysicianAppointmentScheduleRepository = OK
 MembershipRepository =
 ScheduleRepository = OK
 ShiftRepository = OK
