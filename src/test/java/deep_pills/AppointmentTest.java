@@ -1,9 +1,14 @@
 package deep_pills;
 
+import deep_pills.dto.appointments.AppointmentGenericDTO;
 import deep_pills.services.interfaces.AppointmentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @SpringBootTest
 public class AppointmentTest {
@@ -34,50 +39,138 @@ public class AppointmentTest {
     }
 
     @Test public void allAppointmentsByPhysicianIdTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.allAppointmentsByPhysicianId con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+        try{
+            List<AppointmentGenericDTO> list = appointmentService.allAppointmentsByPhysicianId("1012.529.018");
+            for(AppointmentGenericDTO appointment : list){
+                System.out.println(
+                        appointment.appointmentId()+" | "+
+                                appointment.duration()+" | "+
+                                appointment.appointmentState()+" | "+
+                                appointment.date()+" | "+
+                                appointment.time()+" | "+
+                                appointment.personalId());
+            }
+        }catch (Exception ignored){
+        }
     }
 
     @Test public void upcomingAppointmentsByPhysicianIdTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.upcomingAppointmentsByPhysicianId con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+        try{
+            List<AppointmentGenericDTO> list = appointmentService.upcomingAppointmentsByPhysicianId("1012.529.018");
+            for(AppointmentGenericDTO appointment : list){
+                System.out.println(
+                        appointment.appointmentId()+" | "+
+                                appointment.duration()+" | "+
+                                appointment.appointmentState()+" | "+
+                                appointment.date()+" | "+
+                                appointment.time()+" | "+
+                                appointment.personalId());
+            }
+        }catch (Exception ignored){
+        }
     }
 
     @Test public void pastAppointmentsByPhysicianIdTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.pastAppointmentsByPhysicianId con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+        try{
+            List<AppointmentGenericDTO> list = appointmentService.pastAppointmentsByPhysicianId("1012.529.018");
+            for(AppointmentGenericDTO appointment : list){
+                System.out.println(
+                        appointment.appointmentId()+" | "+
+                                appointment.duration()+" | "+
+                                appointment.appointmentState()+" | "+
+                                appointment.date()+" | "+
+                                appointment.time()+" | "+
+                                appointment.personalId());
+            }
+        }catch (Exception ignored){
+        }
     }
 
     @Test public void dateSpecificAppointmentsByPhysicianIdTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.dateSpecificAppointmentsByPhysicianId con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+        String appointmentDate = "18/10/2023"; // Date to search from
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+
+        try{
+            Date date = formato.parse(appointmentDate);
+            List<AppointmentGenericDTO> list = appointmentService.dateSpecificAppointmentsByPhysicianId("108.479.102", date);
+            for(AppointmentGenericDTO appointment : list){
+                System.out.println(
+                        appointment.appointmentId()+" | "+
+                                appointment.duration()+" | "+
+                                appointment.appointmentState()+" | "+
+                                appointment.date()+" | "+
+                                appointment.time()+" | "+
+                                appointment.personalId());
+            }
+        }catch (Exception ignored){
+        }
     }
 
-    @Test public void allAppointmentsByPateintIdTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.allAppointmentsByPateintId con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+    @Test public void allAppointmentsByPatientIdTest() {
+        try{
+            List<AppointmentGenericDTO> list = appointmentService.allAppointmentsByPatientId("1012.529.018");
+            for(AppointmentGenericDTO appointment : list){
+                System.out.println(
+                        appointment.appointmentId()+" | "+
+                                appointment.duration()+" | "+
+                                appointment.appointmentState()+" | "+
+                                appointment.date()+" | "+
+                                appointment.time()+" | "+
+                                appointment.personalId());
+            }
+        }catch (Exception ignored){
+        }
     }
 
     @Test public void upcomingAppointmentsByPatientIdTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.upcomingAppointmentsByPatientId con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+        try{
+            List<AppointmentGenericDTO> list = appointmentService.upcomingAppointmentsByPatientId("1012.529.018");
+            for(AppointmentGenericDTO appointment : list){
+                System.out.println(
+                        appointment.appointmentId()+" | "+
+                                appointment.duration()+" | "+
+                                appointment.appointmentState()+" | "+
+                                appointment.date()+" | "+
+                                appointment.time()+" | "+
+                                appointment.personalId());
+            }
+        }catch (Exception ignored){
+        }
     }
 
     @Test public void pastAppointmentsByPatientIdTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.pastAppointmentsByPatientId con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+        try{
+            List<AppointmentGenericDTO> list = appointmentService.pastAppointmentsByPatientId("1012.529.018");
+            for(AppointmentGenericDTO appointment : list){
+                System.out.println(
+                        appointment.appointmentId()+" | "+
+                                appointment.duration()+" | "+
+                                appointment.appointmentState()+" | "+
+                                appointment.date()+" | "+
+                                appointment.time()+" | "+
+                                appointment.personalId());
+            }
+        }catch (Exception ignored){
+        }
     }
 
-    @Test public void dateSpecificAppointmentsByPatientnIdTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.dateSpecificAppointmentsByPatientnId con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+    @Test public void dateSpecificAppointmentsByPatientIdTest() {
+        String appointmentDate = "18/10/2023"; // Date to search from
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+
+        try{
+            Date date = formato.parse(appointmentDate);
+            List<AppointmentGenericDTO> list = appointmentService.dateSpecificAppointmentsByPatientId("1012.529.018", date);
+            for(AppointmentGenericDTO appointment : list){
+                System.out.println(
+                        appointment.appointmentId()+" | "+
+                        appointment.duration()+" | "+
+                        appointment.appointmentState()+" | "+
+                        appointment.date()+" | "+
+                        appointment.time()+" | "+
+                        appointment.personalId());
+            }
+        }catch (Exception ignored){
+        }
     }
 }

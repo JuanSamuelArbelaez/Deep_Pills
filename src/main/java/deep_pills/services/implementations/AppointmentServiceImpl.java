@@ -268,7 +268,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public List<AppointmentGenericDTO> allAppointmentsByPateintId(@NotNull String patientPersonalID) throws Exception {
+    public List<AppointmentGenericDTO> allAppointmentsByPatientId(@NotNull String patientPersonalID) throws Exception {
         Patient patient = getPatientFromOptional(patientPersonalID);
         List<PhysicianAppointmentSchedule> appointments = appointmentRepository.findByPatient_Id(patient.getId());
         return mapAppointmentDTOS(appointments);
@@ -292,7 +292,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientnId(@NotNull String patientPersonalID, @NotNull Date date) throws Exception {
+    public List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientId(@NotNull String patientPersonalID, @NotNull Date date) throws Exception {
         Patient patient = getPatientFromOptional(patientPersonalID);
         List<PhysicianAppointmentSchedule> appointments = appointmentRepository.findAppointmentsForPatientOnDate(patient.getId(), date);
         return mapAppointmentDTOS(appointments);

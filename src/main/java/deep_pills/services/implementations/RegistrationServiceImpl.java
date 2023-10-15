@@ -5,6 +5,7 @@ import deep_pills.model.entities.accounts.Account;
 import deep_pills.model.entities.accounts.users.patients.*;
 import deep_pills.model.entities.accounts.users.physicians.*;
 import deep_pills.model.entities.schedule.*;
+import deep_pills.model.enums.states.ScheduleState;
 import deep_pills.model.enums.types.ShiftType;
 import deep_pills.model.enums.lists.Specialization;
 import deep_pills.model.enums.states.AccountState;
@@ -92,6 +93,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 Schedule schedule = new Schedule();
                 schedule.setShift(shift);
                 schedule.setDate(currentDate);
+                schedule.setScheduleState(ScheduleState.ACTIVE);
                 schedulerRepository.save(schedule);
             }
 
