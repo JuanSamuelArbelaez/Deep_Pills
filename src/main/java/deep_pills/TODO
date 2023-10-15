@@ -53,7 +53,7 @@ Symptom = OK
 ShiftType = OK
 
 -----------------------------------------------------------------------------------------------------------------------
-Service Implementations: 51.036%
+Service Implementations: 63.535%
 
 AccountUpdateService = Complexity:High(Ponderation: 12.5%), progress:100%, totalProgress: 12.5%
 AppointmentsService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
@@ -78,12 +78,12 @@ InfoUpdatePatientDTO = OK
 PhysicianListingItemAdminDTO = OK
 PhysicianListingItemPatientDTO = OK
 PhysicianSearchDTO = OK
-AppointmentCancellationDTO = OK
 AppointmentGenericDTO = OK
 AppointmentPatientDTO = OK
 AppointmentRescheduleDTO = OK
 AppointmentScheduleDTO = OK
 AppointmentSearchDTO = OK
+AppointmentTreatmentPlanDTO = OK
 ClaimAnswerDTO =
 ClaimDetailedItemAdminDTO = OK
 ClaimItemAdminDTO = OK

@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Table(name = "treatmentPlan")
 public class TreatmentPlan implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "treatmentPlanId")
     private Long treatmentPlanId;
 

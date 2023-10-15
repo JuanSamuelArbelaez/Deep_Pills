@@ -104,7 +104,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setAppointmentState(AppointmentState.RESCHEDULED);
         appointmentRepository.save(appointment);
 
-        return "Appointment "+appointment.getAppointmentId()+" rescheduled for "+appointmentDate+" at "+appointmentTime;
+        return "Appointment "+appointment.getAppointmentId()+" rescheduled for "+appointmentDate+" at "+appointment.getTime();
     }
 
     @Override

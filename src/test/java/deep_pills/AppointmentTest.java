@@ -1,12 +1,16 @@
 package deep_pills;
 
-import deep_pills.dto.appointments.AppointmentGenericDTO;
+import deep_pills.dto.appointments.*;
+import deep_pills.model.enums.lists.Diagnosis;
+import deep_pills.model.enums.lists.Symptom;
 import deep_pills.services.interfaces.AppointmentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -15,32 +19,70 @@ public class AppointmentTest {
     @Autowired private AppointmentService appointmentService;
 
     @Test public void serviceAppointmentTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.serviceAppointment con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+        try{
+            ArrayList<AppointmentTreatmentPlanDTO> plans = new ArrayList<>();
+            plans.add(new AppointmentTreatmentPlanDTO("Pedialite 2 times per day for 1 week", Diagnosis.Common_Cold));
+            System.out.println(appointmentService.serviceAppointment(new AppointmentServiceDTO(
+                    1L,
+                    "108.479.102",
+                    "Patient shows signs of severe dehydration",
+                    Arrays.asList(Symptom.Fever, Symptom.Cough),
+                    plans
+            )));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Test public void cancellAppointmentTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.cancellAppointment con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+        try{
+            System.out.println(appointmentService.cancellAppointment(2L));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Test public void rescheduleAppointmentTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.rescheduleAppointment con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+        try{
+            String timeString = "11:30:00";
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            Date appointmentTime = sdf.parse(timeString);
+
+            System.out.println(appointmentService.rescheduleAppointment(new AppointmentRescheduleDTO(
+                    52L,
+                    108L,
+                    "1012.529.018",
+                    "108.479.102",
+                    appointmentTime
+            )));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test public void scheduleAppointmentTest() {
-        // Implementa tu prueba aquí
-        // Llama a appointmentService.scheduleAppointment con datos de prueba
-        // Utiliza assertions para verificar el comportamiento esperado
+        try{
+            String timeString = "13:30:00";
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            Date appointmentTime = sdf.parse(timeString);
+
+            Long id = appointmentService.scheduleAppointment(new AppointmentScheduleDTO(
+                    "1012.529.018",
+                    "108.479.102",
+                    "Dehydration",
+                    107L,
+                    appointmentTime)
+            );
+            System.out.println("Appointment scheduled: "+id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test public void allAppointmentsByPhysicianIdTest() {
         try{
-            List<AppointmentGenericDTO> list = appointmentService.allAppointmentsByPhysicianId("1012.529.018");
+            List<AppointmentGenericDTO> list = appointmentService.allAppointmentsByPhysicianId("108.479.102");
             for(AppointmentGenericDTO appointment : list){
                 System.out.println(
                         appointment.appointmentId()+" | "+
@@ -56,7 +98,7 @@ public class AppointmentTest {
 
     @Test public void upcomingAppointmentsByPhysicianIdTest() {
         try{
-            List<AppointmentGenericDTO> list = appointmentService.upcomingAppointmentsByPhysicianId("1012.529.018");
+            List<AppointmentGenericDTO> list = appointmentService.upcomingAppointmentsByPhysicianId("108.479.102");
             for(AppointmentGenericDTO appointment : list){
                 System.out.println(
                         appointment.appointmentId()+" | "+
@@ -72,7 +114,7 @@ public class AppointmentTest {
 
     @Test public void pastAppointmentsByPhysicianIdTest() {
         try{
-            List<AppointmentGenericDTO> list = appointmentService.pastAppointmentsByPhysicianId("1012.529.018");
+            List<AppointmentGenericDTO> list = appointmentService.pastAppointmentsByPhysicianId("108.479.102");
             for(AppointmentGenericDTO appointment : list){
                 System.out.println(
                         appointment.appointmentId()+" | "+
@@ -87,7 +129,7 @@ public class AppointmentTest {
     }
 
     @Test public void dateSpecificAppointmentsByPhysicianIdTest() {
-        String appointmentDate = "18/10/2023"; // Date to search from
+        String appointmentDate = "19/10/2023"; // Date to search from
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
         try{
@@ -155,7 +197,7 @@ public class AppointmentTest {
     }
 
     @Test public void dateSpecificAppointmentsByPatientIdTest() {
-        String appointmentDate = "18/10/2023"; // Date to search from
+        String appointmentDate = "19/10/2023"; // Date to search from
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
         try{
