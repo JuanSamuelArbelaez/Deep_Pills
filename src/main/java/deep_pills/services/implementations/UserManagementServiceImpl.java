@@ -6,6 +6,7 @@ import deep_pills.repositories.accounts.AccountRepository;
 import deep_pills.services.interfaces.UserManagementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -15,21 +16,25 @@ import java.util.Optional;
 public class UserManagementServiceImpl implements UserManagementService {
     private final AccountRepository accountRepository;
     @Override
+    @Transactional
     public String disablePhysician(Long physicianId) throws Exception {
         return disableAccount(physicianId).getState().name();
     }
 
     @Override
+    @Transactional
     public String enablePhysician(Long physicianId) throws Exception {
         return enableAccount(physicianId).getState().name();
     }
 
     @Override
+    @Transactional
     public String disablePatient(Long patientId) throws Exception {
         return disableAccount(patientId).getState().name();
     }
 
     @Override
+    @Transactional
     public String enablePatient(Long patientId) throws Exception {
         return enableAccount(patientId).getState().name();
     }

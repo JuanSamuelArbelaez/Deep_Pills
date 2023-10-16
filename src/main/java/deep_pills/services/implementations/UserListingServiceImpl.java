@@ -108,11 +108,13 @@ public class UserListingServiceImpl implements UserListingService {
     }
 
     @Override
+    @Transactional
     public AccountDetailsPhysicianDTO getPhysicianDetails(Long physicianId) throws Exception {
         return null;
     }
 
     @Override
+    @Transactional
     public List<PatientListingItemDTO> listPatients(PatientSearchDTO patientSearchDTO) throws Exception {
         List<Patient> patientList = searchPatients(patientSearchDTO.searchParameter(), patientSearchDTO.searchValue());
         if(patientList.isEmpty()) throw new Exception("No matches found for value:'"+patientSearchDTO.searchValue()+"'");
@@ -162,6 +164,7 @@ public class UserListingServiceImpl implements UserListingService {
          return new Date(); //Implement String to Date parsing
     }
     @Override
+    @Transactional
     public AccountDetailsPatientDTO getPatientDetails(Long patientId) throws Exception {
         return null;
     }
