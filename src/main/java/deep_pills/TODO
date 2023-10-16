@@ -53,12 +53,12 @@ Symptom = OK
 ShiftType = OK
 
 -----------------------------------------------------------------------------------------------------------------------
-Service Implementations: 63.535%
+Service Implementations: 76.035%
 
 AccountUpdateService = Complexity:High(Ponderation: 12.5%), progress:100%, totalProgress: 12.5%
 AppointmentsService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 AuthenticationService = Complexity:Low(Ponderation:4.16%), progress:100%, totalProgress:4.16%
-ClaimsService = Complexity:High(Ponderation:12.5%), progress:0%, totalProgress:0%
+ClaimsService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 EMailService = Complexity:Low(Ponderation:4.16%), progress:0%, totalProgress:0%
 MembershipService = Complexity:High(Ponderation: 12.5%)), progress:0%, totalProgress: 0%
 PicturesService = Complexity:Low(Ponderation:4.16%), progress:0%, totalProgress:0%
@@ -67,7 +67,7 @@ UserListingService = Complexity:High(Ponderation:12.5%), progress:75%, totalProg
 UserManagementService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 
 -----------------------------------------------------------------------------------------------------------------------
-DTOs: 72.41%
+DTOs: 96.41%
 
 AccountDetailsPatientDTO = *
 InfoUpdatePatientDTO = OK
@@ -84,14 +84,14 @@ AppointmentRescheduleDTO = OK
 AppointmentScheduleDTO = OK
 AppointmentSearchDTO = OK
 AppointmentTreatmentPlanDTO = OK
-ClaimAnswerDTO =
+ClaimAnswerDTO = OK
 ClaimDetailedItemAdminDTO = OK
 ClaimItemAdminDTO = OK
-ClaimListingAdminDTO =
-ClaimDetailedItemPatientDTO =
-ClaimItemPatientDTO =
-ClaimListingPatientDTO =
-ClaimRegisterDTO =
+ClaimListingAdminDTO = OK
+ClaimDetailedItemPatientDTO = OK
+ClaimItemPatientDTO = OK
+ClaimListingPatientDTO = OK
+ClaimRegisterDTO = OK
 EMailDTO = OK
 MembershipDTO = OK
 LoginDTO = OK
