@@ -8,12 +8,15 @@ import java.util.Date;
 
 public record ClaimItemAdminDTO(
         @NotNull
-        Long id,
+        Long claimId,
 
         @NotNull Date date,
 
         @NotNull
         ClaimType type,
+
+        @NotNull
+        Long claimInfoId,
 
         @NotNull
         ClaimState status) {

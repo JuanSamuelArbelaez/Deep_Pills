@@ -1,6 +1,7 @@
 package deep_pills.dto.claims.admin;
 
 import deep_pills.model.enums.states.ClaimState;
+import deep_pills.model.enums.types.ClaimType;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
@@ -10,7 +11,7 @@ public record ClaimDetailedItemAdminDTO(
         Long claimId,
 
         @NotNull
-        Long patientId,
+        String patientPersonalId,
 
         @NotNull
         Long adminId,
@@ -22,8 +23,11 @@ public record ClaimDetailedItemAdminDTO(
         Date date,
 
         @NotNull
-        ClaimState status,
+        ClaimType claimType,
 
         @NotNull
-        String notes) {
+        String details,
+
+        @NotNull
+        ClaimState claimStatus) {
 }

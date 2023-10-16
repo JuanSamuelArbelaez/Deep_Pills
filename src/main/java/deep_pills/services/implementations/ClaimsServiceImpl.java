@@ -1,70 +1,213 @@
 package deep_pills.services.implementations;
 
 import deep_pills.dto.claims.admin.*;
-import deep_pills.dto.claims.patient.ClaimDetailedItemPatientDTO;
-import deep_pills.dto.claims.patient.ClaimItemPatientDTO;
-import deep_pills.dto.claims.patient.ClaimListingPatientDTO;
-import deep_pills.dto.claims.patient.ClaimRegisterDTO;
+import deep_pills.dto.claims.patient.*;
+import deep_pills.model.entities.accounts.Admin;
+import deep_pills.model.entities.accounts.users.patients.Patient;
+import deep_pills.model.entities.appointments.Appointment;
+import deep_pills.model.entities.claims.*;
+import deep_pills.model.enums.states.ClaimState;
+import deep_pills.model.enums.types.MessageType;
+import deep_pills.repositories.accounts.AdminRepository;
+import deep_pills.repositories.accounts.users.PatientRepository;
+import deep_pills.repositories.appointments.AppointmentRepository;
+import deep_pills.repositories.claims.*;
 import deep_pills.services.interfaces.ClaimsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ClaimsServiceImpl implements ClaimsService {
+    private final ClaimRepository claimRepository;
+    private final MessageRepository messageRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final ClaimInfoRepository claimInfoRepository;
+    private final PatientRepository patientRepository;
+    private final AdminRepository adminRepository;
 
     @Override
-    public List<ClaimItemAdminDTO> listPendingClaimsForAdmin(ClaimListingAdminDTO claimListingAdminDto) throws Exception {
-        return null;
+    @Transactional
+    public List<ClaimItemAdminDTO> listAllClaimsByStatusForAdmin(Long adminId, ClaimState status) throws Exception {
+        return adminClaimMap(claimRepository.findByAdminAndStatus(adminId, status));
+    }
+    @Override
+    @Transactional
+    public List<ClaimItemAdminDTO> listAllClaimsByStatus(ClaimState status) throws Exception {
+        return adminClaimMap(claimRepository.findByStatus(status));
     }
 
     @Override
+    @Transactional
     public List<ClaimItemAdminDTO> listAllClaimsForAdmin(Long adminId) throws Exception {
-        return null;
+        return adminClaimMap(claimRepository.findByAdmin(adminId));
     }
 
     @Override
+    @Transactional
     public List<ClaimItemAdminDTO> listAllClaims() throws Exception {
-        return null;
+        return adminClaimMap(claimRepository.findAll());
+    }
+
+    private List<ClaimItemAdminDTO> adminClaimMap(List<Claim> claims){
+        return claims.stream().map(
+                claim -> new ClaimItemAdminDTO(
+                        claim.getClaimId(),
+                        claim.getClaimDate(),
+                        claim.getClaimType(),
+                        claim.getClaimInfo().getClaimInfoId(),
+                        claim.getClaimStatus())
+        ).collect(Collectors.toList());
+    }
+    private List<ClaimItemPatientDTO> patientClaimMap(List<Claim> claims){
+        return claims.stream().map(
+                claim -> new ClaimItemPatientDTO(
+                        claim.getClaimId(),
+                        claim.getClaimDate(),
+                        claim.getClaimType(),
+                        claim.getClaimStatus())
+        ).collect(Collectors.toList());
+    }
+
+    private Claim getClaimFromOptional(Optional<Claim> optional){
+        return optional.orElse(null);
     }
 
     @Override
-    public String answerClaim(ClaimAnswerDTO claimAnswerDto) throws Exception {
-        return null;
+    @Transactional
+    public String assignClaimToAdmin(Long claimId, Long adminId) throws Exception{
+        Claim claim = getClaimFromOptional(claimRepository.findById(claimId));
+        Optional<Admin> adminOptional = adminRepository.findById(adminId);
+        if(adminOptional.isEmpty()) throw new Exception("No admin found for id: " + adminId);
+
+        claim.getClaimInfo().setAdmin(adminOptional.get());
+        claimRepository.save(claim);
+
+        return "Claim " + claim.getClaimId() +" assigned to admin: " + claim.getClaimInfo().getAdmin().getId();
     }
 
     @Override
+    @Transactional
+    public Long addMessageToClaim(ClaimAnswerDTO claimAnswerDTO) throws Exception {
+        Claim claim = getClaimFromOptional(claimRepository.findById(claimAnswerDTO.claimId()));
+
+        if(claim == null) throw new Exception("Claim: "+claimAnswerDTO.claimId()+"not found");
+
+        if(!claim.getClaimStatus().equals(ClaimState.ACTIVE)) throw new Exception("Claim not active: "+claim.getClaimStatus());
+
+        Patient patient = claim.getClaimInfo().getPatient();
+        Admin admin = claim.getClaimInfo().getAdmin();
+
+        Message message = new Message();
+        message.setClaim(claim);
+        message.setMessage(claimAnswerDTO.text());
+        message.setMessageType(claimAnswerDTO.messageType());
+
+        if(message.getMessageType().equals(MessageType.ADMIN_PATIENT)){
+            message.setSender(admin);
+            message.setRecipient(patient);
+        }else{
+            message.setSender(patient);
+            message.setRecipient(admin);
+        }
+
+        message.setDate(new Date());
+        Message savedMessage = messageRepository.save(message);
+        return savedMessage.getMessageId();
+    }
+
+    @Override
+    @Transactional
     public ClaimItemAdminDTO searchClaimForAdmin(Long claimId) throws Exception {
-        return null;
+        Claim claim = getClaimFromOptional(claimRepository.findById(claimId));
+        if(claim == null)throw new Exception("No claim found for Id: "+claimId);
+        return adminClaimMap(Collections.singletonList(claim)).get(0);
     }
 
     @Override
+    @Transactional
     public ClaimDetailedItemAdminDTO seeClaimDetailsForAdmin(Long claimId) throws Exception {
-        return null;
+        Claim claim = getClaimFromOptional(claimRepository.findById(claimId));
+        if(claim == null)throw new Exception("No claim found for Id: "+claimId);
+        return new ClaimDetailedItemAdminDTO(
+                claim.getClaimId(),
+                claim.getClaimInfo().getAppointment().getPatient().getPersonalId(),
+                claim.getClaimInfo().getAdmin().getId(),
+                claim.getClaimInfo().getAppointment().getAppointmentId(),
+                claim.getClaimDate(),
+                claim.getClaimType(),
+                claim.getDetails(),
+                claim.getClaimStatus()
+        );
     }
 
     @Override
-    public List<ClaimItemPatientDTO> listPendingClaimsForPatient(ClaimListingPatientDTO claimListingPatientDto) throws Exception {
-        return null;
+    @Transactional
+    public List<ClaimItemPatientDTO> listAllClaimsByStatusForPatient(String patientPersonalId, ClaimState status) throws Exception {
+        return patientClaimMap(claimRepository.findByPatientAndStatus(patientPersonalId, status));
     }
 
     @Override
-    public List<ClaimItemPatientDTO> listAllClaimsForPatient(Long patientId) throws Exception {
-        return null;
+    @Transactional
+    public List<ClaimItemPatientDTO> listAllClaimsForPatient(String patientPersonalId) throws Exception {
+        return patientClaimMap(claimRepository.findByPatientPersonalId(patientPersonalId));
     }
 
     @Override
-    public ClaimItemPatientDTO searchClaimForPatient(Long claimId, Long patientId) throws Exception {
-        return null;
+    @Transactional
+    public ClaimItemPatientDTO searchClaimForPatient(Long claimId, String patientPersonalId) throws Exception {
+        Claim claim = getClaimFromOptional(claimRepository.findByIdAndPatientPersonalId(claimId, patientPersonalId));
+        if(claim == null ) throw new Exception("No claim found for Id: "+claimId+" for Patient: "+patientPersonalId);
+        return patientClaimMap(Collections.singletonList(claim)).get(0);
     }
 
     @Override
-    public ClaimDetailedItemPatientDTO seeClaimDetailsForPatient(Long claimId, Long patientId) throws Exception {
-        return null;
+    @Transactional
+    public ClaimDetailedItemPatientDTO seeClaimDetailsForPatient(Long claimId, String patientPersonalId) throws Exception {
+        Claim claim = getClaimFromOptional(claimRepository.findByIdAndPatientPersonalId(claimId, patientPersonalId));
+        if(claim == null ) throw new Exception("No claim found for Id: "+claimId+" for Patient: "+patientPersonalId);
+        return new ClaimDetailedItemPatientDTO(
+                claim.getClaimId(),
+                claim.getClaimInfo().getPatient().getPersonalId(),
+                claim.getClaimInfo().getAppointment().getAppointmentId(),
+                claim.getClaimDate(),
+                claim.getClaimType(),
+                claim.getDetails(),
+                claim.getClaimStatus()
+        );
     }
 
     @Override
-    public Long newClaim(ClaimRegisterDTO claimRegisterDto) throws Exception {
-        return null;
+    @Transactional
+    public Long newClaim(ClaimRegisterDTO claimRegisterDTO) throws Exception {
+        Optional<Appointment> appointmentOptional = appointmentRepository.findAppointmentsByIdAndPatientPersonalId(claimRegisterDTO.appointmentId(), claimRegisterDTO.patientPersonalId());
+        if(appointmentOptional.isEmpty()) throw new Exception("No appointment found for Id: " + claimRegisterDTO.appointmentId());
+        if(claimInfoRepository.countClaimsByAppointmentAndClaimStatus(claimRegisterDTO.appointmentId(), ClaimState.ACTIVE)>0) throw new Exception("Cannot create new claim for appointment: " + claimRegisterDTO.appointmentId()+" because there is already an ACTIVE");
+
+        Appointment appointment = appointmentOptional.get();
+
+        Optional<Patient> patientOptional = patientRepository.findByPersonalId(claimRegisterDTO.patientPersonalId());
+        if(patientOptional.isEmpty())throw new Exception("No patient found for personalId: "+claimRegisterDTO.patientPersonalId());
+
+        Patient patient = patientOptional.get();
+
+        Claim claim = new Claim();
+        claim.setClaimStatus(ClaimState.ACTIVE);
+        claim.setClaimType(claimRegisterDTO.claimType());
+        claim.setDetails(claimRegisterDTO.details());
+        claim.setClaimDate(new Date());
+        Claim savedClaim = claimRepository.save(claim);
+
+        ClaimInfo info = new ClaimInfo();
+        info.setClaim(claim);
+        info.setAppointment(appointment);
+        info.setPatient(patient);
+        claimInfoRepository.save(info);
+
+        return savedClaim.getClaimId();
     }
 }

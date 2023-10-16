@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
@@ -62,5 +63,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             "WHERE a.patient = :patient " +
             "AND a.appointmentState IN :states")
     Long countScheduledOrRescheduledAppointments(Patient patient, List<AppointmentState> states);
+
+    @Query("SELECT a FROM Appointment a " +
+            "WHERE a.appointmentId = :appointmentId " +
+            "AND a.patient.personalId = :patientPersonalId")
+    Optional<Appointment> findAppointmentsByIdAndPatientPersonalId(@Param("scheduleId") Long appointmentId, @Param("physicianId") String patientPersonalId);
+
 }
 
