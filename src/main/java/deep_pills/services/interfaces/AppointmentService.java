@@ -12,6 +12,9 @@ import java.util.List;
 
 public interface AppointmentService {
     @Transactional
+    Long scheduleFreeDayForPhysician(String physicianPersonalId, Long scheduleId) throws Exception;
+
+    @Transactional
     String serviceAppointment(AppointmentServiceDTO appointmentServiceDTO) throws Exception;
 
     @Transactional

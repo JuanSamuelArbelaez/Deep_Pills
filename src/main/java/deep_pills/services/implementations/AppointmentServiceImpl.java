@@ -7,16 +7,19 @@ import deep_pills.model.entities.appointments.Appointment;
 import deep_pills.model.entities.appointments.AppointmentSymptoms;
 import deep_pills.model.entities.memberships.Membership;
 import deep_pills.model.entities.memberships.Policy;
+import deep_pills.model.entities.schedule.FreeDay;
 import deep_pills.model.entities.schedule.PhysicianAppointmentSchedule;
 import deep_pills.model.entities.schedule.Schedule;
 import deep_pills.model.entities.symptomsTreatmentDiagnosis.Treatment;
 import deep_pills.model.entities.symptomsTreatmentDiagnosis.TreatmentPlan;
 import deep_pills.model.enums.lists.Symptom;
 import deep_pills.model.enums.states.AppointmentState;
+import deep_pills.model.enums.states.FreeDayStatus;
 import deep_pills.model.enums.states.TreatmentState;
 import deep_pills.repositories.accounts.users.PatientRepository;
 import deep_pills.repositories.accounts.users.PhysicianRepository;
 import deep_pills.repositories.appointments.*;
+import deep_pills.repositories.schedules.FreeDayRepository;
 import deep_pills.repositories.schedules.ScheduleRepository;
 import deep_pills.services.interfaces.AppointmentService;
 import jakarta.validation.constraints.NotNull;
@@ -37,6 +40,31 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final PhysicianAppointmentScheduleRepository physicianAppointmentScheduleRepository;
     private final TreatmentRepository treatmentRepository;
     private final TreatmentPlanRepository treatmentPlanRepository;
+    private final FreeDayRepository freeDayRepository;
+
+    @Override
+    @Transactional
+    public Long scheduleFreeDayForPhysician(String physicianPersonalId, Long scheduleId) throws Exception {
+        Physician physician = getPhysicianFromOptional(physicianPersonalId);
+        Schedule schedule = getScheduleFromOptional(scheduleId);
+
+        if (!schedule.getShift().equals(physician.getShift())) throw new Exception("This schedule does not belong to the physicians shift");
+
+        if(freeDayRepository.countByPhysicianPersonalIdAndStatus(physician.getPersonalId(), FreeDayStatus.SCHEDULED)>1) throw new Exception("Physician "+physicianPersonalId+" already has a Free Day scheduled");
+
+        List<AppointmentState> states = new ArrayList<>();
+        states.add(AppointmentState.SCHEDULED);
+        states.add(AppointmentState.RESCHEDULED);
+
+        if(physicianAppointmentScheduleRepository.countByPhysicianPersonalIdAndDateAndStatus(physician.getPersonalId(), scheduleId, states)>0) throw new Exception("Appointments already scheduled for this day");
+
+        FreeDay freeDay = new FreeDay();
+        freeDay.setFreeDayStatus(FreeDayStatus.SCHEDULED);
+        freeDay.setPhysician(physician);
+        freeDay.setSchedule(schedule);
+
+        return freeDayRepository.save(freeDay).getFreeDayId();
+    }
 
     @Override
     @Transactional
@@ -88,6 +116,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         Physician physician = getPhysicianFromOptional(appointmentRescheduleDTO.physicianPersonalId());
         Appointment appointment = getAppointmentFromOptional(appointmentRescheduleDTO.appointmentId());
         Schedule schedule = getScheduleFromOptional(appointmentRescheduleDTO.scheduleId());
+
+        if(freeDayRepository.findByPhysicianPersonalIdAndScheduleAndStatus(physician.getPersonalId(), schedule.getScheduleId(), FreeDayStatus.SCHEDULED).isPresent()) throw new Exception("This is a scheduled free day for the physician");
+
         if (schedule.getDate().before(new Date())) throw new Exception("Cannot schedule an appointment for a date before today");
 
         Date appointmentDate = schedule.getDate();
@@ -102,6 +133,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setDate(appointmentDate);
         appointment.setTime(appointmentTime);
         appointment.setAppointmentState(AppointmentState.RESCHEDULED);
+        appointment.getPhysicianAppointmentSchedule().setSchedule(schedule);
         appointmentRepository.save(appointment);
 
         return "Appointment "+appointment.getAppointmentId()+" rescheduled for "+appointmentDate+" at "+appointment.getTime();
@@ -113,6 +145,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         Physician physician = getPhysicianFromOptional(appointmentScheduleDTO.physicianPersonalId());
         Patient patient = getPatientFromOptional(appointmentScheduleDTO.patientPersonalId());
         Schedule schedule = getScheduleFromOptional(appointmentScheduleDTO.scheduleId());
+
+        if(freeDayRepository.findByPhysicianPersonalIdAndScheduleAndStatus(physician.getPersonalId(), schedule.getScheduleId(), FreeDayStatus.SCHEDULED).isPresent()) throw new Exception("This is a scheduled free day for the physician");
 
         if(schedule.getDate().before(new Date())) throw new Exception("Cannot schedule an appointment for a date before today");
 

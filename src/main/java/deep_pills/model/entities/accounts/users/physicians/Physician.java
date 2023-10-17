@@ -1,6 +1,7 @@
 package deep_pills.model.entities.accounts.users.physicians;
 
 import deep_pills.model.entities.accounts.users.User;
+import deep_pills.model.entities.schedule.FreeDay;
 import deep_pills.model.entities.schedule.PhysicianAppointmentSchedule;
 import deep_pills.model.entities.schedule.Shift;
 import deep_pills.model.entities.symptomsTreatmentDiagnosis.TreatmentPlan;
@@ -30,4 +31,7 @@ public class Physician extends User {
 
     @OneToOne(mappedBy = "physician")
     private PhysicianRegistration physicianRegistration;
+
+    @OneToMany(mappedBy = "physician")
+    private List<FreeDay> freeDays;
 }

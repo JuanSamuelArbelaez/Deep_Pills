@@ -35,7 +35,7 @@ public class AccountUpdateTest {
 
     @Test public void updatePatientTest() {
         try {
-            String fechaNacimientoStr = "13/10/1990"; // Cambia esto a tu fecha de nacimiento
+            String fechaNacimientoStr = "11/04/1997"; // Cambia esto a tu fecha de nacimiento
 
             SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -43,15 +43,15 @@ public class AccountUpdateTest {
             System.out.println("Fecha de nacimiento en formato Date: " + fechaNacimiento);
 
             accountUpdateService.updatePatient(new InfoUpdatePatientDTO(
-                    152L,
-                    "Pepito",
-                    "Perez",
+                    402L,
+                    "Marta",
+                    "Quiroz",
                     fechaNacimiento,
-                    "303-202-1010",
-                    "pepito.perez@gmail.com",
-                    City.NEW_YORK_CITY,
-                    null,
-                    BloodType.O_POSITIVE
+                    "312-276-1801",
+                    "martaq.97@gmail.com",
+                    City.DALLAS,
+                    "www.example2.com/img2.jpg",
+                    BloodType.AB_POSITIVE
             ));
         }catch (Exception e) {
             e.printStackTrace();

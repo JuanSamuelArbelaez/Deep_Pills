@@ -18,18 +18,26 @@ import java.util.List;
 public class AppointmentTest {
     @Autowired private AppointmentService appointmentService;
 
-    @Test public void serviceAppointmentTest() {
+    @Test public void scheduleFreeDayForPhysicianTest(){
         try{
+            System.out.println("Free day: "+appointmentService.scheduleFreeDayForPhysician("108.479.102", 122L));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test public void serviceAppointmentTest() {
+        try {
             ArrayList<AppointmentTreatmentPlanDTO> plans = new ArrayList<>();
-            plans.add(new AppointmentTreatmentPlanDTO("Pedialite 2 times per day for 1 week", Diagnosis.Common_Cold));
+            plans.add(new AppointmentTreatmentPlanDTO("Topic cream twice per day on zones", Diagnosis.Acne));
             System.out.println(appointmentService.serviceAppointment(new AppointmentServiceDTO(
-                    1L,
-                    "108.479.102",
-                    "Patient shows signs of severe dehydration",
+                    152L,
+                    "723.319.180",
+                    "Patient shows signs of sever acne",
                     Arrays.asList(Symptom.Fever, Symptom.Cough),
                     plans
             )));
-        }catch(Exception e){
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -51,7 +59,7 @@ public class AppointmentTest {
 
             System.out.println(appointmentService.rescheduleAppointment(new AppointmentRescheduleDTO(
                     52L,
-                    108L,
+                    122L,
                     "1012.529.018",
                     "108.479.102",
                     appointmentTime
@@ -68,10 +76,10 @@ public class AppointmentTest {
             Date appointmentTime = sdf.parse(timeString);
 
             Long id = appointmentService.scheduleAppointment(new AppointmentScheduleDTO(
-                    "1012.529.018",
-                    "108.479.102",
-                    "Dehydration",
-                    107L,
+                    "171.018.271",
+                    "723.319.180",
+                    "Acne",
+                    122L,
                     appointmentTime)
             );
             System.out.println("Appointment scheduled: "+id);

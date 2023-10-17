@@ -8,8 +8,6 @@ public record ClaimAnswerDTO(
 
         @NotNull String text,
 
-        @NotNull MessageType messageType
-
-) {
+        @NotNull MessageType messageType) {
 
 }

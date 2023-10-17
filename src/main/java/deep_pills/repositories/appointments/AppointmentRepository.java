@@ -67,7 +67,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query("SELECT a FROM Appointment a " +
             "WHERE a.appointmentId = :appointmentId " +
             "AND a.patient.personalId = :patientPersonalId")
-    Optional<Appointment> findAppointmentsByIdAndPatientPersonalId(@Param("scheduleId") Long appointmentId, @Param("physicianId") String patientPersonalId);
+    Optional<Appointment> findAppointmentsByIdAndPatientPersonalId(@Param("appointmentId") Long appointmentId, @Param("patientPersonalId") String patientPersonalId);
 
 }
 

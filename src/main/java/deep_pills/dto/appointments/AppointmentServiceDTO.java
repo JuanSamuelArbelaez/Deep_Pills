@@ -1,6 +1,5 @@
 package deep_pills.dto.appointments;
 
-
 import deep_pills.model.enums.lists.Symptom;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;

@@ -18,26 +18,27 @@ public class RegistrationTest {
 
     @Test public void registerPhysicianTest(){
         ArrayList<Specialization> specs = new ArrayList<>();
-        specs.add(Specialization.Cardiology);
-        specs.add(Specialization.Palliative_Medicine);
+        specs.add(Specialization.Emergency_Medicine);
+        specs.add(Specialization.Obstetrics);
+        specs.add(Specialization.Gynecology);
 
         RegisterPhysicianDTO dto = new RegisterPhysicianDTO(
-                "Harry",
-                "White",
-                "harrywhite@deep.pills.com",
-                "apoidy",
-                "108.479.102",
+                "Serenna",
+                "Keisha",
+                "serenna.keisha@deep.pills.com",
+                "0192hsji",
+                "30.971.342",
                 Long.parseLong("1"),
                 specs,
                 new ShiftDTO(
-                        "Monday Tuesday Wednesday Thursday",
-                        Time.valueOf("8:00:00"),
+                        "Monday Tuesday Wednesday Thursday Friday",
+                        Time.valueOf("08:00:00"),
                         Time.valueOf("17:00:00")
                 )
         );
         try {
             Long id = registrationService.registerPhysician(dto);
-            System.out.println("Physycian registered. ID: "+id);
+            System.out.println("Physician registered. ID: "+id);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,9 +47,9 @@ public class RegistrationTest {
 
     @Test public void registerPatientTest(){
         RegisterPatientDTO dto = new RegisterPatientDTO(
-                "pepitoperez@gmail.com",
-                "pepepiña",
-                "1012.529.018"
+                "juanalcachofa@gmail.com",
+                "lalaland",
+                "171.018.271"
         );
         try {
             Long id = registrationService.registerPatient(dto);

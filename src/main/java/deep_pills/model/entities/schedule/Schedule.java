@@ -33,4 +33,7 @@ public class Schedule implements Serializable {
 
     @OneToMany(mappedBy = "schedule")
     private List<PhysicianAppointmentSchedule> physicianAppointmentScheduleList;
+
+    @OneToMany(mappedBy = "schedule")
+    private List<FreeDay> freeDays;
 }
