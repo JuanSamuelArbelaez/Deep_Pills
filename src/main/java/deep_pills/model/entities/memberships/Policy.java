@@ -1,4 +1,5 @@
 package deep_pills.model.entities.memberships;
+import deep_pills.model.enums.states.PolicyState;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,4 +35,8 @@ public class Policy implements Serializable { //Policy finished
 
     @OneToMany(mappedBy = "policy")
     private List<Membership> memberships;
+
+    @Enumerated
+    @Column(name = "state")
+    private PolicyState state;
 }

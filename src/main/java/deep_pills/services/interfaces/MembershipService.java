@@ -1,6 +1,7 @@
 package deep_pills.services.interfaces;
 
 import deep_pills.dto.memberships.*;
+import deep_pills.model.enums.states.PolicyState;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 

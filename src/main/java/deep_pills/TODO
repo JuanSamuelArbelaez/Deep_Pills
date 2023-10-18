@@ -67,7 +67,7 @@ UserListingService = Complexity:High(Ponderation:12.5%), progress:100%, totalPro
 UserManagementService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 
 -----------------------------------------------------------------------------------------------------------------------
-DTOs: 96.41%
+DTOs: 98.87%
 
 AccountDetailsPatientDTO = *
 InfoUpdatePatientDTO = OK
@@ -100,7 +100,7 @@ RegisterPhysicianDTO = OK
 ShiftDTO = OK
 
 -----------------------------------------------------------------------------------------------------------------------
-Repositories: 90.90% (Sujeto a la cantidad de Repos)
+Repositories: 98.87% (Sujeto a la cantidad de Repos)
 
 PatientRegistrationRepository = OK
 PhysicianRegistrationRepository = OK
@@ -117,22 +117,7 @@ PhysicianSpecializationRepository = OK
 -----------------------------------------------------------------------------------------------------------------------
 
 Para hacer (ASTAIZA):
-1. getPatientDetails(Long patientId) [UserListingServiceImpl].
-    Se debe implementar el metodo. Este debe retornar el DTO (poblar el DTO con los
-    argumentos previstos en el mockup de verdetalle/perfil de paciente), cuyos datos
-    deben ser trazados desde el Paciente buscado por el argumento (Long) patientId.
-
-2. getPhysicianDetails(Long physicianId) [UserListingServiceImpl].
-    Se debe implementar el metodo. Este debe retornar el DTO (poblar el DTO con los
-    argumentos previstos en el mockup de verdetalle/perfil de medico), cuyos datos
-    deben ser trazados desde el Medico buscado por el argumento (Long) physicianId.
-
-3. Indicar las funcionalidades en la interfaz MembershipService (no la Impl).
-    Es necesario ver las funcionalidades reflejadas como un método. Este método
-    puede usar o devolver un DTO, si existe y no esta poblado, poblelo. Si este DTO
-    no existe, creelo. Actualize la seccion de progreso de DTO's
-
-4. Anotaciones: De ser posible, revisar cada entidad y añadirle anotaciones de
+    Anotaciones: De ser posible, revisar cada entidad y añadirle anotaciones de
     restriccion de parámetros. Ej: @Length(max=25).
 
     Nota: El @NotNull debe usarse solo en los casos en los que se esté seguro de que

@@ -7,6 +7,7 @@ import deep_pills.model.entities.memberships.*;
 import deep_pills.model.enums.states.ChargeState;
 import deep_pills.model.enums.states.MembershipState;
 import deep_pills.model.enums.states.PaymentState;
+import deep_pills.model.enums.states.PolicyState;
 import deep_pills.repositories.accounts.AdminRepository;
 import deep_pills.repositories.accounts.users.PatientRepository;
 import deep_pills.repositories.memberships.*;
