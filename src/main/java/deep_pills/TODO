@@ -53,17 +53,17 @@ Symptom = OK
 ShiftType = OK
 
 -----------------------------------------------------------------------------------------------------------------------
-Service Implementations: 76.035%
+Service Implementations: 91.66%
 
 AccountUpdateService = Complexity:High(Ponderation: 12.5%), progress:100%, totalProgress: 12.5%
 AppointmentsService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 AuthenticationService = Complexity:Low(Ponderation:4.16%), progress:100%, totalProgress:4.16%
 ClaimsService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 EMailService = Complexity:Low(Ponderation:4.16%), progress:0%, totalProgress:0%
-MembershipService = Complexity:High(Ponderation: 12.5%)), progress:0%, totalProgress: 0%
+MembershipService = Complexity:High(Ponderation: 12.5%)), progress:12.5%, totalProgress: 12.5%
 PicturesService = Complexity:Low(Ponderation:4.16%), progress:0%, totalProgress:0%
 RegistrationService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
-UserListingService = Complexity:High(Ponderation:12.5%), progress:75%, totalProgress:9.375%
+UserListingService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 UserManagementService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
 
 -----------------------------------------------------------------------------------------------------------------------

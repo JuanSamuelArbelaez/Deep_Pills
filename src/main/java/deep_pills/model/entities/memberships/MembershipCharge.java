@@ -23,6 +23,9 @@ public class MembershipCharge implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
 
+    @Column(name = "chargeAmount")
+    private Double chargeAmount;
+
     @Enumerated
     @Column(name = "state")
     private ChargeState chargeState;

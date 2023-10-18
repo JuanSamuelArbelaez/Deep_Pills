@@ -15,6 +15,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -109,8 +112,20 @@ public class UserListingServiceImpl implements UserListingService {
 
     @Override
     @Transactional
-    public AccountDetailsPhysicianDTO getPhysicianDetails(Long physicianId) throws Exception {
-        return null;
+    public AccountDetailsPhysicianDTO getPhysicianDetails(String physicianPersonalId) throws Exception {
+        Physician physician = getPhysicianFromOptional(physicianRepository.findByPersonalId(physicianPersonalId));
+        if(physician == null) throw new Exception("physician not found");
+
+        return new AccountDetailsPhysicianDTO(
+                physician.getId(),
+                physician.getPersonalId(),
+                physician.getName(),
+                physician.getLastName(),
+                physician.getEmail(),
+                physician.getPhone(),
+                physician.getShift(),
+                physician.getCity(),
+                physician.getState());
     }
 
     @Override
@@ -160,12 +175,34 @@ public class UserListingServiceImpl implements UserListingService {
         return patientList;
     }
 
-    private Date getDate(String date){
-         return new Date(); //Implement String to Date parsing
+    private Date getDate(String date) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+        return format.parse(date); //Implement String to Date parsing
     }
     @Override
     @Transactional
-    public AccountDetailsPatientDTO getPatientDetails(Long patientId) throws Exception {
-        return null;
+    public AccountDetailsPatientDTO getPatientDetails(String patientPersonalId) throws Exception {
+        Patient patient = getPatientFromOptional(patientRepository.findByPersonalId(patientPersonalId));
+        if (patient == null) throw new Exception("patient not found");
+
+        return new AccountDetailsPatientDTO(
+                patient.getId(),
+                patient.getPersonalId(),
+                patient.getName(),
+                patient.getLastName(),
+                patient.getEmail(),
+                patient.getPhone(),
+                patient.getCity(),
+                patient.getDateOfBirth(),
+                patient.getBloodType(),
+                patient.getPatientAllergies(),
+                patient.getState());
+    }
+    private Patient getPatientFromOptional(Optional<Patient> optional){
+        return optional.orElse(null);
+    }
+    private Physician getPhysicianFromOptional(Optional<Physician> optional){
+        return optional.orElse(null);
     }
 }

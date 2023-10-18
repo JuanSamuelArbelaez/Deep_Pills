@@ -23,4 +23,53 @@ public class ClaimsTest {
             e.printStackTrace();
         }
     }
+    public void listAllClaimsByStatusForAdminTest(){
+
+    }
+
+    public void listAllClaimsByStatusTest(){
+
+    }
+
+    public void listAllClaimsForAdminTest(){
+    }
+
+    public void listAllClaimsTest(){
+
+    }
+
+    @Test public void assignClaimToAdminTest(){
+        try{
+            System.out.println(claimsService.assignClaimToAdmin(1L, 1L));
+        }catch(Exception e){
+        e.printStackTrace();
+        }
+    }
+
+    public void addMessageToClaimTest(){
+
+    }
+
+    public void searchClaimForAdminTest(){
+
+    }
+
+    public void seeClaimDetailsForAdminTest(){
+
+    }
+
+    public void listAllClaimsByStatusForPatientTest(){
+
+    }
+
+    public void listAllClaimsForPatientTest(){
+
+    }
+    public void searchClaimForPatientTest(){
+
+    }
+
+    public void seeClaimDetailsForPatientTest(){
+
+    }
 }

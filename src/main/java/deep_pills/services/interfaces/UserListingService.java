@@ -13,7 +13,10 @@ public interface UserListingService {
     @Transactional
     List<PhysicianListingItemPatientDTO> listPhysiciansForPatient(@NotNull PhysicianSearchDTO physicianSearchDTO) throws Exception;
 
-    AccountDetailsPhysicianDTO getPhysicianDetails(Long physicianId) throws Exception;
+    @Transactional
+    AccountDetailsPhysicianDTO getPhysicianDetails(String physicianPersonalId) throws Exception;
+
     List<PatientListingItemDTO> listPatients(PatientSearchDTO patientSearchDTO) throws Exception;
-    AccountDetailsPatientDTO getPatientDetails(Long patientId) throws Exception;
+    @Transactional
+    AccountDetailsPatientDTO getPatientDetails(String patientPersonalId) throws Exception;
 }
