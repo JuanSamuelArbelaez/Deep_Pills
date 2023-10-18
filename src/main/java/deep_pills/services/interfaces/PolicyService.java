@@ -12,7 +12,7 @@ public interface PolicyService {
     Long newPolicy(@NotNull PolicyDetailsDTO policyDetailsDTO) throws Exception;
 
     @Transactional
-    boolean setPolicyState(@NotNull Long policyId, @NotNull PolicyState state) throws Exception;
+    PolicyState setPolicyState(@NotNull Long policyId, @NotNull PolicyState state) throws Exception;
 
     @Transactional
     List<PolicyDetailsDTO> listAllPolicies() throws Exception;

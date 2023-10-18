@@ -25,6 +25,7 @@ public class PolicyServiceImpl implements PolicyService {
         if(policy != null) throw new Exception("There already exists a policy with this properties (Policy: "+policy.getPolicyId()+")");
         policy = new Policy();
         policy.setCost(policyDetailsDTO.cost());
+        policy.setName(policyDetailsDTO.name());
         policy.setMaxAppointments(policyDetailsDTO.maxAppointments());
         policy.setMaxPatients(policyDetailsDTO.maxPatients());
         policy.setDescription(policyDetailsDTO.description());
@@ -36,13 +37,13 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     @Transactional
-    public boolean setPolicyState(@NotNull Long policyId, @NotNull PolicyState state) throws Exception {
+    public PolicyState setPolicyState(@NotNull Long policyId, @NotNull PolicyState state) throws Exception {
         Policy policy = getPolicyFromOptional(policyRepository.findById(policyId));
         if(policy == null) throw new Exception("Policy "+policyId+" not found");
         if(policy.getState().equals(state)) throw new Exception("Policy "+policyId+" is "+state+" already");
         policy.setState(state);
         policyRepository.save(policy);
-        return true;
+        return policy.getState();
     }
 
     @Override
