@@ -1,5 +1,6 @@
 package deep_pills.services.implementations;
 
+import deep_pills.dto.emails.EMailDTO;
 import deep_pills.dto.registrations.*;
 import deep_pills.model.entities.accounts.Account;
 import deep_pills.model.entities.accounts.users.patients.*;
@@ -14,9 +15,11 @@ import deep_pills.repositories.accounts.users.*;
 import deep_pills.repositories.accounts.users.registrations.*;
 import deep_pills.repositories.schedules.*;
 import deep_pills.repositories.specializations.*;
+import deep_pills.services.interfaces.EMailService;
 import deep_pills.services.interfaces.RegistrationService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +39,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final ScheduleRepository schedulerRepository;
     private final ShiftRepository shiftRepository;
 
+    private final EMailService eMailService;
+
     @Override
     @Transactional
     public Long registerPhysician(@NotNull RegisterPhysicianDTO physicianForm) throws Exception{
@@ -53,6 +58,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         registration.setAdmin(adminRepository.findById(physicianForm.adminId()).get());
         physicianRegistrationRepository.save(registration);
         physicianSpecializationRepository.saveAll(physicianSpecializations);
+
+        eMailService.sendEmail(new EMailDTO(registeredPhysician.getEmail(), "This JUAN from the DeepPills Team! We are happy that you decided to join us. Go to your dashboard so we can start giving you the care you deserve.", "Welcome to DeepPills"));
 
         return registeredPhysician.getId();
     }
@@ -125,7 +132,11 @@ public class RegistrationServiceImpl implements RegistrationService {
         Physician physicianEntity = new Physician();
         physicianEntity.setName(physicianForm.name());
         physicianEntity.setLastName(physicianForm.lastName());
-        physicianEntity.setPassword(physicianForm.password());
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String passwordEncriptada = passwordEncoder.encode(physicianForm.password());
+        physicianEntity.setPassword(passwordEncriptada);
+
         physicianEntity.setEmail(physicianForm.email());
         physicianEntity.setPersonalId(physicianForm.personalId());
         physicianEntity.setState(AccountState.ACTIVE);
@@ -139,7 +150,11 @@ public class RegistrationServiceImpl implements RegistrationService {
         if(personalPatientIdExists(patientForm.personalId()))throw new Exception("Personal ID already in use");
 
         Patient patientEntity =  new Patient();
-        patientEntity.setPassword(patientForm.password());
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String passwordEncriptada = passwordEncoder.encode(patientForm.password());
+        patientEntity.setPassword(passwordEncriptada);
+
         patientEntity.setEmail(patientForm.email());
         patientEntity.setPersonalId(patientForm.personalId());
         patientEntity.setState(AccountState.ACTIVE);
@@ -149,8 +164,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         PatientRegistration registration = new PatientRegistration();
         registration.setPatient(registeredPatient);
         registration.setDate(new Date());
-
         patientRegistrationRepository.save(registration);
+        eMailService.sendEmail(new EMailDTO(registeredPatient.getEmail(),
+                "This JUAN from the DeepPills Team! We are happy that you decided to join us. Go to your dashboard so we can start giving you the care you deserve.",
+                "Welcome to DeepPills"));
         return registeredPatient.getId();
     }
 

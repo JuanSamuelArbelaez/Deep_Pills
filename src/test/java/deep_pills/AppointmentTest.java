@@ -53,15 +53,15 @@ public class AppointmentTest {
 
     @Test public void rescheduleAppointmentTest() {
         try{
-            String timeString = "11:30:00";
+            String timeString = "11:00:00";
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             Date appointmentTime = sdf.parse(timeString);
 
             System.out.println(appointmentService.rescheduleAppointment(new AppointmentRescheduleDTO(
-                    52L,
-                    122L,
-                    "1012.529.018",
-                    "108.479.102",
+                    252L,
+                    129L,
+                    "1000.000.000",
+                    "723.319.180",
                     appointmentTime
             )));
         } catch (Exception e) {
@@ -71,15 +71,15 @@ public class AppointmentTest {
 
     @Test public void scheduleAppointmentTest() {
         try{
-            String timeString = "13:30:00";
+            String timeString = "14:30:00";
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             Date appointmentTime = sdf.parse(timeString);
 
             Long id = appointmentService.scheduleAppointment(new AppointmentScheduleDTO(
-                    "171.018.271",
+                    "1000.000.000",
                     "723.319.180",
-                    "Acne",
-                    122L,
+                    "First appointment to establish care",
+                    129L,
                     appointmentTime)
             );
             System.out.println("Appointment scheduled: "+id);

@@ -1,8 +1,10 @@
 package deep_pills.services.implementations;
 
+import deep_pills.dto.emails.EMailDTO;
 import deep_pills.model.entities.accounts.Account;
 import deep_pills.model.enums.states.AccountState;
 import deep_pills.repositories.accounts.AccountRepository;
+import deep_pills.services.interfaces.EMailService;
 import deep_pills.services.interfaces.UserManagementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserManagementServiceImpl implements UserManagementService {
     private final AccountRepository accountRepository;
+    private final EMailService eMailService;
     @Override
     @Transactional
     public String disablePhysician(Long physicianId) throws Exception {
@@ -52,6 +55,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 
         account.setState(AccountState.ACTIVE);
         accountRepository.save(account);
+        eMailService.sendEmail(new EMailDTO(account.getEmail(),
+                "This JUAN from the DeepPills Team! We're happy to say that your account has been enabled.",
+                "Account enabled"));
         return account;
     }
 
@@ -62,6 +68,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 
         account.setState(AccountState.INACTIVE);
         accountRepository.save(account);
+        eMailService.sendEmail(new EMailDTO(account.getEmail(),
+                "This JUAN from the DeepPills Team! We're sorry to say that your account has been disabled. Pleas contact us for more info.",
+                "Account disabled"));
         return account;
     }
 }

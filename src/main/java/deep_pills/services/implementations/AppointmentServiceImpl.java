@@ -1,6 +1,7 @@
 package deep_pills.services.implementations;
 
 import deep_pills.dto.appointments.*;
+import deep_pills.dto.emails.EMailDTO;
 import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.accounts.users.physicians.Physician;
 import deep_pills.model.entities.appointments.Appointment;
@@ -22,6 +23,7 @@ import deep_pills.repositories.appointments.*;
 import deep_pills.repositories.schedules.FreeDayRepository;
 import deep_pills.repositories.schedules.ScheduleRepository;
 import deep_pills.services.interfaces.AppointmentService;
+import deep_pills.services.interfaces.EMailService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final TreatmentRepository treatmentRepository;
     private final TreatmentPlanRepository treatmentPlanRepository;
     private final FreeDayRepository freeDayRepository;
+    private final EMailService eMailService;
 
     @Override
     @Transactional
@@ -62,7 +65,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         freeDay.setFreeDayStatus(FreeDayStatus.SCHEDULED);
         freeDay.setPhysician(physician);
         freeDay.setSchedule(schedule);
-
+        eMailService.sendEmail(new EMailDTO(physician.getEmail(),
+                "This JUAN from the DeepPills Team! Your free day has been scheduled for "+schedule.getDate()+".",
+                "Free Day"));
         return freeDayRepository.save(freeDay).getFreeDayId();
     }
 
@@ -98,6 +103,14 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         appointmentRepository.save(appointment);
 
+        eMailService.sendEmail(new EMailDTO(physician.getEmail(),
+                "This JUAN from the DeepPills Team! Appointment "+appointment.getAppointmentId()+" served.",
+                "Appointment Service"));
+
+        eMailService.sendEmail(new EMailDTO(appointment.getPatient().getEmail(),
+                "This JUAN from the DeepPills Team! Appointment "+appointment.getAppointmentId()+" served.",
+                "Appointment Service"));
+
         return "Appointment service updated successfully.";
     }
 
@@ -107,6 +120,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = getAppointmentFromOptional(appointmentId);
         appointment.setAppointmentState(AppointmentState.CANCELLED);
         appointmentRepository.save(appointment);
+        eMailService.sendEmail(new EMailDTO(appointment.getPatient().getEmail(),
+                "This JUAN from the DeepPills Team! Your appointment "+
+                        appointment.getAppointmentId()+" for "+appointment.getDate()+
+                        " at "+appointment.getTime().getTime()+" on "+appointment.getLocation()+
+                        " has been cancelled.",
+                "Appointment Cancelled"));
         return "Appointment " + appointment.getAppointmentId() + " cancelled";
     }
 
@@ -116,6 +135,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         Physician physician = getPhysicianFromOptional(appointmentRescheduleDTO.physicianPersonalId());
         Appointment appointment = getAppointmentFromOptional(appointmentRescheduleDTO.appointmentId());
         Schedule schedule = getScheduleFromOptional(appointmentRescheduleDTO.scheduleId());
+
+        Date date = appointment.getDate(), time = appointment.getTime();
+        String location = appointment.getLocation();
 
         if(freeDayRepository.findByPhysicianPersonalIdAndScheduleAndStatus(physician.getPersonalId(), schedule.getScheduleId(), FreeDayStatus.SCHEDULED).isPresent()) throw new Exception("This is a scheduled free day for the physician");
 
@@ -135,6 +157,19 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setAppointmentState(AppointmentState.RESCHEDULED);
         appointment.getPhysicianAppointmentSchedule().setSchedule(schedule);
         appointmentRepository.save(appointment);
+
+        eMailService.sendEmail(new EMailDTO(appointment.getPatient().getEmail(),
+                "This JUAN from the DeepPills Team! Your appointment "+
+                        appointment.getAppointmentId()+
+                        " for "+date+
+                        " at "+time.getTime()+
+                        " on "+location+
+                        " has been rescheduled"+
+                        " for "+appointment.getDate()+
+                        " at "+appointment.getTime().getTime()+
+                        " on "+appointment.getLocation()
+                ,
+                "Appointment Rescheduled"));
 
         return "Appointment "+appointment.getAppointmentId()+" rescheduled for "+appointmentDate+" at "+appointment.getTime();
     }
@@ -183,6 +218,15 @@ public class AppointmentServiceImpl implements AppointmentService {
         physicianAppointmentSchedule.setSchedule(schedule);
         physicianAppointmentSchedule.setPhysician(physician);
         physicianAppointmentScheduleRepository.save(physicianAppointmentSchedule);
+
+        eMailService.sendEmail(new EMailDTO(appointment.getPatient().getEmail(),
+                "This JUAN from the DeepPills Team! Your appointment "+
+                        appointment.getAppointmentId()+
+                        " has been scheduled"+
+                        " for "+appointment.getDate()+
+                        " at "+appointment.getTime().getTime()+
+                        " on "+appointment.getLocation(),
+                "Appointment Scheduled"));
         return savedAppointment.getAppointmentId();
     }
 

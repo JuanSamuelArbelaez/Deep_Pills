@@ -2,6 +2,7 @@ package deep_pills.services.implementations;
 
 import deep_pills.dto.claims.admin.*;
 import deep_pills.dto.claims.patient.*;
+import deep_pills.dto.emails.EMailDTO;
 import deep_pills.model.entities.accounts.Admin;
 import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.appointments.Appointment;
@@ -29,6 +30,7 @@ public class ClaimsServiceImpl implements ClaimsService {
     private final ClaimInfoRepository claimInfoRepository;
     private final PatientRepository patientRepository;
     private final AdminRepository adminRepository;
+    private final EMailServiceImpl eMailService;
 
     @Override
     @Transactional
@@ -107,16 +109,25 @@ public class ClaimsServiceImpl implements ClaimsService {
         message.setMessage(claimAnswerDTO.text());
         message.setMessageType(claimAnswerDTO.messageType());
 
+        String email = "";
+
         if(message.getMessageType().equals(MessageType.ADMIN_PATIENT)){
             message.setSender(admin);
             message.setRecipient(patient);
+            email = patient.getEmail();
         }else{
             message.setSender(patient);
             message.setRecipient(admin);
+            email = admin.getEmail();
         }
 
         message.setDate(new Date());
         Message savedMessage = messageRepository.save(message);
+        eMailService.sendEmail(new EMailDTO(email,
+                "This JUAN from the DeepPills Team! A new message has been sent to the claim "+
+                        claim.getClaimId()
+                ,
+                "New message from Claim"));
         return savedMessage.getMessageId();
     }
 
@@ -207,7 +218,10 @@ public class ClaimsServiceImpl implements ClaimsService {
         info.setAppointment(appointment);
         info.setPatient(patient);
         claimInfoRepository.save(info);
-
+        eMailService.sendEmail(new EMailDTO(patient.getEmail(),
+                "This JUAN from the DeepPills Team! A new claim ("+claim.getClaimId()+") has been created for the appointment: "+
+                        appointment.getAppointmentId(),
+                "New Claim"));
         return savedClaim.getClaimId();
     }
 }

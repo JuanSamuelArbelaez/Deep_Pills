@@ -1,5 +1,6 @@
 package deep_pills.services.implementations;
 
+import deep_pills.dto.emails.EMailDTO;
 import deep_pills.dto.memberships.*;
 import deep_pills.model.entities.accounts.Admin;
 import deep_pills.model.entities.accounts.users.patients.Patient;
@@ -11,6 +12,7 @@ import deep_pills.model.enums.states.PolicyState;
 import deep_pills.repositories.accounts.AdminRepository;
 import deep_pills.repositories.accounts.users.PatientRepository;
 import deep_pills.repositories.memberships.*;
+import deep_pills.services.interfaces.EMailService;
 import deep_pills.services.interfaces.MembershipService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class MembershipServiceImpl implements MembershipService {
     private final MembershipChargeRepository membershipChargeRepository;
     private final MembershipPaymentRepository membershipPaymentRepository;
     private final AdminRepository adminRepository;
+    private final EMailService eMailService;
 
     @Override
     @Transactional
@@ -56,7 +59,12 @@ public class MembershipServiceImpl implements MembershipService {
         if(patient.getOwnedMembership() != null && !patient.getOwnedMembership().equals(membership)) throw new Exception("The patient with PID: "+membershipPatientModificationDTO.patientPersonalId()+" already owns another membership");
 
         patient.setBeneficiaryMembership(membership);
-
+        eMailService.sendEmail(new EMailDTO(owner.getEmail(),
+                "This JUAN from the DeepPills Team! You just added "+patient.getName()+" to your membership.",
+                "New patient added to your membership"));
+        eMailService.sendEmail(new EMailDTO(patient.getEmail(),
+                "This JUAN from the DeepPills Team! "+owner.getName()+" just added you to their membership.",
+                "You have been added to a membership"));
         return patientRepository.save(patient).getPersonalId();
     }
 
@@ -77,6 +85,12 @@ public class MembershipServiceImpl implements MembershipService {
         if(patient.equals(owner)) throw new Exception("Patient cannot remove itself from it's membership's beneficiaries");
         if(!membership.getBeneficiaries().contains(patient)) throw new Exception("Patient with PID: " + membershipPatientModificationDTO.patientPersonalId() + " isn't a beneficiary of the membership with ID: "+membershipPatientModificationDTO.membershipId());
         membership.getBeneficiaries().remove(patient);
+        eMailService.sendEmail(new EMailDTO(owner.getEmail(),
+                "This JUAN from the DeepPills Team! You just removed "+patient.getName()+" from your membership.",
+                "Patient removed from your membership"));
+        eMailService.sendEmail(new EMailDTO(patient.getEmail(),
+                "This JUAN from the DeepPills Team! "+owner.getName()+" just removed you from their membership.",
+                "You have been removed from a membership"));
         return patientRepository.save(patient).getPersonalId();
     }
 
@@ -97,7 +111,9 @@ public class MembershipServiceImpl implements MembershipService {
             membership.setOwner(patient);
             membership.setState(MembershipState.ACTIVE);
         } else if(policy.getMaxPatients()>membership.getPolicy().getMaxPatients()) throw new Exception("Cannot update membership's current policy to policy: "+membershipAcquirementDTO.policyId()+" because the membership's current policy's amount of patients ("+(membership.getBeneficiaries().size()+1)+") exceeds the target policy's maximum amount of patients ("+policy.getMaxPatients()+")");
-
+        eMailService.sendEmail(new EMailDTO(patient.getEmail(),
+                "This JUAN from the DeepPills Team! You just acquired a new membership: "+membership.getMembershipId()+" ("+policy.getName()+")",
+                "New membership"));
         return membershipRepository.save(membership).getMembershipId();
     }
 
@@ -115,12 +131,15 @@ public class MembershipServiceImpl implements MembershipService {
             membership.setOwner(null);
         }else membership.getBeneficiaries().remove(patient);
         membership.setState(MembershipState.INACTIVE);
+        eMailService.sendEmail(new EMailDTO(patient.getEmail(),
+                "This JUAN from the DeepPills Team! You just resigned from your membership: "+membership.getMembershipId()+" ("+membership.getPolicy().getName()+")",
+                "Resigned from Membership"));
         return membership.getMembershipId();
     }
 
     @Override
     @Transactional
-    public List<Long> chargeCurrentMonthToMemberships() {
+    public List<Long> chargeCurrentMonthToMemberships() throws Exception{
         List<Long> charges = new ArrayList<>();
 
         List<Membership> memberships = membershipRepository.findMembershipWithNonInactiveStateAndNoChargesInCurrentMonth(MembershipState.INACTIVE);
@@ -132,6 +151,9 @@ public class MembershipServiceImpl implements MembershipService {
             membershipCharge.setDateTime(new Date());
             membershipCharge.setChargeAmount(membership.getPolicy().getCost());
             charges.add(membershipChargeRepository.save(membershipCharge).getMembershipChargeId());
+            eMailService.sendEmail(new EMailDTO(membership.getOwner().getEmail(),
+                    "This JUAN from the DeepPills Team! This month's charge for your membership: "+membership.getMembershipId()+" ("+membership.getPolicy().getName()+") has just been issued: "+membershipCharge.getMembershipChargeId(),
+                    "Membership Charge"));
         }
         return charges;
     }
@@ -172,18 +194,26 @@ public class MembershipServiceImpl implements MembershipService {
             charge.setChargeState(ChargeState.FULLFILLED);
             membershipChargeRepository.save(charge);
         }
+        eMailService.sendEmail(new EMailDTO(charge.getMembership().getOwner().getEmail(),
+                "This JUAN from the DeepPills Team! A payment for: "+payment.getAmount()+
+                        " has just been made to the charge: "+charge.getMembershipChargeId()+
+                        "\nThe charge has a remaining amount of "+(charge.getChargeAmount()-payedAmount-payment.getAmount()),
+                "Membership Payment"));
         return id;
     }
 
     @Override
     @Transactional
-    public List<Long> setArrearMemberships(){
+    public List<Long> setArrearMemberships()throws Exception{
         List<Long> memberships = new ArrayList<>();
 
         List<Membership> membershipsFromActiveToArrear = membershipRepository.findMembershipsToBeInArrear(MembershipState.ACTIVE, ChargeState.ISSUED);
         for(Membership membership : membershipsFromActiveToArrear){
             membership.setState(MembershipState.ARREAR);
             memberships.add(membershipRepository.save(membership).getMembershipId());
+            eMailService.sendEmail(new EMailDTO(membership.getOwner().getEmail(),
+                    "This JUAN from the DeepPills Team! Your membership: "+membership.getMembershipId()+" has been set to ARREAR, for there are pending charges to it to be fulfilled",
+                    "Membership In Arrear"));
         }
 
         return memberships;
@@ -191,13 +221,16 @@ public class MembershipServiceImpl implements MembershipService {
 
     @Override
     @Transactional
-    public List<Long> setActiveMemberships(){
+    public List<Long> setActiveMemberships()throws Exception {
         List<Long> memberships = new ArrayList<>();
 
         List<Membership> membershipsFromArrearToActive = membershipRepository.findMembershipsToNoLongerBeInArrear(MembershipState.ARREAR, ChargeState.ISSUED);
         for(Membership membership : membershipsFromArrearToActive){
             membership.setState(MembershipState.ACTIVE);
             memberships.add(membershipRepository.save(membership).getMembershipId());
+            eMailService.sendEmail(new EMailDTO(membership.getOwner().getEmail(),
+                    "This JUAN from the DeepPills Team! All of your membership: "+membership.getMembershipId()+" charges are up to date, and your membership is back to ACTIVE",
+                    "Membership Back to ACTIVE"));
         }
 
         return memberships;

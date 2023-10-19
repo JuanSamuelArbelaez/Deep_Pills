@@ -25,7 +25,7 @@ public class Account implements Serializable {
     @Column(name = "email", unique = true, length = 50, nullable = false)
     private String email;
 
-    @Column(name = "pswd", length = 15, nullable = false)
+    @Column(name = "pswd", nullable = false)
     private String password;
 
     @Enumerated

@@ -1,38 +1,56 @@
 package deep_pills.services.implementations;
 
+import deep_pills.dto.authentications.TokenDTO;
 import deep_pills.dto.logins.LoginDTO;
 import deep_pills.model.entities.accounts.Account;
+import deep_pills.model.entities.accounts.users.patients.Patient;
+import deep_pills.model.entities.accounts.users.physicians.Physician;
 import deep_pills.repositories.accounts.AccountRepository;
 import deep_pills.services.interfaces.AuthenticationService;
-import jakarta.validation.constraints.NotNull;
+import deep_pills.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final AccountRepository accountRepository;
-
-    /**
-     * Authenticates the account credentials contained in the DTO.
-     * @param loginDto Data transfer object required for authentication. Must contain credentials.
-     * @return Account ID if authenticated successfully.
-     * @throws Exception Throws exceptions if the DTO or any of its credentials are null; if the search query by email returns null, or if the authentication failed.
-     */
+    private final JWTUtils jwtUtils;
     @Override
-    @Transactional
-    public Long login(@NotNull LoginDTO loginDto) throws Exception {
-        Optional<Account> optional = accountRepository.fingByEmail(loginDto.email()); //Query for account search by email
-        Account account = null;
-
-        if(optional.isEmpty()) throw new Exception("Wrong Email, account not found"); //Validation of query results
-        else account = optional.get();
-
-        if(!account.getPassword().equals(loginDto.password())) throw new Exception("Wrong Password"); //Account authentication
-
-        return account.getId();//Return of accountId
+    public TokenDTO login(LoginDTO loginDTO) throws Exception {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Optional<Account> optionalAccount = accountRepository.fingByEmail(loginDTO.email());
+        if(optionalAccount.isEmpty()){
+            throw new Exception("Incorrect E-mail address.");
+        }
+        Account account = optionalAccount.get();
+        if(!passwordEncoder.matches(loginDTO.password(), account.getPassword()) ){
+            throw new Exception("Incorrect password");
+        }
+        return new TokenDTO(createToken(account));
+    }
+    private String createToken(Account account){
+        String role;
+        String name;
+        if(account instanceof Patient){
+            role = "patient";
+            name = ((Patient) account).getName();
+        }else if( account instanceof Physician){
+            role = "physician";
+            name = ((Physician) account).getName();
+        }else{
+            role = "admin";
+            name = "Admin";
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("role", role);
+        map.put("name", name);
+        map.put("id", account.getId());
+        return jwtUtils.generarToken(account.getEmail(), map);
     }
 }

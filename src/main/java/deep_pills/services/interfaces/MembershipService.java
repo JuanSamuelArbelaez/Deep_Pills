@@ -21,16 +21,16 @@ public interface MembershipService {
     Long resignMembership(String patientPersonalId) throws Exception;
 
     @Transactional
-    List<Long> chargeCurrentMonthToMemberships();
+    List<Long> chargeCurrentMonthToMemberships() throws Exception;
 
     @Transactional
     Long makePaymentToMembershipCharge(MembershipPaymentDTO membershipPaymentDTO) throws Exception;
 
     @Transactional
-    List<Long> setArrearMemberships();
+    List<Long> setArrearMemberships() throws Exception;
 
     @Transactional
-    List<Long> setActiveMemberships();
+    List<Long> setActiveMemberships() throws Exception;
 
     @Transactional
     Long setChargeState(@NotNull ChargeStateUpdateDTO chargeStateUpdateDTO) throws Exception;

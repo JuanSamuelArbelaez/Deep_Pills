@@ -13,6 +13,7 @@ import deep_pills.repositories.schedules.ShiftRepository;
 import deep_pills.services.interfaces.UserListingService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,8 @@ public class UserListingServiceImpl implements UserListingService {
 
         List<PhysicianListingItemAdminDTO> physicianItemList = new ArrayList<>();
         for(Physician physician: physicianList){
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            System.out.println(physician.getId()+" | "+passwordEncoder.encode(physician.getPassword()));
             PhysicianListingItemAdminDTO item = new PhysicianListingItemAdminDTO(
                     physician.getId(),
                     physician.getPersonalId(),
@@ -136,6 +139,8 @@ public class UserListingServiceImpl implements UserListingService {
 
         List<PatientListingItemDTO> patientItemList = new ArrayList<>();
         for(Patient patient : patientList){
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            System.out.println(patient.getId()+" | "+passwordEncoder.encode(patient.getPassword()));
             patientItemList.add(new PatientListingItemDTO(
                     patient.getId(),
                     patient.getPersonalId(),

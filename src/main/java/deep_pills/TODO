@@ -53,18 +53,19 @@ Symptom = OK
 ShiftType = OK
 
 -----------------------------------------------------------------------------------------------------------------------
-Service Implementations: 91.66%
+Service Implementations: 98.88%
 
-AccountUpdateService = Complexity:High(Ponderation: 12.5%), progress:100%, totalProgress: 12.5%
-AppointmentsService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
-AuthenticationService = Complexity:Low(Ponderation:4.16%), progress:100%, totalProgress:4.16%
-ClaimsService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
-EMailService = Complexity:Low(Ponderation:4.16%), progress:0%, totalProgress:0%
-MembershipService = Complexity:High(Ponderation: 12.5%)), progress:12.5%, totalProgress: 12.5%
-PicturesService = Complexity:Low(Ponderation:4.16%), progress:0%, totalProgress:0%
-RegistrationService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
-UserListingService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
-UserManagementService = Complexity:High(Ponderation:12.5%), progress:100%, totalProgress:12.5%
+AccountUpdateService = Complexity:High(Ponderation: 11.11%), progress:90%, totalProgress: 10%
+AppointmentsService = Complexity:High(Ponderation: 11.11%), progress:100%, totalProgress: 11.11%
+AuthenticationService = Complexity:Low(Ponderation: 5.55%), progress:100%, totalProgress: 5.55%
+ClaimsService = Complexity:High(Ponderation: 11.11%), progress:100%, totalProgress: 11.11%
+EMailService = Complexity:Low(Ponderation: 5.55:%), progress:100%, totalProgress: 5.55%
+MembershipService = Complexity:High(Ponderation: 11.11%)), progress:100%, totalProgress: 11.11%
+PicturesService = Complexity:Low(Ponderation: 11.11%), progress:100%, totalProgress: 5.55%
+PolicyService = Complexity:Low(Ponderation: 5.55:), progress:100%, totalProgress: 5.55%
+RegistrationService = Complexity:High(Ponderation: 11.11%), progress:100%, totalProgress: 11.11%
+UserListingService = Complexity:High(Ponderation: 11.11%), progress:100%, totalProgress: 11.11%
+UserManagementService = Complexity:High(Ponderation: 11.11%), progress:100%, totalProgress: 11.11%
 
 -----------------------------------------------------------------------------------------------------------------------
 DTOs: 98.87%
@@ -116,15 +117,4 @@ PhysicianSpecializationRepository = OK
 
 -----------------------------------------------------------------------------------------------------------------------
 
-Para hacer (ASTAIZA):
-    Anotaciones: De ser posible, revisar cada entidad y añadirle anotaciones de
-    restriccion de parámetros. Ej: @Length(max=25).
-
-    Nota: El @NotNull debe usarse solo en los casos en los que se esté seguro de que
-    siempre que se vaya a agregar una tupla a la DB, este dato estará.
-    Ej: nombre (registro).
-
-    Nota2: Al colocar las anotaciones en la entidad, por favor trazar la antocacion
-    hasta el/los DTO(s) en los que el atributo en particular intervenga.
-
-Al final, actualizar el archivo "To-Do" para visualizar el proceso realizado.
+Para hacer: Recuperación de contraseña.

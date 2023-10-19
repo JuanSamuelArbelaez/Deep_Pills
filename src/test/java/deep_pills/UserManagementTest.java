@@ -11,14 +11,14 @@ public class UserManagementTest {
 
     @Test public void enablePatientTest(){
         try{
-            userManagementService.enablePatient(152L);
+            userManagementService.enablePatient(502L);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     @Test public void disablePatientTest(){
         try{
-            userManagementService.disablePatient(152L);
+            userManagementService.disablePatient(502L);
         } catch (Exception e) {
             e.printStackTrace();
         }

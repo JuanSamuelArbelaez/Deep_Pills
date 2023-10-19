@@ -44,12 +44,11 @@ public class RegistrationTest {
         }
     }
 
-
     @Test public void registerPatientTest(){
         RegisterPatientDTO dto = new RegisterPatientDTO(
-                "juanalcachofa@gmail.com",
-                "lalaland",
-                "171.018.271"
+                "juane.astaizaf@uqvirtual.edu.co",
+                "bimbimbambam",
+                "1000.000.000"
         );
         try {
             Long id = registrationService.registerPatient(dto);
