@@ -210,6 +210,8 @@ public class ClaimsServiceImpl implements ClaimsService {
 
         Patient patient = patientOptional.get();
 
+        if(claimRepository.countClaimsByStateAndPatientPersonalId(patient.getPersonalId(), ClaimState.ACTIVE)>3) throw new Exception("Cannot create new claims for appointment: " + claimRegisterDTO+" because there are already 3 active claims");
+
         Claim claim = new Claim();
         claim.setClaimStatus(ClaimState.ACTIVE);
         claim.setClaimType(claimRegisterDTO.claimType());

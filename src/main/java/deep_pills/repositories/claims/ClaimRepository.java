@@ -39,4 +39,10 @@ public interface ClaimRepository extends JpaRepository<Claim, Long> {
             "AND cl.claimId = :claimId ")
     Optional<Claim> findByIdAndPatientPersonalId(@Param("claimId") Long claimId, @Param("patientPersonalId") String patientPersonalId);
 
+    @Query("SELECT COUNT(*) " +
+            "FROM Claim c " +
+            "JOIN Patient p ON c.claimInfo.patient.personalId= p.personalId " +
+            "WHERE c.claimStatus = :state " +
+            "  AND p.personalId = :personalId")
+    int countClaimsByStateAndPatientPersonalId(@Param("patientId") String patientId, @Param("state") ClaimState state);
 }
