@@ -48,7 +48,7 @@ public class MembershipTest {
             System.out.println(membershipService.acquireMembership(
                     new MembershipAcquirementDTO(
                             "1000.000.000",
-                            2L
+                            3L
                     )));
         } catch (Exception e) {
             e.printStackTrace();
