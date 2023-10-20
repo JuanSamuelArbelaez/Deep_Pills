@@ -8,7 +8,7 @@ import deep_pills.model.entities.memberships.*;
 import deep_pills.model.enums.states.ChargeState;
 import deep_pills.model.enums.states.MembershipState;
 import deep_pills.model.enums.states.PaymentState;
-import deep_pills.model.enums.states.PolicyState;
+import deep_pills.model.enums.types.EMailType;
 import deep_pills.repositories.accounts.AdminRepository;
 import deep_pills.repositories.accounts.users.PatientRepository;
 import deep_pills.repositories.memberships.*;
@@ -61,10 +61,14 @@ public class MembershipServiceImpl implements MembershipService {
         patient.setBeneficiaryMembership(membership);
         eMailService.sendEmail(new EMailDTO(owner.getEmail(),
                 "This JUAN from the DeepPills Team! You just added "+patient.getName()+" to your membership.",
-                "New patient added to your membership"));
+                "New patient added to your membership",
+                EMailType.MEMB_PATIENT_ADDED,
+                membership.getMembershipId()));
         eMailService.sendEmail(new EMailDTO(patient.getEmail(),
                 "This JUAN from the DeepPills Team! "+owner.getName()+" just added you to their membership.",
-                "You have been added to a membership"));
+                "You have been added to a membership",
+                EMailType.MEMB_PATIENT_ADDED,
+                membership.getMembershipId()));
         return patientRepository.save(patient).getPersonalId();
     }
 
@@ -87,10 +91,14 @@ public class MembershipServiceImpl implements MembershipService {
         membership.getBeneficiaries().remove(patient);
         eMailService.sendEmail(new EMailDTO(owner.getEmail(),
                 "This JUAN from the DeepPills Team! You just removed "+patient.getName()+" from your membership.",
-                "Patient removed from your membership"));
+                "Patient removed from your membership",
+                EMailType.MEMB_PATIENT_REMOVED,
+                membership.getMembershipId()));
         eMailService.sendEmail(new EMailDTO(patient.getEmail(),
                 "This JUAN from the DeepPills Team! "+owner.getName()+" just removed you from their membership.",
-                "You have been removed from a membership"));
+                "You have been removed from a membership",
+                EMailType.MEMB_PATIENT_REMOVED,
+                membership.getMembershipId()));
         return patientRepository.save(patient).getPersonalId();
     }
 
@@ -110,11 +118,14 @@ public class MembershipServiceImpl implements MembershipService {
             membership.setDate(new Date());
             membership.setOwner(patient);
             membership.setState(MembershipState.ACTIVE);
+            membership.setPolicy(policy);
         } else if(policy.getMaxPatients()>membership.getPolicy().getMaxPatients()) throw new Exception("Cannot update membership's current policy to policy: "+membershipAcquirementDTO.policyId()+" because the membership's current policy's amount of patients ("+(membership.getBeneficiaries().size()+1)+") exceeds the target policy's maximum amount of patients ("+policy.getMaxPatients()+")");
+        Long id = membershipRepository.save(membership).getMembershipId();
         eMailService.sendEmail(new EMailDTO(patient.getEmail(),
                 "This JUAN from the DeepPills Team! You just acquired a new membership: "+membership.getMembershipId()+" ("+policy.getName()+")",
-                "New membership"));
-        return membershipRepository.save(membership).getMembershipId();
+                "New membership",
+                EMailType.MEMB_ACQUIRED,id));
+        return id;
     }
 
     @Override
@@ -133,7 +144,9 @@ public class MembershipServiceImpl implements MembershipService {
         membership.setState(MembershipState.INACTIVE);
         eMailService.sendEmail(new EMailDTO(patient.getEmail(),
                 "This JUAN from the DeepPills Team! You just resigned from your membership: "+membership.getMembershipId()+" ("+membership.getPolicy().getName()+")",
-                "Resigned from Membership"));
+                "Resigned from Membership",
+                EMailType.MEMB_RESIGNED,
+                membership.getMembershipId()));
         return membership.getMembershipId();
     }
 
@@ -153,7 +166,10 @@ public class MembershipServiceImpl implements MembershipService {
             charges.add(membershipChargeRepository.save(membershipCharge).getMembershipChargeId());
             eMailService.sendEmail(new EMailDTO(membership.getOwner().getEmail(),
                     "This JUAN from the DeepPills Team! This month's charge for your membership: "+membership.getMembershipId()+" ("+membership.getPolicy().getName()+") has just been issued: "+membershipCharge.getMembershipChargeId(),
-                    "Membership Charge"));
+                    "Membership Charge",
+                    EMailType.MEMB_CHARGE,
+                    membership.getMembershipId()
+            ));
         }
         return charges;
     }
@@ -198,7 +214,9 @@ public class MembershipServiceImpl implements MembershipService {
                 "This JUAN from the DeepPills Team! A payment for: "+payment.getAmount()+
                         " has just been made to the charge: "+charge.getMembershipChargeId()+
                         "\nThe charge has a remaining amount of "+(charge.getChargeAmount()-payedAmount-payment.getAmount()),
-                "Membership Payment"));
+                "Membership Payment",
+                EMailType.MEMB_PAYMENT,
+                charge.getMembership().getMembershipId()));
         return id;
     }
 
@@ -213,7 +231,10 @@ public class MembershipServiceImpl implements MembershipService {
             memberships.add(membershipRepository.save(membership).getMembershipId());
             eMailService.sendEmail(new EMailDTO(membership.getOwner().getEmail(),
                     "This JUAN from the DeepPills Team! Your membership: "+membership.getMembershipId()+" has been set to ARREAR, for there are pending charges to it to be fulfilled",
-                    "Membership In Arrear"));
+                    "Membership In Arrear",
+                    EMailType.MEMB_STATE_UPDATED,
+                    membership.getMembershipId()
+                    ));
         }
 
         return memberships;
@@ -230,7 +251,10 @@ public class MembershipServiceImpl implements MembershipService {
             memberships.add(membershipRepository.save(membership).getMembershipId());
             eMailService.sendEmail(new EMailDTO(membership.getOwner().getEmail(),
                     "This JUAN from the DeepPills Team! All of your membership: "+membership.getMembershipId()+" charges are up to date, and your membership is back to ACTIVE",
-                    "Membership Back to ACTIVE"));
+                    "Membership Back to ACTIVE",
+                    EMailType.MEMB_STATE_UPDATED,
+                    membership.getMembershipId()
+            ));
         }
 
         return memberships;
@@ -246,6 +270,13 @@ public class MembershipServiceImpl implements MembershipService {
         if(charge == null) throw new Exception("No charge with ID: "+chargeStateUpdateDTO.membershipChargeId()+" found");
 
         charge.setChargeState(chargeStateUpdateDTO.state());
+
+        eMailService.sendEmail(new EMailDTO(charge.getMembership().getOwner().getEmail(),
+                "This JUAN from the DeepPills Team! The charge: "+charge.getMembershipChargeId()+" to your membership has been set to "+charge.getChargeState()+"by an admin",
+                "Charge "+charge.getChargeState()+"!",
+                EMailType.MEMB_STATE_UPDATED,
+                charge.getMembership().getMembershipId()
+        ));
         return membershipChargeRepository.save(charge).getMembershipChargeId();
     }
 
@@ -259,6 +290,12 @@ public class MembershipServiceImpl implements MembershipService {
         if(membership == null) throw new Exception("No charge with ID: "+membershipStateUpdateDTO.membershipId()+" found");
 
         membership.setState(membershipStateUpdateDTO.state());
+        eMailService.sendEmail(new EMailDTO(membership.getOwner().getEmail(),
+                "This JUAN from the DeepPills Team! Your membership: "+membership.getMembershipId()+" has been set to "+membership.getState()+"by an admin",
+                "Charge "+membership.getState()+"!",
+                EMailType.MEMB_STATE_UPDATED,
+                membership.getMembershipId()
+        ));
         return membershipRepository.save(membership).getMembershipId();
     }
 

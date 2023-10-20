@@ -3,6 +3,7 @@ package deep_pills.services.implementations;
 import deep_pills.dto.emails.EMailDTO;
 import deep_pills.model.entities.accounts.Account;
 import deep_pills.model.enums.states.AccountState;
+import deep_pills.model.enums.types.EMailType;
 import deep_pills.repositories.accounts.AccountRepository;
 import deep_pills.services.interfaces.EMailService;
 import deep_pills.services.interfaces.UserManagementService;
@@ -57,7 +58,9 @@ public class UserManagementServiceImpl implements UserManagementService {
         accountRepository.save(account);
         eMailService.sendEmail(new EMailDTO(account.getEmail(),
                 "This JUAN from the DeepPills Team! We're happy to say that your account has been enabled.",
-                "Account enabled"));
+                "Account enabled",
+                EMailType.ACCOUNT_STATE_UPDATED,
+                account.getId()));
         return account;
     }
 
@@ -70,7 +73,10 @@ public class UserManagementServiceImpl implements UserManagementService {
         accountRepository.save(account);
         eMailService.sendEmail(new EMailDTO(account.getEmail(),
                 "This JUAN from the DeepPills Team! We're sorry to say that your account has been disabled. Pleas contact us for more info.",
-                "Account disabled"));
+                "Account disabled",
+                EMailType.ACCOUNT_STATE_UPDATED,
+                account.getId()
+                ));
         return account;
     }
 }

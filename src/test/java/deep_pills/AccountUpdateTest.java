@@ -1,9 +1,11 @@
 package deep_pills;
 
+import deep_pills.dto.accounts.PasswordRecoveryDTO;
 import deep_pills.dto.accounts.patient.InfoUpdatePatientDTO;
 import deep_pills.dto.accounts.physician.InfoUpdatePhysicianDTO;
 import deep_pills.model.enums.lists.BloodType;
 import deep_pills.model.enums.lists.City;
+import deep_pills.model.enums.lists.EPS;
 import deep_pills.services.interfaces.AccountUpdateService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +53,38 @@ public class AccountUpdateTest {
                     null,
                     City.NEW_ORLEANS,
                     "www.example2.com/img2.jpg",
-                    BloodType.O_POSITIVE
+                    BloodType.O_POSITIVE,
+                    EPS.MEDICAID
             ));
         }catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test public void newPasswordRecoveryRequest(){
+        try {
+            System.out.println(accountUpdateService.newPasswordRecoveryRequest("juane.astaizaf@uqvirtual.edu.co"));
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    @Test public void acceptPasswordRecoveryCode(){
+        Long prrId = 102L; //Use id provided
+        String email = "juane.astaizaf@uqvirtual.edu.co";
+        String code = "2WDGEJ"; //ej: 8D001A
+        String newPassword = "bimbimbambam2";
+        try{
+            System.out.println(
+                    accountUpdateService.acceptPasswordRecoveryCode(
+                            new PasswordRecoveryDTO(prrId,
+                                    email,
+                                    code,
+                                    newPassword
+            )));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

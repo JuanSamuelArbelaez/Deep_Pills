@@ -158,7 +158,7 @@ public class AppointmentTest {
 
     @Test public void allAppointmentsByPatientIdTest() {
         try{
-            List<AppointmentGenericDTO> list = appointmentService.allAppointmentsByPatientId("1012.529.018");
+            List<AppointmentGenericDTO> list = appointmentService.allAppointmentsByPatientId("1000.000.000");
             for(AppointmentGenericDTO appointment : list){
                 System.out.println(
                         appointment.appointmentId()+" | "+

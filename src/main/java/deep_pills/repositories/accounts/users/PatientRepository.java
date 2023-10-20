@@ -1,13 +1,12 @@
 package deep_pills.repositories.accounts.users;
 
 import deep_pills.model.entities.accounts.users.patients.Patient;
-import deep_pills.model.entities.memberships.Membership;
+import deep_pills.model.enums.lists.EPS;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +29,10 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("select p from Patient p where p.phone = :phone")
     List<Patient> findByPhone(String phone);
 
-    List<Patient> findByDateOfBirth(Date dateOfBirth);
+    @Query("SELECT p FROM Patient p WHERE p.dateOfBirth = :dateOfBirth")
+    List<Patient> findByDateOfBirth(@Param("dateOfBirth") Date dateOfBirth);
+
+    @Query("SELECT p FROM Patient p WHERE p.eps = :eps")
+    List<Patient> findByEps(@Param("eps") EPS eps);
 }
 

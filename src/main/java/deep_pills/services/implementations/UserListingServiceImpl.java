@@ -6,6 +6,7 @@ import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.accounts.users.physicians.Physician;
 import deep_pills.model.entities.memberships.Membership;
 import deep_pills.model.enums.lists.City;
+import deep_pills.model.enums.lists.EPS;
 import deep_pills.model.enums.lists.Specialization;
 import deep_pills.repositories.accounts.users.*;
 import deep_pills.repositories.memberships.MembershipRepository;
@@ -175,6 +176,7 @@ public class UserListingServiceImpl implements UserListingService {
                 patientList.add(optional.get().getOwner());
                 patientList.addAll(optional.get().getBeneficiaries());
                 }
+            case 9 -> patientList.addAll(patientRepository.findByEps(EPS.valueOf(searchValue)));
             default -> new ArrayList<>();
         }
         return patientList;
@@ -201,6 +203,7 @@ public class UserListingServiceImpl implements UserListingService {
                 patient.getCity(),
                 patient.getDateOfBirth(),
                 patient.getBloodType(),
+                patient.getEps(),
                 patient.getPatientAllergies(),
                 patient.getState());
     }

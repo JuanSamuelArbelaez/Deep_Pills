@@ -3,6 +3,7 @@ package deep_pills.dto.accounts.patient;
 import deep_pills.model.entities.accounts.users.patients.PatientAllergy;
 import deep_pills.model.enums.lists.BloodType;
 import deep_pills.model.enums.lists.City;
+import deep_pills.model.enums.lists.EPS;
 import deep_pills.model.enums.states.AccountState;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,6 +19,7 @@ public record AccountDetailsPatientDTO(
         @NotNull String phone,
         @NotNull City city, Date dateOfBirth,
         @NotNull BloodType bloodType,
+        @NotNull EPS eps,
         @NotNull List<PatientAllergy> patientAllergies,
         @NotNull AccountState state) {
 }

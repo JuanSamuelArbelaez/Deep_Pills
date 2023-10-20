@@ -4,6 +4,7 @@ import deep_pills.model.entities.appointments.Appointment;
 import deep_pills.model.entities.claims.ClaimInfo;
 import deep_pills.model.entities.memberships.Membership;
 import deep_pills.model.enums.lists.BloodType;
+import deep_pills.model.enums.lists.EPS;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,10 @@ public class Patient extends User{
     @Column(name = "dateBirth")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
+
+    @Enumerated
+    @Column(name = "eps")
+    private EPS eps;
 
     @Enumerated
     @Column(name = "BloodType")

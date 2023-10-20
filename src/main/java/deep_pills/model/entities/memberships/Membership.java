@@ -1,6 +1,7 @@
 package deep_pills.model.entities.memberships;
 
 import deep_pills.model.entities.accounts.users.patients.Patient;
+import deep_pills.model.entities.notifications.EMail;
 import deep_pills.model.enums.states.MembershipState;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,4 +42,7 @@ public class Membership implements Serializable {
 
     @OneToMany(mappedBy = "membership")
     private List<MembershipCharge> membershipCharges;
+
+    @OneToMany(mappedBy = "membership")
+    private List<EMail> eMailsReceived;
 }

@@ -1,7 +1,14 @@
 package deep_pills;
 
+import deep_pills.dto.claims.admin.ClaimAnswerDTO;
+import deep_pills.dto.claims.admin.ClaimDetailedItemAdminDTO;
+import deep_pills.dto.claims.admin.ClaimItemAdminDTO;
+import deep_pills.dto.claims.patient.ClaimDetailedItemPatientDTO;
+import deep_pills.dto.claims.patient.ClaimItemPatientDTO;
 import deep_pills.dto.claims.patient.ClaimRegisterDTO;
+import deep_pills.model.enums.states.ClaimState;
 import deep_pills.model.enums.types.ClaimType;
+import deep_pills.model.enums.types.MessageType;
 import deep_pills.services.interfaces.ClaimsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class ClaimsTest {
-    @Autowired ClaimsService claimsService;
+    @Autowired private ClaimsService claimsService;
 
     @Test public void newClaim(){
         try {
@@ -23,19 +30,60 @@ public class ClaimsTest {
             e.printStackTrace();
         }
     }
-    public void listAllClaimsByStatusForAdminTest(){
-
+    @Test public void listAllClaimsByStatusForAdminTest(){
+        try {
+            for(ClaimItemAdminDTO claim : claimsService.listAllClaimsByStatusForAdmin(1L, ClaimState.ACTIVE)){
+                System.out.println(claim.claimId()+" | "+
+                                claim.date()+" | "+
+                                claim.claimInfoId()+ " | "+
+                                claim.status()+" | "
+                );
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void listAllClaimsByStatusTest(){
-
+    @Test public void listAllClaimsByStatusTest(){
+        try {
+            for(ClaimItemAdminDTO claim : claimsService.listAllClaimsByStatus(ClaimState.ACTIVE)){
+                System.out.println(claim.claimId()+" | "+
+                        claim.date()+" | "+
+                        claim.claimInfoId()+ " | "+
+                        claim.status()+" | "
+                );
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void listAllClaimsForAdminTest(){
+    @Test public void listAllClaimsForAdminTest(){
+        try {
+            for(ClaimItemAdminDTO claim : claimsService.listAllClaimsForAdmin(1L)){
+                System.out.println(claim.claimId()+" | "+
+                        claim.date()+" | "+
+                        claim.claimInfoId()+ " | "+
+                        claim.status()+" | "
+                );
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void listAllClaimsTest(){
-
+    @Test void listAllClaimsTest(){
+        try {
+            for(ClaimItemAdminDTO claim : claimsService.listAllClaims()){
+                System.out.println(claim.claimId()+" | "+
+                        claim.date()+" | "+
+                        claim.claimInfoId()+ " | "+
+                        claim.status()+" | "
+                );
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test public void assignClaimToAdminTest(){
@@ -46,30 +94,91 @@ public class ClaimsTest {
         }
     }
 
-    public void addMessageToClaimTest(){
-
+    @Test public void addMessageToClaimTest(){
+        try {
+            System.out.println(claimsService.addMessageToClaim(new ClaimAnswerDTO(
+                    1L,
+                    "Necesitamos expandir la info",
+                    MessageType.ADMIN_PATIENT
+            )));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void searchClaimForAdminTest(){
-
+    @Test public void searchClaimForAdminTest(){
+        try {
+            System.out.println(claimsService.searchClaimForAdmin(1L));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void seeClaimDetailsForAdminTest(){
-
+    @Test public void seeClaimDetailsForAdminTest(){
+        try {
+            ClaimDetailedItemAdminDTO cl = claimsService.seeClaimDetailsForAdmin(1L);
+            System.out.println(cl.claimId()+" | "+
+                    cl.adminId()+" | "+
+                    cl.patientPersonalId()+" | "+
+                    cl.appointmentId()+" | "+
+                    cl.date()+" | "+
+                    cl.details()+" | "+
+                    cl.claimType()+" | "+
+                    cl.claimStatus()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void listAllClaimsByStatusForPatientTest(){
-
+    @Test public void listAllClaimsByStatusForPatientTest(){
+        try {
+            for(ClaimItemPatientDTO cl : claimsService.listAllClaimsByStatusForPatient("1000.000.000", ClaimState.ACTIVE)){
+                System.out.println(cl.claimId()+" | "+
+                                cl.claimDate()+" | "+
+                                cl.claimType()+" | "+
+                                cl.claimStatus()
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void listAllClaimsForPatientTest(){
-
+        try {
+            for(ClaimItemPatientDTO cl : claimsService.listAllClaimsForPatient("1000.000.000")){
+                System.out.println(cl.claimId()+" | "+
+                        cl.claimDate()+" | "+
+                        cl.claimType()+" | "+
+                        cl.claimStatus()
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public void searchClaimForPatientTest(){
-
+        try {
+            System.out.println(claimsService.searchClaimForPatient(1L, "1000.000.000"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void seeClaimDetailsForPatientTest(){
-
+        try {
+            ClaimDetailedItemPatientDTO cl = claimsService.seeClaimDetailsForPatient(1L, "1000.000.000");
+            System.out.println(cl.claimId()+" | "+
+                    cl.personalId()+" | "+
+                    cl.appointmentId()+" | "+
+                    cl.claimDate()+" | "+
+                    cl.details()+" | "+
+                    cl.claimType()+" | "+
+                    cl.claimStatus()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

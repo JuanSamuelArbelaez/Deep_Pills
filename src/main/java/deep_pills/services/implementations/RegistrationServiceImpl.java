@@ -7,6 +7,7 @@ import deep_pills.model.entities.accounts.users.patients.*;
 import deep_pills.model.entities.accounts.users.physicians.*;
 import deep_pills.model.entities.schedule.*;
 import deep_pills.model.enums.states.ScheduleState;
+import deep_pills.model.enums.types.EMailType;
 import deep_pills.model.enums.types.ShiftType;
 import deep_pills.model.enums.lists.Specialization;
 import deep_pills.model.enums.states.AccountState;
@@ -59,7 +60,12 @@ public class RegistrationServiceImpl implements RegistrationService {
         physicianRegistrationRepository.save(registration);
         physicianSpecializationRepository.saveAll(physicianSpecializations);
 
-        eMailService.sendEmail(new EMailDTO(registeredPhysician.getEmail(), "This JUAN from the DeepPills Team! We are happy that you decided to join us. Go to your dashboard so we can start giving you the care you deserve.", "Welcome to DeepPills"));
+        eMailService.sendEmail(new EMailDTO(registeredPhysician.getEmail(),
+                "This JUAN from the DeepPills Team! We are happy that you decided to join us. Go to your dashboard so we can start giving you the care you deserve.",
+                "Welcome to DeepPills",
+                EMailType.REGISTRATION,
+                registeredPhysician.getId()
+                ));
 
         return registeredPhysician.getId();
     }
@@ -167,7 +173,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         patientRegistrationRepository.save(registration);
         eMailService.sendEmail(new EMailDTO(registeredPatient.getEmail(),
                 "This JUAN from the DeepPills Team! We are happy that you decided to join us. Go to your dashboard so we can start giving you the care you deserve.",
-                "Welcome to DeepPills"));
+                "Welcome to DeepPills",
+                EMailType.REGISTRATION,
+                registeredPatient.getId()
+        ));
         return registeredPatient.getId();
     }
 

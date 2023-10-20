@@ -30,6 +30,13 @@ public class PasswordRecoveryRequest implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
 
+    @Column(name = "expirationDateTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date expirationDateTime;
+
+    @Column(name = "code")
+    private String code;
+
     @Enumerated
     @Column(name = "state")
     private PasswordRecoveryRequestState passwordRecoveryRequestState;

@@ -8,6 +8,7 @@ import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.appointments.Appointment;
 import deep_pills.model.entities.claims.*;
 import deep_pills.model.enums.states.ClaimState;
+import deep_pills.model.enums.types.EMailType;
 import deep_pills.model.enums.types.MessageType;
 import deep_pills.repositories.accounts.AdminRepository;
 import deep_pills.repositories.accounts.users.PatientRepository;
@@ -127,7 +128,10 @@ public class ClaimsServiceImpl implements ClaimsService {
                 "This JUAN from the DeepPills Team! A new message has been sent to the claim "+
                         claim.getClaimId()
                 ,
-                "New message from Claim"));
+                "New message from Claim",
+                EMailType.CLAIM,
+                claim.getClaimId()
+        ));
         return savedMessage.getMessageId();
     }
 
@@ -221,7 +225,11 @@ public class ClaimsServiceImpl implements ClaimsService {
         eMailService.sendEmail(new EMailDTO(patient.getEmail(),
                 "This JUAN from the DeepPills Team! A new claim ("+claim.getClaimId()+") has been created for the appointment: "+
                         appointment.getAppointmentId(),
-                "New Claim"));
+
+                "New Claim",
+                EMailType.CLAIM,
+                claim.getClaimId()
+                ));
         return savedClaim.getClaimId();
     }
 }

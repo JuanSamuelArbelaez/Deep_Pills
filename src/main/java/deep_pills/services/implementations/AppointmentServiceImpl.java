@@ -17,6 +17,7 @@ import deep_pills.model.enums.lists.Symptom;
 import deep_pills.model.enums.states.AppointmentState;
 import deep_pills.model.enums.states.FreeDayStatus;
 import deep_pills.model.enums.states.TreatmentState;
+import deep_pills.model.enums.types.EMailType;
 import deep_pills.repositories.accounts.users.PatientRepository;
 import deep_pills.repositories.accounts.users.PhysicianRepository;
 import deep_pills.repositories.appointments.*;
@@ -67,7 +68,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         freeDay.setSchedule(schedule);
         eMailService.sendEmail(new EMailDTO(physician.getEmail(),
                 "This JUAN from the DeepPills Team! Your free day has been scheduled for "+schedule.getDate()+".",
-                "Free Day"));
+                "Free Day",
+                EMailType.FREE_DAY,
+                physician.getId()));
         return freeDayRepository.save(freeDay).getFreeDayId();
     }
 
@@ -105,11 +108,15 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         eMailService.sendEmail(new EMailDTO(physician.getEmail(),
                 "This JUAN from the DeepPills Team! Appointment "+appointment.getAppointmentId()+" served.",
-                "Appointment Service"));
+                "Appointment Service",
+                EMailType.APPOINT_SERVED,
+                appointment.getAppointmentId()));
 
         eMailService.sendEmail(new EMailDTO(appointment.getPatient().getEmail(),
                 "This JUAN from the DeepPills Team! Appointment "+appointment.getAppointmentId()+" served.",
-                "Appointment Service"));
+                "Appointment Service",
+                EMailType.APPOINT_SERVED,
+                appointment.getAppointmentId()));
 
         return "Appointment service updated successfully.";
     }
@@ -125,7 +132,10 @@ public class AppointmentServiceImpl implements AppointmentService {
                         appointment.getAppointmentId()+" for "+appointment.getDate()+
                         " at "+appointment.getTime().getTime()+" on "+appointment.getLocation()+
                         " has been cancelled.",
-                "Appointment Cancelled"));
+
+                "Appointment Cancelled",
+                EMailType.APPOINT_CANCELLED,
+                appointment.getAppointmentId()));
         return "Appointment " + appointment.getAppointmentId() + " cancelled";
     }
 
@@ -169,7 +179,9 @@ public class AppointmentServiceImpl implements AppointmentService {
                         " at "+appointment.getTime().getTime()+
                         " on "+appointment.getLocation()
                 ,
-                "Appointment Rescheduled"));
+                "Appointment Rescheduled",
+                EMailType.APPOINT_RESCHEDULED,
+                appointment.getAppointmentId()));
 
         return "Appointment "+appointment.getAppointmentId()+" rescheduled for "+appointmentDate+" at "+appointment.getTime();
     }
@@ -226,7 +238,10 @@ public class AppointmentServiceImpl implements AppointmentService {
                         " for "+appointment.getDate()+
                         " at "+appointment.getTime().getTime()+
                         " on "+appointment.getLocation(),
-                "Appointment Scheduled"));
+
+                "Appointment Scheduled",
+                EMailType.APPOINT_SCHEDULED,
+                appointment.getAppointmentId()));
         return savedAppointment.getAppointmentId();
     }
 

@@ -1,5 +1,6 @@
 package deep_pills.model.entities.claims;
 
+import deep_pills.model.entities.notifications.EMail;
 import deep_pills.model.enums.states.ClaimState;
 import deep_pills.model.enums.types.ClaimType;
 import jakarta.persistence.*;
@@ -40,4 +41,7 @@ public class Claim implements Serializable { //Entity finished
 
     @OneToMany(mappedBy = "claim")
     private List<Message> messages;
+
+    @OneToMany(mappedBy = "claim")
+    private List<EMail> emails;
 }

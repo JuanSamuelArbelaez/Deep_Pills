@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record PatientSearchDTO(
-        @NotNull @Min(0) @Max(6) Integer searchParameter,
+        @NotNull @Min(0) @Max(9) Integer searchParameter,
 
         @NotNull String searchValue) {
 
@@ -16,6 +16,7 @@ public record PatientSearchDTO(
     // LastName = 4,
     // Email = 5,
     // Phone = 6,
-    // DateOfBirth = 8,
-    // Membership = 9
+    // DateOfBirth = 7,
+    // Membership = 8
+    // EPS = 9
 }

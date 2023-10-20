@@ -1,6 +1,7 @@
 package deep_pills.model.entities.accounts;
 
 import deep_pills.model.entities.claims.Message;
+import deep_pills.model.entities.notifications.EMail;
 import jakarta.persistence.*;
 import lombok.*;
 import deep_pills.model.enums.states.AccountState;
@@ -37,4 +38,7 @@ public class Account implements Serializable {
 
     @OneToMany(mappedBy = "sender")
     private List<Message> messagesSent;
+
+    @OneToMany(mappedBy = "account")
+    private List<EMail> eMailsReceived;
 }
