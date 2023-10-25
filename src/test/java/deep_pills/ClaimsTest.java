@@ -3,9 +3,7 @@ package deep_pills;
 import deep_pills.dto.claims.admin.ClaimAnswerDTO;
 import deep_pills.dto.claims.admin.ClaimDetailedItemAdminDTO;
 import deep_pills.dto.claims.admin.ClaimItemAdminDTO;
-import deep_pills.dto.claims.patient.ClaimDetailedItemPatientDTO;
-import deep_pills.dto.claims.patient.ClaimItemPatientDTO;
-import deep_pills.dto.claims.patient.ClaimRegisterDTO;
+import deep_pills.dto.claims.patient.*;
 import deep_pills.model.enums.states.ClaimState;
 import deep_pills.model.enums.types.ClaimType;
 import deep_pills.model.enums.types.MessageType;
@@ -133,7 +131,7 @@ public class ClaimsTest {
 
     @Test public void listAllClaimsByStatusForPatientTest(){
         try {
-            for(ClaimItemPatientDTO cl : claimsService.listAllClaimsByStatusForPatient("1000.000.000", ClaimState.ACTIVE)){
+            for(ClaimItemPatientDTO cl : claimsService.listAllClaimsByStatusForPatient(new ClaimListingPatientDTO("1000.000.000", ClaimState.ACTIVE))){
                 System.out.println(cl.claimId()+" | "+
                                 cl.claimDate()+" | "+
                                 cl.claimType()+" | "+
@@ -160,7 +158,7 @@ public class ClaimsTest {
     }
     public void searchClaimForPatientTest(){
         try {
-            System.out.println(claimsService.searchClaimForPatient(1L, "1000.000.000"));
+            System.out.println(claimsService.searchClaimForPatient(new ClaimSearchDTO(1L, "1000.000.000")));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -168,7 +166,7 @@ public class ClaimsTest {
 
     public void seeClaimDetailsForPatientTest(){
         try {
-            ClaimDetailedItemPatientDTO cl = claimsService.seeClaimDetailsForPatient(1L, "1000.000.000");
+            ClaimDetailedItemPatientDTO cl = claimsService.seeClaimDetailsForPatient(new ClaimSearchDTO(1L, "1000.000.000"));
             System.out.println(cl.claimId()+" | "+
                     cl.personalId()+" | "+
                     cl.appointmentId()+" | "+

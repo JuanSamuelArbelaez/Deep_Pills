@@ -1,9 +1,6 @@
 package deep_pills.services.interfaces;
 
-import deep_pills.dto.appointments.AppointmentGenericDTO;
-import deep_pills.dto.appointments.AppointmentRescheduleDTO;
-import deep_pills.dto.appointments.AppointmentScheduleDTO;
-import deep_pills.dto.appointments.AppointmentServiceDTO;
+import deep_pills.dto.appointments.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,5 +44,5 @@ public interface AppointmentService {
     List<AppointmentGenericDTO> pastAppointmentsByPatientId(@NotNull String patientPersonalID) throws Exception;
 
     @Transactional
-    List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientId(@NotNull String patientPersonalID, @NotNull Date date) throws Exception;
+    List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientId(@NotNull AppointmentDateSearchDTO appointmentDateSearchDTO) throws Exception;
 }

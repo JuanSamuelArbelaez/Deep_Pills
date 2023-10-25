@@ -210,7 +210,7 @@ public class AppointmentTest {
 
         try{
             Date date = formato.parse(appointmentDate);
-            List<AppointmentGenericDTO> list = appointmentService.dateSpecificAppointmentsByPatientId("1012.529.018", date);
+            List<AppointmentGenericDTO> list = appointmentService.dateSpecificAppointmentsByPatientId(new AppointmentDateSearchDTO("1012.529.018", date));
             for(AppointmentGenericDTO appointment : list){
                 System.out.println(
                         appointment.appointmentId()+" | "+

@@ -69,6 +69,7 @@ public class MembershipServiceImpl implements MembershipService {
                 "You have been added to a membership",
                 EMailType.MEMB_PATIENT_ADDED,
                 membership.getMembershipId()));
+        membershipRepository.save(membership);
         return patientRepository.save(patient).getPersonalId();
     }
 
@@ -99,6 +100,7 @@ public class MembershipServiceImpl implements MembershipService {
                 "You have been removed from a membership",
                 EMailType.MEMB_PATIENT_REMOVED,
                 membership.getMembershipId()));
+        membershipRepository.save(membership);
         return patientRepository.save(patient).getPersonalId();
     }
 
@@ -119,7 +121,7 @@ public class MembershipServiceImpl implements MembershipService {
             membership.setOwner(patient);
             membership.setState(MembershipState.ACTIVE);
             membership.setPolicy(policy);
-        } else if(policy.getMaxPatients()>membership.getPolicy().getMaxPatients()) throw new Exception("Cannot update membership's current policy to policy: "+membershipAcquirementDTO.policyId()+" because the membership's current policy's amount of patients ("+(membership.getBeneficiaries().size()+1)+") exceeds the target policy's maximum amount of patients ("+policy.getMaxPatients()+")");
+        } else if(policy.getMaxPatients()<membership.getBeneficiaries().size()+1) throw new Exception("Cannot update membership's current policy to policy: "+membershipAcquirementDTO.policyId()+" because the membership's current amount of patients ("+(membership.getBeneficiaries().size()+1)+") exceeds the target policy's maximum amount of patients ("+policy.getMaxPatients()+")");
         Long id = membershipRepository.save(membership).getMembershipId();
         eMailService.sendEmail(new EMailDTO(patient.getEmail(),
                 "This JUAN from the DeepPills Team! You just acquired a new membership: "+membership.getMembershipId()+" ("+policy.getName()+")",
@@ -142,6 +144,8 @@ public class MembershipServiceImpl implements MembershipService {
             membership.setOwner(null);
         }else membership.getBeneficiaries().remove(patient);
         membership.setState(MembershipState.INACTIVE);
+        patientRepository.save(patient);
+        membershipRepository.save(membership);
         eMailService.sendEmail(new EMailDTO(patient.getEmail(),
                 "This JUAN from the DeepPills Team! You just resigned from your membership: "+membership.getMembershipId()+" ("+membership.getPolicy().getName()+")",
                 "Resigned from Membership",

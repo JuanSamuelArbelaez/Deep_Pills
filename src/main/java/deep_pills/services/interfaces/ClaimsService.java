@@ -1,9 +1,7 @@
 package deep_pills.services.interfaces;
 
 import deep_pills.dto.claims.admin.*;
-import deep_pills.dto.claims.patient.ClaimDetailedItemPatientDTO;
-import deep_pills.dto.claims.patient.ClaimItemPatientDTO;
-import deep_pills.dto.claims.patient.ClaimRegisterDTO;
+import deep_pills.dto.claims.patient.*;
 import deep_pills.model.enums.states.ClaimState;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +20,10 @@ public interface ClaimsService {
     ClaimDetailedItemAdminDTO seeClaimDetailsForAdmin(Long claimId) throws Exception;
 
     //Patient
-    List<ClaimItemPatientDTO> listAllClaimsByStatusForPatient(String patientPersonalId, ClaimState status) throws Exception;
+    List<ClaimItemPatientDTO> listAllClaimsByStatusForPatient(ClaimListingPatientDTO claimListingPatientDTO) throws Exception;
     List<ClaimItemPatientDTO> listAllClaimsForPatient(String patientPersonalId) throws Exception;
-    ClaimItemPatientDTO searchClaimForPatient(Long claimId, String patientPersonalId) throws Exception;
-    ClaimDetailedItemPatientDTO seeClaimDetailsForPatient(Long claimId, String patientPersonalId) throws Exception;
+    ClaimItemPatientDTO searchClaimForPatient(ClaimSearchDTO claimSearchDTO) throws Exception;
+    ClaimDetailedItemPatientDTO seeClaimDetailsForPatient(ClaimSearchDTO claimSearchDTO) throws Exception;
     Long newClaim(ClaimRegisterDTO claimRegisterDto) throws Exception;
 
     //Generic

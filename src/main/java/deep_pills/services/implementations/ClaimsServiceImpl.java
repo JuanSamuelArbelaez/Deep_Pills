@@ -15,6 +15,7 @@ import deep_pills.repositories.accounts.users.PatientRepository;
 import deep_pills.repositories.appointments.AppointmentRepository;
 import deep_pills.repositories.claims.*;
 import deep_pills.services.interfaces.ClaimsService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -162,8 +163,8 @@ public class ClaimsServiceImpl implements ClaimsService {
 
     @Override
     @Transactional
-    public List<ClaimItemPatientDTO> listAllClaimsByStatusForPatient(String patientPersonalId, ClaimState status) throws Exception {
-        return patientClaimMap(claimRepository.findByPatientAndStatus(patientPersonalId, status));
+    public List<ClaimItemPatientDTO> listAllClaimsByStatusForPatient(@NotNull ClaimListingPatientDTO claimListingPatientDTO) throws Exception {
+        return patientClaimMap(claimRepository.findByPatientAndStatus(claimListingPatientDTO.patientPersonalId(), claimListingPatientDTO.claimState()));
     }
 
     @Override
@@ -174,17 +175,17 @@ public class ClaimsServiceImpl implements ClaimsService {
 
     @Override
     @Transactional
-    public ClaimItemPatientDTO searchClaimForPatient(Long claimId, String patientPersonalId) throws Exception {
-        Claim claim = getClaimFromOptional(claimRepository.findByIdAndPatientPersonalId(claimId, patientPersonalId));
-        if(claim == null ) throw new Exception("No claim found for Id: "+claimId+" for Patient: "+patientPersonalId);
+    public ClaimItemPatientDTO searchClaimForPatient(ClaimSearchDTO claimSearchDTO) throws Exception {
+        Claim claim = getClaimFromOptional(claimRepository.findByIdAndPatientPersonalId(claimSearchDTO.claimId(), claimSearchDTO.patientPersonalId()));
+        if(claim == null ) throw new Exception("No claim found for Id: "+claimSearchDTO.claimId()+" for Patient: "+claimSearchDTO.patientPersonalId());
         return patientClaimMap(Collections.singletonList(claim)).get(0);
     }
 
     @Override
     @Transactional
-    public ClaimDetailedItemPatientDTO seeClaimDetailsForPatient(Long claimId, String patientPersonalId) throws Exception {
-        Claim claim = getClaimFromOptional(claimRepository.findByIdAndPatientPersonalId(claimId, patientPersonalId));
-        if(claim == null ) throw new Exception("No claim found for Id: "+claimId+" for Patient: "+patientPersonalId);
+    public ClaimDetailedItemPatientDTO seeClaimDetailsForPatient(ClaimSearchDTO claimSearchDTO) throws Exception {
+        Claim claim = getClaimFromOptional(claimRepository.findByIdAndPatientPersonalId(claimSearchDTO.claimId(), claimSearchDTO.patientPersonalId()));
+        if(claim == null ) throw new Exception("No claim found for Id: "+claimSearchDTO.claimId()+" for Patient: "+claimSearchDTO.patientPersonalId());
         return new ClaimDetailedItemPatientDTO(
                 claim.getClaimId(),
                 claim.getClaimInfo().getPatient().getPersonalId(),

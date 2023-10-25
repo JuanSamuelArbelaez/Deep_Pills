@@ -385,9 +385,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientId(@NotNull String patientPersonalID, @NotNull Date date) throws Exception {
-        Patient patient = getPatientFromOptional(patientPersonalID);
-        List<PhysicianAppointmentSchedule> appointments = appointmentRepository.findAppointmentsForPatientOnDate(patient.getId(), date);
+    public List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientId(@NotNull AppointmentDateSearchDTO appointmentDateSearchDTO) throws Exception {
+        Patient patient = getPatientFromOptional(appointmentDateSearchDTO.patientPersonalId());
+        List<PhysicianAppointmentSchedule> appointments = appointmentRepository.findAppointmentsForPatientOnDate(patient.getId(), appointmentDateSearchDTO.date());
         return mapAppointmentDTOS(appointments);
     }
 }
