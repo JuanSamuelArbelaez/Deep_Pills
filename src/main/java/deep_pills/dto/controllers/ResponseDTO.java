@@ -2,7 +2,7 @@ package deep_pills.dto.controllers;
 
 import jakarta.validation.constraints.NotNull;
 
-public record ResponseDTO(
+public record ResponseDTO<T>(
         @NotNull boolean errors,
-        @NotNull String message) {
+        @NotNull T message) {
 }

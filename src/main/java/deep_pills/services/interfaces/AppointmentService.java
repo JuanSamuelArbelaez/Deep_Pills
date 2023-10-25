@@ -1,6 +1,7 @@
 package deep_pills.services.interfaces;
 
 import deep_pills.dto.appointments.*;
+import deep_pills.dto.schedule.FreeDayRequestDTO;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface AppointmentService {
     @Transactional
-    Long scheduleFreeDayForPhysician(String physicianPersonalId, Long scheduleId) throws Exception;
+    Long scheduleFreeDayForPhysician(FreeDayRequestDTO freeDayRequestDTO) throws Exception;
 
     @Transactional
     String serviceAppointment(AppointmentServiceDTO appointmentServiceDTO) throws Exception;

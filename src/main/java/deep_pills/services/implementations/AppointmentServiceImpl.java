@@ -2,6 +2,7 @@ package deep_pills.services.implementations;
 
 import deep_pills.dto.appointments.*;
 import deep_pills.dto.emails.EMailDTO;
+import deep_pills.dto.schedule.FreeDayRequestDTO;
 import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.accounts.users.physicians.Physician;
 import deep_pills.model.entities.appointments.Appointment;
@@ -48,19 +49,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public Long scheduleFreeDayForPhysician(String physicianPersonalId, Long scheduleId) throws Exception {
-        Physician physician = getPhysicianFromOptional(physicianPersonalId);
-        Schedule schedule = getScheduleFromOptional(scheduleId);
+    public Long scheduleFreeDayForPhysician(FreeDayRequestDTO freeDayRequestDTO) throws Exception {
+        Physician physician = getPhysicianFromOptional(freeDayRequestDTO.physicianPersonalId());
+        Schedule schedule = getScheduleFromOptional(freeDayRequestDTO.scheduleId());
 
         if (!schedule.getShift().equals(physician.getShift())) throw new Exception("This schedule does not belong to the physicians shift");
 
-        if(freeDayRepository.countByPhysicianPersonalIdAndStatus(physician.getPersonalId(), FreeDayStatus.SCHEDULED)>1) throw new Exception("Physician "+physicianPersonalId+" already has a Free Day scheduled");
+        if(freeDayRepository.countByPhysicianPersonalIdAndStatus(physician.getPersonalId(), FreeDayStatus.SCHEDULED)>1) throw new Exception("Physician "+freeDayRequestDTO.physicianPersonalId()+" already has a Free Day scheduled");
 
         List<AppointmentState> states = new ArrayList<>();
         states.add(AppointmentState.SCHEDULED);
         states.add(AppointmentState.RESCHEDULED);
 
-        if(physicianAppointmentScheduleRepository.countByPhysicianPersonalIdAndDateAndStatus(physician.getPersonalId(), scheduleId, states)>0) throw new Exception("Appointments already scheduled for this day");
+        if(physicianAppointmentScheduleRepository.countByPhysicianPersonalIdAndDateAndStatus(physician.getPersonalId(), freeDayRequestDTO.scheduleId(), states)>0) throw new Exception("Appointments already scheduled for this day");
 
         FreeDay freeDay = new FreeDay();
         freeDay.setFreeDayStatus(FreeDayStatus.SCHEDULED);

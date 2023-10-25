@@ -1,6 +1,7 @@
 package deep_pills;
 
 import deep_pills.dto.appointments.*;
+import deep_pills.dto.schedule.FreeDayRequestDTO;
 import deep_pills.model.enums.lists.Diagnosis;
 import deep_pills.model.enums.lists.Symptom;
 import deep_pills.services.interfaces.AppointmentService;
@@ -20,7 +21,7 @@ public class AppointmentTest {
 
     @Test public void scheduleFreeDayForPhysicianTest(){
         try{
-            System.out.println("Free day: "+appointmentService.scheduleFreeDayForPhysician("108.479.102", 122L));
+            System.out.println("Free day: "+appointmentService.scheduleFreeDayForPhysician(new FreeDayRequestDTO("108.479.102", 122L)));
         } catch (Exception e) {
             e.printStackTrace();
         }
