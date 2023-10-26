@@ -47,7 +47,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
         }else throw new Exception("Physician with id: "+infoUpdatePhysicianDTO.id()+" not found");
 
         // Check if the email is already in use by another user
-        Optional<Account> optional2 = accountRepository.fingByEmail(infoUpdatePhysicianDTO.email());
+        Optional<Account> optional2 = accountRepository.findByEmail(infoUpdatePhysicianDTO.email());
         if(optional2.isPresent()) {
             if(optional2.get().getId().equals(infoUpdatePhysicianDTO.id())) {
                 throw new Exception("Cannot update physician's email to: "+infoUpdatePhysicianDTO.email()+" because it is already in use by someone");
@@ -57,7 +57,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
         // Update physician information based on the DTO
         if(infoUpdatePhysicianDTO.city()!=null) physician.setCity(infoUpdatePhysicianDTO.city());
         if(infoUpdatePhysicianDTO.email()!=null) {
-            Optional<Account> op = accountRepository.fingByEmail(infoUpdatePhysicianDTO.email());
+            Optional<Account> op = accountRepository.findByEmail(infoUpdatePhysicianDTO.email());
             if(op.isPresent()){
                 if(!op.get().getId().equals(physician.getId())) throw new Exception("Email already in use by another account");
             }
@@ -66,7 +66,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
         if(infoUpdatePhysicianDTO.name()!=null) physician.setName(infoUpdatePhysicianDTO.name());
         if(infoUpdatePhysicianDTO.lastName()!=null) physician.setLastName(infoUpdatePhysicianDTO.lastName());
         if(infoUpdatePhysicianDTO.phone()!=null) physician.setPhone(infoUpdatePhysicianDTO.phone());
-        if(infoUpdatePhysicianDTO.pictureURL()!=null) physician.setPictureUrl(infoUpdatePhysicianDTO.pictureURL());
+        //if(infoUpdatePhysicianDTO.pictureURL()!=null) physician.setPictureUrl(loadImg(infoUpdatePhysicianDTO.pictureURL()));
 
         // Save the updated physician information
         physicianRepository.save(physician);
@@ -86,7 +86,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
         }
 
         // Check if the email is already in use by another user
-        Optional<Account> optional2 = accountRepository.fingByEmail(infoUpdatePatientDTO.email());
+        Optional<Account> optional2 = accountRepository.findByEmail(infoUpdatePatientDTO.email());
         if (optional2.isPresent()){
             if(optional2.get().getId().equals(infoUpdatePatientDTO.id())) {
                 throw new Exception("Cannot update patient's email to: " + infoUpdatePatientDTO.email() + " because it is already in use by someone");
@@ -99,7 +99,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
         if (infoUpdatePatientDTO.dateOfBirth() != null) patient.setDateOfBirth(infoUpdatePatientDTO.dateOfBirth());
         if (infoUpdatePatientDTO.phone() != null) patient.setPhone(infoUpdatePatientDTO.phone());
         if (infoUpdatePatientDTO.email() != null){
-            Optional<Account> op = accountRepository.fingByEmail(infoUpdatePatientDTO.email());
+            Optional<Account> op = accountRepository.findByEmail(infoUpdatePatientDTO.email());
             if(op.isPresent()){
                 if(!op.get().getId().equals(patient.getId())) throw new Exception("Email already in use by another account");
             }

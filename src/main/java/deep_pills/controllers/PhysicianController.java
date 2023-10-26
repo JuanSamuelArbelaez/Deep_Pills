@@ -1,12 +1,11 @@
 package deep_pills.controllers;
 
 import deep_pills.dto.accounts.physician.InfoUpdatePhysicianDTO;
-import deep_pills.dto.appointments.AppointmentDatePhysicianSearchDTO;
-import deep_pills.dto.appointments.AppointmentServiceDTO;
+import deep_pills.dto.appointments.*;
 import deep_pills.dto.controllers.ResponseDTO;
-import deep_pills.dto.logins.LoginDTO;
 import deep_pills.dto.schedule.FreeDayRequestDTO;
 import deep_pills.services.interfaces.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,20 +13,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/deep_pills/physician")
+@RequestMapping("/deep_pills/api/physician")
+@SecurityRequirement(name = "bearerAuth")
 public class PhysicianController {
     private final AccountUpdateService accountUpdateService;
     private final AppointmentService appointmentService;
-    private final AuthenticationService authenticationService;
     private final UserManagementService userManagementService;
 
 
-    //Registration, Account Management and Authentication
-    @PostMapping("/account/login")
-    public ResponseEntity<ResponseDTO<String>> physicianLogin(@Valid @RequestBody LoginDTO loginDTO) throws Exception{
-        authenticationService.login(loginDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Physician Logged in"));
-    }
+    //Registration and Account Management
     @PostMapping("/account/info-update")
     public ResponseEntity<ResponseDTO<String>> patientInfoUpdate(@Valid @RequestBody InfoUpdatePhysicianDTO infoUpdatePhysicianDTO) throws Exception{
         accountUpdateService.updatePhysician(infoUpdatePhysicianDTO);

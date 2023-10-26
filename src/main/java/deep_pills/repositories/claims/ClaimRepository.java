@@ -13,30 +13,36 @@ import java.util.Optional;
 @Repository
 public interface ClaimRepository extends JpaRepository<Claim, Long> {
     @Query("SELECT cl FROM Claim cl " +
-            "WHERE cl.claimStatus = :status ")
+            "WHERE cl.claimStatus = :status "+
+            "ORDER BY cl.claimInfo.appointment.date")
     List<Claim> findByStatus(@Param("status")ClaimState status);
 
     @Query("SELECT cl FROM Claim cl " +
             "WHERE cl.claimInfo.admin.id = :adminId "+
-            "AND cl.claimStatus = :status ")
+            "AND cl.claimStatus = :status "+
+            "ORDER BY cl.claimInfo.appointment.date")
     List<Claim> findByAdminAndStatus(@Param("adminId") Long adminId, @Param("status")ClaimState status);
 
     @Query("SELECT cl FROM Claim cl " +
-            "WHERE cl.claimInfo.admin.id = :adminId ")
+            "WHERE cl.claimInfo.admin.id = :adminId "+
+            "ORDER BY cl.claimInfo.appointment.date")
     List<Claim> findByAdmin(@Param("adminId") Long adminId);
 
     @Query("SELECT cl FROM Claim cl " +
             "WHERE cl.claimInfo.appointment.patient.personalId = :patientPersonalId "+
-            "AND cl.claimStatus = :status ")
+            "AND cl.claimStatus = :status "+
+            "ORDER BY cl.claimInfo.appointment.date")
     List<Claim> findByPatientAndStatus(@Param("patientPersonalId") String patientPersonalId, @Param("status")ClaimState status);
 
     @Query("SELECT cl FROM Claim cl " +
-            "WHERE cl.claimInfo.appointment.patient.personalId = :patientPersonalId ")
+            "WHERE cl.claimInfo.appointment.patient.personalId = :patientPersonalId "+
+            "ORDER BY cl.claimInfo.appointment.date")
     List<Claim> findByPatientPersonalId(@Param("patientPersonalId") String patientPersonalId);
 
     @Query("SELECT cl FROM Claim cl " +
             "WHERE cl.claimInfo.appointment.patient.personalId = :patientPersonalId "+
-            "AND cl.claimId = :claimId ")
+            "AND cl.claimId = :claimId "+
+            "ORDER BY cl.claimInfo.appointment.date")
     Optional<Claim> findByIdAndPatientPersonalId(@Param("claimId") Long claimId, @Param("patientPersonalId") String patientPersonalId);
 
     @Query("SELECT COUNT(*) " +

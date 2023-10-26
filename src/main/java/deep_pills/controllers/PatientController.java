@@ -2,16 +2,14 @@ package deep_pills.controllers;
 
 import deep_pills.dto.accounts.patient.InfoUpdatePatientDTO;
 import deep_pills.dto.accounts.physician.PhysicianSearchDTO;
-import deep_pills.dto.appointments.AppointmentDatePatientSearchDTO;
-import deep_pills.dto.appointments.AppointmentRescheduleDTO;
-import deep_pills.dto.appointments.AppointmentScheduleDTO;
+import deep_pills.dto.appointments.*;
 import deep_pills.dto.claims.admin.ClaimAnswerDTO;
 import deep_pills.dto.claims.patient.*;
 import deep_pills.dto.controllers.ResponseDTO;
-import deep_pills.dto.logins.LoginDTO;
 import deep_pills.dto.memberships.*;
 import deep_pills.dto.registrations.RegisterPatientDTO;
 import deep_pills.services.interfaces.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,30 +18,18 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/deep_pills/patient")
+@RequestMapping("/deep_pills/api/patient")
+@SecurityRequirement(name = "bearerAuth")
 public class PatientController {
     private final AccountUpdateService accountUpdateService;
     private final AppointmentService appointmentService;
-    private final AuthenticationService authenticationService;
     private final ClaimsService claimsService;
     private final MembershipService membershipService;
-    private final RegistrationService registrationService;
     private final UserListingService userListingService;
     private final UserManagementService userManagementService;
 
 
-    //Registration, Account Management and Authentication
-    @PostMapping("/account/login")
-    public ResponseEntity<ResponseDTO<String>> patientLogin(@Valid @RequestBody LoginDTO loginDTO) throws Exception{
-        authenticationService.login(loginDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Patient Logged in"));
-    }
-    @PutMapping("/account/register")
-    public ResponseEntity<ResponseDTO<String>> patientRegistration(@Valid @RequestBody RegisterPatientDTO registerPatientDTO) throws Exception{
-        registrationService.registerPatient(registerPatientDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Patient registration completed"));
-    }
-
+    //Registration and Account Management
     @PostMapping("/account/info-update")
     public ResponseEntity<ResponseDTO<String>> patientInfoUpdate(@Valid @RequestBody InfoUpdatePatientDTO infoUpdatePatientDTO) throws Exception{
         accountUpdateService.updatePatient(infoUpdatePatientDTO);
@@ -54,12 +40,6 @@ public class PatientController {
     public ResponseEntity<ResponseDTO<String>> deletePatientAccount(@PathVariable Long patientId) throws Exception{
         userManagementService.disablePatient(patientId);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Patient account deleted"));
-    }
-
-    @PutMapping("/account/password-recovery/{patientEmail}")
-    public ResponseEntity<ResponseDTO<String>> patientPasswordRecovery(@PathVariable String patientEmail) throws Exception{
-        accountUpdateService.newPasswordRecoveryRequest(patientEmail);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Patient password recovery request successful"));
     }
 
 

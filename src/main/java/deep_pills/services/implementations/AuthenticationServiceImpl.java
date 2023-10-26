@@ -24,7 +24,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public TokenDTO login(LoginDTO loginDTO) throws Exception {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Optional<Account> optionalAccount = accountRepository.fingByEmail(loginDTO.email());
+        Optional<Account> optionalAccount = accountRepository.findByEmail(loginDTO.email());
         if(optionalAccount.isEmpty()){
             throw new Exception("Incorrect E-mail address.");
         }

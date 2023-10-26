@@ -21,42 +21,50 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query("SELECT pas FROM PhysicianAppointmentSchedule pas " +
             "WHERE pas.physician.id = :physicianId " +
-            "AND pas.appointment.date > CURRENT_DATE")
+            "AND pas.appointment.date > CURRENT_DATE "+
+            "ORDER BY pas.appointment.date")
     List<PhysicianAppointmentSchedule> findUpcomingAppointmentsForPhysician(@Param("physicianId") Long physicianId);
 
     @Query("SELECT pas FROM PhysicianAppointmentSchedule pas " +
             "WHERE pas.physician.id = :physicianId " +
-            "AND pas.appointment.date <= CURRENT_DATE")
+            "AND pas.appointment.date <= CURRENT_DATE "+
+            "ORDER BY pas.appointment.date")
     List<PhysicianAppointmentSchedule> findPastAppointmentsForPhysician(@Param("physicianId") Long physicianId);
 
     @Query("SELECT pas FROM PhysicianAppointmentSchedule pas " +
             "WHERE pas.physician.id = :physicianId " +
-            "AND pas.appointment.date = :date")
+            "AND pas.appointment.date = :date "+
+            "ORDER BY pas.appointment.date")
     List<PhysicianAppointmentSchedule> findAppointmentsForPhysicianOnDate(@Param("physicianId") Long physicianId, @Param("date") Date date);
 
     @Query("SELECT pas FROM PhysicianAppointmentSchedule pas " +
-            "WHERE pas.appointment.patient.id = :patientId")
+            "WHERE pas.appointment.patient.id = :patientId "+
+            "ORDER BY pas.appointment.date")
     List<PhysicianAppointmentSchedule> findByPatient_Id(@Param("patientId") Long patientId);
 
     @Query("SELECT pas FROM PhysicianAppointmentSchedule pas " +
             "WHERE pas.appointment.patient.id = :patientId "+
-            "AND pas.appointment.date > CURRENT_DATE")
+            "AND pas.appointment.date > CURRENT_DATE "+
+            "ORDER BY pas.appointment.date")
     List<PhysicianAppointmentSchedule> findUpcomingAppointmentsForPatient(@Param("patientId")Long patientId);
 
     @Query("SELECT pas FROM PhysicianAppointmentSchedule pas " +
             "WHERE pas.appointment.patient.id = :patientId " +
-            "AND pas.appointment.date <= CURRENT_DATE")
+            "AND pas.appointment.date <= CURRENT_DATE "+
+            "ORDER BY pas.appointment.date")
     List<PhysicianAppointmentSchedule> findPastAppointmentsForPatient(@Param("patientId")Long patientId);
 
     @Query("SELECT pas FROM PhysicianAppointmentSchedule pas " +
             "WHERE pas.appointment.patient.id= :patientId " +
-            "AND pas.appointment.date = :date")
+            "AND pas.appointment.date = :date "+
+            "ORDER BY pas.appointment.date")
     List<PhysicianAppointmentSchedule> findAppointmentsForPatientOnDate(@Param("patientId") Long patientId, @Param("date") Date date);
 
     @Query("SELECT a FROM Appointment a " +
             "JOIN a.physicianAppointmentSchedule pas " +
             "WHERE pas.schedule.scheduleId = :scheduleId " +
-            "AND pas.physician.id = :physicianId")
+            "AND pas.physician.id = :physicianId "+
+            "ORDER BY pas.appointment.date")
     List<Appointment> findAppointmentsByScheduleAndPhysician(@Param("scheduleId") Long scheduleId, @Param("physicianId") Long physicianId);
 
     @Query("SELECT COUNT(a) FROM Appointment a " +
@@ -66,7 +74,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query("SELECT a FROM Appointment a " +
             "WHERE a.appointmentId = :appointmentId " +
-            "AND a.patient.personalId = :patientPersonalId")
+            "AND a.patient.personalId = :patientPersonalId "+
+            "ORDER BY a.date")
     Optional<Appointment> findAppointmentsByIdAndPatientPersonalId(@Param("appointmentId") Long appointmentId, @Param("patientPersonalId") String patientPersonalId);
 
 }

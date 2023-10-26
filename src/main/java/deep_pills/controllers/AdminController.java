@@ -11,6 +11,7 @@ import deep_pills.dto.memberships.*;
 import deep_pills.dto.registrations.RegisterPhysicianDTO;
 import deep_pills.model.enums.states.ClaimState;
 import deep_pills.services.interfaces.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/deep_pills/admin")
+@RequestMapping("/deep_pills/api/admin")
+@SecurityRequirement(name = "bearerAuth")
 public class AdminController {
     private final ClaimsService claimsService;
     private final MembershipService membershipService;
@@ -91,7 +93,7 @@ public class AdminController {
         claimsService.listAllClaims();
         return ResponseEntity.ok(new ResponseDTO<>(false, "Claims loaded successfully"));
     }
-    @GetMapping("/claims/list-all")
+    @GetMapping("/claims/assign-claim-to-admin")
     public ResponseEntity<ResponseDTO<String>> assignClaimToAdmin(@Valid @RequestBody ClaimAssignmentDTO claimAssignmentDTO) throws Exception{
         claimsService.assignClaimToAdmin(claimAssignmentDTO);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Claims loaded successfully"));
