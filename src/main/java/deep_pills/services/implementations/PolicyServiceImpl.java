@@ -1,6 +1,7 @@
 package deep_pills.services.implementations;
 
 import deep_pills.dto.memberships.PolicyDetailsDTO;
+import deep_pills.dto.memberships.PolicyStateDTO;
 import deep_pills.model.entities.memberships.Policy;
 import deep_pills.model.enums.states.PolicyState;
 import deep_pills.repositories.memberships.PolicyRepository;
@@ -37,11 +38,11 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     @Transactional
-    public PolicyState setPolicyState(@NotNull Long policyId, @NotNull PolicyState state) throws Exception {
-        Policy policy = getPolicyFromOptional(policyRepository.findById(policyId));
-        if(policy == null) throw new Exception("Policy "+policyId+" not found");
-        if(policy.getState().equals(state)) throw new Exception("Policy "+policyId+" is "+state+" already");
-        policy.setState(state);
+    public PolicyState setPolicyState(@NotNull PolicyStateDTO policyStateDTO) throws Exception {
+        Policy policy = getPolicyFromOptional(policyRepository.findById(policyStateDTO.policyId()));
+        if(policy == null) throw new Exception("Policy "+policyStateDTO.policyId()+" not found");
+        if(policy.getState().equals(policyStateDTO.policyState())) throw new Exception("Policy "+policyStateDTO.policyId()+" is "+policyStateDTO.policyState()+" already");
+        policy.setState(policyStateDTO.policyState());
         policyRepository.save(policy);
         return policy.getState();
     }

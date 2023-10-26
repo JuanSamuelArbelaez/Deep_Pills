@@ -1,6 +1,7 @@
 package deep_pills;
 
 import deep_pills.dto.memberships.PolicyDetailsDTO;
+import deep_pills.dto.memberships.PolicyStateDTO;
 import deep_pills.model.enums.states.PolicyState;
 import deep_pills.services.interfaces.PolicyService;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class PolicyTest {
 
     @Test public void setPolicyStateTest(){
         try{
-            System.out.println(policyService.setPolicyState(1L, PolicyState.ACTIVE));
+            System.out.println(policyService.setPolicyState(new PolicyStateDTO(1L, PolicyState.ACTIVE)));
         } catch (Exception e) {
             e.printStackTrace();
         }

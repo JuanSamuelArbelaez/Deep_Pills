@@ -143,7 +143,7 @@ public class AppointmentTest {
 
         try{
             Date date = formato.parse(appointmentDate);
-            List<AppointmentGenericDTO> list = appointmentService.dateSpecificAppointmentsByPhysicianId("108.479.102", date);
+            List<AppointmentGenericDTO> list = appointmentService.dateSpecificAppointmentsByPhysicianId(new AppointmentDatePhysicianSearchDTO("108.479.102", date));
             for(AppointmentGenericDTO appointment : list){
                 System.out.println(
                         appointment.appointmentId()+" | "+
@@ -211,7 +211,7 @@ public class AppointmentTest {
 
         try{
             Date date = formato.parse(appointmentDate);
-            List<AppointmentGenericDTO> list = appointmentService.dateSpecificAppointmentsByPatientId(new AppointmentDateSearchDTO("1012.529.018", date));
+            List<AppointmentGenericDTO> list = appointmentService.dateSpecificAppointmentsByPatientId(new AppointmentDatePatientSearchDTO("1012.529.018", date));
             for(AppointmentGenericDTO appointment : list){
                 System.out.println(
                         appointment.appointmentId()+" | "+

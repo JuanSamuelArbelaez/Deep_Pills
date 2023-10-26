@@ -1,8 +1,6 @@
 package deep_pills;
 
-import deep_pills.dto.claims.admin.ClaimAnswerDTO;
-import deep_pills.dto.claims.admin.ClaimDetailedItemAdminDTO;
-import deep_pills.dto.claims.admin.ClaimItemAdminDTO;
+import deep_pills.dto.claims.admin.*;
 import deep_pills.dto.claims.patient.*;
 import deep_pills.model.enums.states.ClaimState;
 import deep_pills.model.enums.types.ClaimType;
@@ -30,7 +28,7 @@ public class ClaimsTest {
     }
     @Test public void listAllClaimsByStatusForAdminTest(){
         try {
-            for(ClaimItemAdminDTO claim : claimsService.listAllClaimsByStatusForAdmin(1L, ClaimState.ACTIVE)){
+            for(ClaimItemAdminDTO claim : claimsService.listAllClaimsByStatusForAdmin(new AdminClaimsSearchDTO(1L, ClaimState.ACTIVE))){
                 System.out.println(claim.claimId()+" | "+
                                 claim.date()+" | "+
                                 claim.claimInfoId()+ " | "+
@@ -86,7 +84,7 @@ public class ClaimsTest {
 
     @Test public void assignClaimToAdminTest(){
         try{
-            System.out.println(claimsService.assignClaimToAdmin(1L, 1L));
+            System.out.println(claimsService.assignClaimToAdmin(new ClaimAssignmentDTO(1L, 1L)));
         }catch(Exception e){
         e.printStackTrace();
         }

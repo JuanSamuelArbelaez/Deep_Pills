@@ -33,7 +33,7 @@ public interface AppointmentService {
     List<AppointmentGenericDTO> pastAppointmentsByPhysicianId(@NotNull String physicianPersonalID) throws Exception;
 
     @Transactional
-    List<AppointmentGenericDTO> dateSpecificAppointmentsByPhysicianId(@NotNull String physicianPersonalID, @NotNull Date date) throws Exception;
+    List<AppointmentGenericDTO> dateSpecificAppointmentsByPhysicianId(@NotNull AppointmentDatePhysicianSearchDTO appointmentDatePhysicianSearchDTO) throws Exception;
 
     @Transactional
     List<AppointmentGenericDTO> allAppointmentsByPatientId(@NotNull String patientPersonalID) throws Exception;
@@ -45,5 +45,5 @@ public interface AppointmentService {
     List<AppointmentGenericDTO> pastAppointmentsByPatientId(@NotNull String patientPersonalID) throws Exception;
 
     @Transactional
-    List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientId(@NotNull AppointmentDateSearchDTO appointmentDateSearchDTO) throws Exception;
+    List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientId(@NotNull AppointmentDatePatientSearchDTO appointmentDatePatientSearchDTO) throws Exception;
 }

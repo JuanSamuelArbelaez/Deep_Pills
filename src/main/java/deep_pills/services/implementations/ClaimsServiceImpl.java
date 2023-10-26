@@ -3,10 +3,12 @@ package deep_pills.services.implementations;
 import deep_pills.dto.claims.admin.*;
 import deep_pills.dto.claims.patient.*;
 import deep_pills.dto.emails.EMailDTO;
+import deep_pills.dto.memberships.MembershipStateUpdateDTO;
 import deep_pills.model.entities.accounts.Admin;
 import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.appointments.Appointment;
 import deep_pills.model.entities.claims.*;
+import deep_pills.model.entities.memberships.Membership;
 import deep_pills.model.enums.states.ClaimState;
 import deep_pills.model.enums.types.EMailType;
 import deep_pills.model.enums.types.MessageType;
@@ -36,8 +38,8 @@ public class ClaimsServiceImpl implements ClaimsService {
 
     @Override
     @Transactional
-    public List<ClaimItemAdminDTO> listAllClaimsByStatusForAdmin(Long adminId, ClaimState status) throws Exception {
-        return adminClaimMap(claimRepository.findByAdminAndStatus(adminId, status));
+    public List<ClaimItemAdminDTO> listAllClaimsByStatusForAdmin(AdminClaimsSearchDTO adminClaimsSearchDTO) throws Exception {
+        return adminClaimMap(claimRepository.findByAdminAndStatus(adminClaimsSearchDTO.adminId(), adminClaimsSearchDTO.claimState()));
     }
     @Override
     @Transactional
@@ -83,10 +85,10 @@ public class ClaimsServiceImpl implements ClaimsService {
 
     @Override
     @Transactional
-    public String assignClaimToAdmin(Long claimId, Long adminId) throws Exception{
-        Claim claim = getClaimFromOptional(claimRepository.findById(claimId));
-        Optional<Admin> adminOptional = adminRepository.findById(adminId);
-        if(adminOptional.isEmpty()) throw new Exception("No admin found for id: " + adminId);
+    public String assignClaimToAdmin(ClaimAssignmentDTO claimAssignmentDTO) throws Exception{
+        Claim claim = getClaimFromOptional(claimRepository.findById(claimAssignmentDTO.claimId()));
+        Optional<Admin> adminOptional = adminRepository.findById(claimAssignmentDTO.adminId());
+        if(adminOptional.isEmpty()) throw new Exception("No admin found for id: " + claimAssignmentDTO.adminId());
 
         claim.getClaimInfo().setAdmin(adminOptional.get());
         claimRepository.save(claim);
@@ -234,5 +236,20 @@ public class ClaimsServiceImpl implements ClaimsService {
                 claim.getClaimId()
                 ));
         return savedClaim.getClaimId();
+    }
+    @Override
+    @Transactional
+    public Long setClaimState(@NotNull ClaimStateDTO claimStateDTO) throws Exception {
+        Claim claim = getClaimFromOptional(claimRepository.findById(claimStateDTO.claimId()));
+        if(claim == null) throw new Exception("Claim not found");
+
+        claim.setClaimStatus(claimStateDTO.claimState());
+        eMailService.sendEmail(new EMailDTO(claim.getClaimInfo().getPatient().getEmail(),
+                "This JUAN from the DeepPills Team! Your claim: "+claim.getClaimId()+" has been set to "+claim.getClaimStatus()+"by an admin",
+                "Charge "+claim.getClaimStatus()+"!",
+                EMailType.CLAIM,
+                claim.getClaimId()
+        ));
+        return claimRepository.save(claim).getClaimId();
     }
 }

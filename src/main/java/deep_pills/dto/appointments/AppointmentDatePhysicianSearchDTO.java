@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 
-public record AppointmentDateSearchDTO(
-        @NotNull String patientPersonalId,
+public record AppointmentDatePhysicianSearchDTO(
+        @NotNull String physicianPersonalId,
         @NotNull Date date) {
 }

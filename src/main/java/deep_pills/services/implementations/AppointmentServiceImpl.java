@@ -316,9 +316,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public List<AppointmentGenericDTO> dateSpecificAppointmentsByPhysicianId(@NotNull String physicianPersonalID, @NotNull Date date) throws Exception {
-        Physician physician = getPhysicianFromOptional(physicianPersonalID);
-        List<PhysicianAppointmentSchedule> appointments = appointmentRepository.findAppointmentsForPhysicianOnDate(physician.getId(), date);
+    public List<AppointmentGenericDTO> dateSpecificAppointmentsByPhysicianId(AppointmentDatePhysicianSearchDTO appointmentDatePhysicianSearchDTO) throws Exception {
+        Physician physician = getPhysicianFromOptional(appointmentDatePhysicianSearchDTO.physicianPersonalId());
+        List<PhysicianAppointmentSchedule> appointments = appointmentRepository.findAppointmentsForPhysicianOnDate(physician.getId(), appointmentDatePhysicianSearchDTO.date());
         return mapAppointmentDTOS(appointments);
     }
 
@@ -386,9 +386,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientId(@NotNull AppointmentDateSearchDTO appointmentDateSearchDTO) throws Exception {
-        Patient patient = getPatientFromOptional(appointmentDateSearchDTO.patientPersonalId());
-        List<PhysicianAppointmentSchedule> appointments = appointmentRepository.findAppointmentsForPatientOnDate(patient.getId(), appointmentDateSearchDTO.date());
+    public List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientId(@NotNull AppointmentDatePatientSearchDTO appointmentDatePatientSearchDTO) throws Exception {
+        Patient patient = getPatientFromOptional(appointmentDatePatientSearchDTO.patientPersonalId());
+        List<PhysicianAppointmentSchedule> appointments = appointmentRepository.findAppointmentsForPatientOnDate(patient.getId(), appointmentDatePatientSearchDTO.date());
         return mapAppointmentDTOS(appointments);
     }
 }

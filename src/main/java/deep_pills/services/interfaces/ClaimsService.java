@@ -9,15 +9,14 @@ import java.util.List;
 
 public interface ClaimsService {
     //Admin
-    List<ClaimItemAdminDTO> listAllClaimsByStatusForAdmin(Long adminId, ClaimState status) throws Exception;
-
+    List<ClaimItemAdminDTO> listAllClaimsByStatusForAdmin(AdminClaimsSearchDTO adminClaimsSearchDTO) throws Exception;
     List<ClaimItemAdminDTO> listAllClaimsByStatus(ClaimState status) throws Exception;
-
     List<ClaimItemAdminDTO> listAllClaimsForAdmin(Long adminId) throws Exception;
     List<ClaimItemAdminDTO> listAllClaims() throws Exception;
-    String assignClaimToAdmin(Long claimId, Long adminId) throws Exception;
+    String assignClaimToAdmin(ClaimAssignmentDTO claimAssignmentDTO) throws Exception;
     ClaimItemAdminDTO searchClaimForAdmin(Long claimId) throws Exception;
     ClaimDetailedItemAdminDTO seeClaimDetailsForAdmin(Long claimId) throws Exception;
+    Long setClaimState(ClaimStateDTO claimStateDTO) throws Exception;
 
     //Patient
     List<ClaimItemPatientDTO> listAllClaimsByStatusForPatient(ClaimListingPatientDTO claimListingPatientDTO) throws Exception;

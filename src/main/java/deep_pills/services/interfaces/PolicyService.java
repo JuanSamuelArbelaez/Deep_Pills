@@ -1,6 +1,7 @@
 package deep_pills.services.interfaces;
 
 import deep_pills.dto.memberships.PolicyDetailsDTO;
+import deep_pills.dto.memberships.PolicyStateDTO;
 import deep_pills.model.enums.states.PolicyState;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ public interface PolicyService {
     Long newPolicy(@NotNull PolicyDetailsDTO policyDetailsDTO) throws Exception;
 
     @Transactional
-    PolicyState setPolicyState(@NotNull Long policyId, @NotNull PolicyState state) throws Exception;
+    PolicyState setPolicyState(@NotNull PolicyStateDTO policyStateDTO) throws Exception;
 
     @Transactional
     List<PolicyDetailsDTO> listAllPolicies() throws Exception;

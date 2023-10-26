@@ -2,7 +2,7 @@ package deep_pills.controllers;
 
 import deep_pills.dto.accounts.patient.InfoUpdatePatientDTO;
 import deep_pills.dto.accounts.physician.PhysicianSearchDTO;
-import deep_pills.dto.appointments.AppointmentDateSearchDTO;
+import deep_pills.dto.appointments.AppointmentDatePatientSearchDTO;
 import deep_pills.dto.appointments.AppointmentRescheduleDTO;
 import deep_pills.dto.appointments.AppointmentScheduleDTO;
 import deep_pills.dto.claims.admin.ClaimAnswerDTO;
@@ -38,13 +38,13 @@ public class PatientController {
         authenticationService.login(loginDTO);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Patient Logged in"));
     }
-    @PostMapping("/account/register")
+    @PutMapping("/account/register")
     public ResponseEntity<ResponseDTO<String>> patientRegistration(@Valid @RequestBody RegisterPatientDTO registerPatientDTO) throws Exception{
         registrationService.registerPatient(registerPatientDTO);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Patient registration completed"));
     }
 
-    @PutMapping("/account/info-update")
+    @PostMapping("/account/info-update")
     public ResponseEntity<ResponseDTO<String>> patientInfoUpdate(@Valid @RequestBody InfoUpdatePatientDTO infoUpdatePatientDTO) throws Exception{
         accountUpdateService.updatePatient(infoUpdatePatientDTO);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Patient info update completed"));
@@ -101,8 +101,8 @@ public class PatientController {
     }
 
     @GetMapping("/appointments/list-date")
-    public ResponseEntity<ResponseDTO<String>> dateSpecificAppointmentsByPatientId(@Valid @RequestBody AppointmentDateSearchDTO appointmentDateSearchDTO) throws Exception {
-        appointmentService.dateSpecificAppointmentsByPatientId(appointmentDateSearchDTO);
+    public ResponseEntity<ResponseDTO<String>> dateSpecificAppointmentsByPatientId(@Valid @RequestBody AppointmentDatePatientSearchDTO appointmentDatePatientSearchDTO) throws Exception {
+        appointmentService.dateSpecificAppointmentsByPatientId(appointmentDatePatientSearchDTO);
         return ResponseEntity.ok(new ResponseDTO<>(true, "Appointments loaded successfully"));
     }
 
