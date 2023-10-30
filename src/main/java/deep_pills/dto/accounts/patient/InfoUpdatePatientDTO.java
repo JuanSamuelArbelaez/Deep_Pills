@@ -5,6 +5,7 @@ import deep_pills.model.enums.lists.City;
 import deep_pills.model.enums.lists.EPS;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -16,7 +17,7 @@ public record InfoUpdatePatientDTO(
         String phone,
         @Email String email,
         City city,
-        String pictureURL,
+        MultipartFile pic,
         BloodType bloodType,
         EPS eps){
 }

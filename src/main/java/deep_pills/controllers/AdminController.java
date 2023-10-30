@@ -1,11 +1,10 @@
 package deep_pills.controllers;
 
+import deep_pills.dto.accounts.patient.PatientListingItemDTO;
 import deep_pills.dto.accounts.patient.PatientSearchDTO;
+import deep_pills.dto.accounts.physician.PhysicianListingItemAdminDTO;
 import deep_pills.dto.accounts.physician.PhysicianSearchDTO;
-import deep_pills.dto.claims.admin.AdminClaimsSearchDTO;
-import deep_pills.dto.claims.admin.ClaimAnswerDTO;
-import deep_pills.dto.claims.admin.ClaimAssignmentDTO;
-import deep_pills.dto.claims.admin.ClaimStateDTO;
+import deep_pills.dto.claims.admin.*;
 import deep_pills.dto.controllers.ResponseDTO;
 import deep_pills.dto.memberships.*;
 import deep_pills.dto.registrations.RegisterPhysicianDTO;
@@ -17,6 +16,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,75 +39,45 @@ public class AdminController {
         return ResponseEntity.ok(new ResponseDTO<>(false, "Physician registration completed"));
     }
     @GetMapping("/physician/search")
-    public ResponseEntity<ResponseDTO<String>> listPhysicians(@Valid @RequestBody PhysicianSearchDTO physicianSearchDTO) throws Exception{
-        userListingService.listPhysiciansForAdmin(physicianSearchDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Physicians loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<PhysicianListingItemAdminDTO>>> listPhysicians(@Valid @RequestBody PhysicianSearchDTO physicianSearchDTO) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, userListingService.listPhysiciansForAdmin(physicianSearchDTO)));
     }
-    @PostMapping("/physician/disable/{physicianId}")
-    public ResponseEntity<ResponseDTO<String>> disablePhysician(@PathVariable Long physicianId) throws Exception{
-        userManagementService.disablePhysician(physicianId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Physician disabled successfully"));
-    }
-    @PostMapping("/physician/enable/{physicianId}")
-    public ResponseEntity<ResponseDTO<String>> enablePhysician(@PathVariable Long physicianId) throws Exception{
-        userManagementService.enablePhysician(physicianId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Physician enabled successfully"));
-    }
-
 
     //Patient Management
     @GetMapping("/patient/search")
-    public ResponseEntity<ResponseDTO<String>> listPatients(@Valid @RequestBody PatientSearchDTO patientSearchDTO) throws Exception{
-        userListingService.listPatients(patientSearchDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Patients loaded successfully"));
-    }
-    @PostMapping("/patient/disable/{patientId}")
-    public ResponseEntity<ResponseDTO<String>> disablePatient(@PathVariable Long patientId) throws Exception{
-        userManagementService.disablePatient(patientId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Patient disabled successfully"));
-    }
-    @PostMapping("/patient/enable/{patientId}")
-    public ResponseEntity<ResponseDTO<String>> enablePatient(@PathVariable Long patientId) throws Exception{
-        userManagementService.enablePatient(patientId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Patient enabled successfully"));
+    public ResponseEntity<ResponseDTO<List<PatientListingItemDTO>>> listPatients(@Valid @RequestBody PatientSearchDTO patientSearchDTO) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, userListingService.listPatients(patientSearchDTO)));
     }
 
 
     //Claim Management
     @GetMapping("/claims/list-mine-by-status")
-    public ResponseEntity<ResponseDTO<String>> listAllClaimsByStatusForAdmin(@Valid @RequestBody AdminClaimsSearchDTO adminClaimsSearchDTO) throws Exception{
-        claimsService.listAllClaimsByStatusForAdmin(adminClaimsSearchDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claims loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<ClaimItemAdminDTO>>> listAllClaimsByStatusForAdmin(@Valid @RequestBody AdminClaimsSearchDTO adminClaimsSearchDTO) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.listAllClaimsByStatusForAdmin(adminClaimsSearchDTO)));
     }
     @GetMapping("/claims/list-all-by-status/{status}")
-    public ResponseEntity<ResponseDTO<String>> listAllClaimsByStatus(@PathVariable ClaimState status) throws Exception{
-        claimsService.listAllClaimsByStatus(status);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claims loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<ClaimItemAdminDTO>>> listAllClaimsByStatus(@PathVariable ClaimState status) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.listAllClaimsByStatus(status)));
     }
     @GetMapping("/claims/list-mine/{adminId}")
-    public ResponseEntity<ResponseDTO<String>> listAllClaimsForAdmin(@PathVariable Long adminId) throws Exception{
-        claimsService.listAllClaimsForAdmin(adminId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claims loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<ClaimItemAdminDTO>>> listAllClaimsForAdmin(@PathVariable Long adminId) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.listAllClaimsForAdmin(adminId)));
     }
     @GetMapping("/claims/list-all")
-    public ResponseEntity<ResponseDTO<String>> listAllClaims() throws Exception{
-        claimsService.listAllClaims();
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claims loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<ClaimItemAdminDTO>>> listAllClaims() throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.listAllClaims()));
     }
     @GetMapping("/claims/assign-claim-to-admin")
     public ResponseEntity<ResponseDTO<String>> assignClaimToAdmin(@Valid @RequestBody ClaimAssignmentDTO claimAssignmentDTO) throws Exception{
-        claimsService.assignClaimToAdmin(claimAssignmentDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claims loaded successfully"));
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.assignClaimToAdmin(claimAssignmentDTO)));
     }
     @GetMapping("/claims/search-by-id/{claimId}")
-    public ResponseEntity<ResponseDTO<String>> searchClaimForAdmin(@PathVariable Long claimId) throws Exception{
-        claimsService.searchClaimForAdmin(claimId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claims loaded successfully"));
+    public ResponseEntity<ResponseDTO<ClaimItemAdminDTO>> searchClaimForAdmin(@PathVariable Long claimId) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.searchClaimForAdmin(claimId)));
     }
     @GetMapping("/claims/see-details/{claimId}")
-    public ResponseEntity<ResponseDTO<String>> seeClaimDetailsForAdmin(@PathVariable Long claimId) throws Exception{
-        claimsService.seeClaimDetailsForAdmin(claimId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claims loaded successfully"));
+    public ResponseEntity<ResponseDTO<ClaimDetailedItemAdminDTO>> seeClaimDetailsForAdmin(@PathVariable Long claimId) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.seeClaimDetailsForAdmin(claimId)));
     }
     @PutMapping("/claims/new-message")
     public ResponseEntity<ResponseDTO<String>> newMessageToClaim(@Valid @RequestBody ClaimAnswerDTO claimAnswerDTO) throws Exception{
@@ -122,19 +93,16 @@ public class AdminController {
 
     //Membership Management
     @PutMapping("/memberships/charge-all")
-    public ResponseEntity<ResponseDTO<String>> chargeCurrentMonthToMemberships() throws Exception{
-        membershipService.chargeCurrentMonthToMemberships();
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Memberships charged successfully"));
+    public ResponseEntity<ResponseDTO<List<Long>>> chargeCurrentMonthToMemberships() throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, membershipService.chargeCurrentMonthToMemberships()));
     }
     @PostMapping("/memberships/set-arrears")
-    public ResponseEntity<ResponseDTO<String>> setArrearMemberships() throws Exception{
-        membershipService.setArrearMemberships();
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Arrearing memberships identified successfully"));
+    public ResponseEntity<ResponseDTO<List<Long>>> setArrearMemberships() throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, membershipService.setArrearMemberships()));
     }
     @PostMapping("/memberships/set-active")
-    public ResponseEntity<ResponseDTO<String>> setActiveMemberships() throws Exception{
-        membershipService.setActiveMemberships();
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Active memberships identified successfully"));
+    public ResponseEntity<ResponseDTO<List<Long>>> setActiveMemberships() throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, membershipService.setActiveMemberships()));
     }
     @PostMapping("/memberships/set-charge-state")
     public ResponseEntity<ResponseDTO<String>> setChargeState(@Valid @RequestBody ChargeStateUpdateDTO chargeStateUpdateDTO) throws Exception{
@@ -151,22 +119,18 @@ public class AdminController {
     //Policy Management
     @PutMapping("/policies/new-policy")
     public ResponseEntity<ResponseDTO<String>> newPolicy(@Valid @RequestBody PolicyDetailsDTO policyDetailsDTO) throws Exception{
-        policyService.newPolicy(policyDetailsDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Policy added successfully"));
+        return ResponseEntity.ok(new ResponseDTO<>(false, "Policy added successfully: "+policyService.newPolicy(policyDetailsDTO)));
     }
     @PostMapping("/policies/set-policy-state")
     public ResponseEntity<ResponseDTO<String>> setPolicyState(@Valid @RequestBody PolicyStateDTO policyStateDTO) throws Exception{
-        policyService.setPolicyState(policyStateDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Policy state updated successfully"));
+        return ResponseEntity.ok(new ResponseDTO<>(false, "Policy state updated successfully: "+policyService.setPolicyState(policyStateDTO)));
     }
     @GetMapping("/policies/list-all")
-    public ResponseEntity<ResponseDTO<String>> listAllPolicies() throws Exception{
-        policyService.listAllPolicies();
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Policies loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<PolicyDetailsDTO>>> listAllPolicies() throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, policyService.listAllPolicies()));
     }
     @GetMapping("/policies/search-by-id/{policyId}")
-    public ResponseEntity<ResponseDTO<String>> searchPolicyById(@PathVariable Long policyId) throws Exception{
-        policyService.searchPolicyById(policyId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Policy loaded successfully"));
+    public ResponseEntity<ResponseDTO<PolicyDetailsDTO>> searchPolicyById(@PathVariable Long policyId) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, policyService.searchPolicyById(policyId)));
     }
 }

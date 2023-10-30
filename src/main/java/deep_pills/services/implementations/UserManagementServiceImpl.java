@@ -19,29 +19,6 @@ import java.util.Optional;
 public class UserManagementServiceImpl implements UserManagementService {
     private final AccountRepository accountRepository;
     private final EMailService eMailService;
-    @Override
-    @Transactional
-    public String disablePhysician(Long physicianId) throws Exception {
-        return disableAccount(physicianId).getState().name();
-    }
-
-    @Override
-    @Transactional
-    public String enablePhysician(Long physicianId) throws Exception {
-        return enableAccount(physicianId).getState().name();
-    }
-
-    @Override
-    @Transactional
-    public String disablePatient(Long patientId) throws Exception {
-        return disableAccount(patientId).getState().name();
-    }
-
-    @Override
-    @Transactional
-    public String enablePatient(Long patientId) throws Exception {
-        return enableAccount(patientId).getState().name();
-    }
 
     private Account getAccountById(Long id) throws Exception {
         Optional<Account> optional = accountRepository.findById(id);
@@ -49,8 +26,9 @@ public class UserManagementServiceImpl implements UserManagementService {
         if(optional.isEmpty()) throw new Exception("No account was found with id: " + id);
         return optional.get();
     }
-    private Account enableAccount(Long id) throws Exception {
-        Account account = getAccountById(id);
+    @Override
+    public void enableUser(Long userId) throws Exception {
+        Account account = getAccountById(userId);
 
         if(account.getState().equals(AccountState.ACTIVE)) throw new Exception("Account already enabled");
 
@@ -61,11 +39,11 @@ public class UserManagementServiceImpl implements UserManagementService {
                 "Account enabled",
                 EMailType.ACCOUNT_STATE_UPDATED,
                 account.getId()));
-        return account;
     }
 
-    private Account disableAccount(Long id) throws Exception {
-        Account account = getAccountById(id);
+    @Override
+    public void disableUser(Long userId) throws Exception {
+        Account account = getAccountById(userId);
 
         if(account.getState().equals(AccountState.INACTIVE)) throw new Exception("Account already disabled");
 
@@ -77,6 +55,5 @@ public class UserManagementServiceImpl implements UserManagementService {
                 EMailType.ACCOUNT_STATE_UPDATED,
                 account.getId()
                 ));
-        return account;
     }
 }

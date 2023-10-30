@@ -11,28 +11,28 @@ public class UserManagementTest {
 
     @Test public void enablePatientTest(){
         try{
-            userManagementService.enablePatient(502L);
+            userManagementService.enableUser(502L);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     @Test public void disablePatientTest(){
         try{
-            userManagementService.disablePatient(502L);
+            userManagementService.disableUser(502L);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     @Test public void enablePhysicianTest(){
         try{
-            userManagementService.enablePhysician(52L);
+            userManagementService.enableUser(52L);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     @Test public void disablePhysicianTest(){
         try{
-            userManagementService.disablePhysician(52L);
+            userManagementService.disableUser(52L);
         } catch (Exception e) {
             e.printStackTrace();
         }

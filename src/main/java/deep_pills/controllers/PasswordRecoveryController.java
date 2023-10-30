@@ -16,7 +16,7 @@ public class PasswordRecoveryController {
     private final AccountUpdateService accountUpdateService;
 
     @PutMapping("/account/password-recovery/{email}")
-    public ResponseEntity<ResponseDTO<String>> patientPasswordRecovery(@PathVariable String email) throws Exception{
+    public ResponseEntity<ResponseDTO<String>> userPasswordRecovery(@PathVariable String email) throws Exception{
         accountUpdateService.newPasswordRecoveryRequest(email);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Password recovery request successful"));
     }

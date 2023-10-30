@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/deep_pills/api/enums")
 public class EnumsController {
     private final EnumsService enumsService;
     @GetMapping("/get/{enumName}")
-    public ResponseEntity<ResponseDTO<String>> getEnum(@PathVariable String enumName) throws Exception{
-        enumsService.getEnumValues(enumName);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Enum recovery successful"));
+    public ResponseEntity<ResponseDTO<List<String>>> getEnum(@PathVariable String enumName) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, enumsService.getEnumValues(enumName)));
     }
 }

@@ -1,11 +1,10 @@
 package deep_pills.services.interfaces;
 
-public interface UserManagementService {
-    String disablePhysician(Long physicianId) throws Exception;
-    String enablePhysician(Long physicianId) throws Exception;
-    String disablePatient(Long patientId) throws Exception;
-    String enablePatient(Long patientId) throws Exception;
+import jakarta.validation.constraints.NotNull;
 
+public interface UserManagementService {
+    void disableUser(@NotNull Long userId) throws Exception;
+    void enableUser(@NotNull Long userId) throws Exception;
 }
 
 

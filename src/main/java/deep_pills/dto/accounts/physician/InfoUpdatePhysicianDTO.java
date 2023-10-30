@@ -3,6 +3,7 @@ package deep_pills.dto.accounts.physician;
 import deep_pills.model.enums.lists.City;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
 public record InfoUpdatePhysicianDTO(
     @NotNull Long id,
@@ -11,5 +12,5 @@ public record InfoUpdatePhysicianDTO(
     String phone,
     @Email String email,
     City city,
-    String pictureURL){
+    MultipartFile pic){
 }

@@ -1,19 +1,21 @@
 package deep_pills.controllers;
 
 import deep_pills.dto.accounts.patient.InfoUpdatePatientDTO;
+import deep_pills.dto.accounts.physician.PhysicianListingItemPatientDTO;
 import deep_pills.dto.accounts.physician.PhysicianSearchDTO;
 import deep_pills.dto.appointments.*;
 import deep_pills.dto.claims.admin.ClaimAnswerDTO;
 import deep_pills.dto.claims.patient.*;
 import deep_pills.dto.controllers.ResponseDTO;
 import deep_pills.dto.memberships.*;
-import deep_pills.dto.registrations.RegisterPatientDTO;
 import deep_pills.services.interfaces.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -29,17 +31,11 @@ public class PatientController {
     private final UserManagementService userManagementService;
 
 
-    //Registration and Account Management
+    //Info update
     @PostMapping("/account/info-update")
     public ResponseEntity<ResponseDTO<String>> patientInfoUpdate(@Valid @RequestBody InfoUpdatePatientDTO infoUpdatePatientDTO) throws Exception{
         accountUpdateService.updatePatient(infoUpdatePatientDTO);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Patient info update completed"));
-    }
-
-    @DeleteMapping("/account/delete-account/{patientId}")
-    public ResponseEntity<ResponseDTO<String>> deletePatientAccount(@PathVariable Long patientId) throws Exception{
-        userManagementService.disablePatient(patientId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Patient account deleted"));
     }
 
 
@@ -63,33 +59,28 @@ public class PatientController {
     }
 
     @GetMapping ("/appointments/list-all/{patientPersonalId}")
-    public ResponseEntity<ResponseDTO<String>> allAppointmentsByPatientId(@PathVariable String patientPersonalId) throws Exception {
-        appointmentService.allAppointmentsByPatientId(patientPersonalId);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Appointments loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> allAppointmentsByPatientId(@PathVariable String patientPersonalId) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.allAppointmentsByPatientId(patientPersonalId)));
     }
 
     @GetMapping("/appointments/list-upcoming/{patientPersonalId}")
-    public ResponseEntity<ResponseDTO<String>> upcomingAppointmentsByPatientId(@PathVariable String patientPersonalId) throws Exception {
-        appointmentService.upcomingAppointmentsByPatientId(patientPersonalId);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Appointments loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> upcomingAppointmentsByPatientId(@PathVariable String patientPersonalId) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.upcomingAppointmentsByPatientId(patientPersonalId)));
     }
 
     @GetMapping("/appointments/list-past/{patientPersonalId}")
-    public ResponseEntity<ResponseDTO<String>> pastAppointmentsByPatientId(@PathVariable String patientPersonalId) throws Exception {
-        appointmentService.pastAppointmentsByPatientId(patientPersonalId);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Appointments loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> pastAppointmentsByPatientId(@PathVariable String patientPersonalId) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.pastAppointmentsByPatientId(patientPersonalId)));
     }
 
     @GetMapping("/appointments/list-date")
-    public ResponseEntity<ResponseDTO<String>> dateSpecificAppointmentsByPatientId(@Valid @RequestBody AppointmentDatePatientSearchDTO appointmentDatePatientSearchDTO) throws Exception {
-        appointmentService.dateSpecificAppointmentsByPatientId(appointmentDatePatientSearchDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Appointments loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> dateSpecificAppointmentsByPatientId(@Valid @RequestBody AppointmentDatePatientSearchDTO appointmentDatePatientSearchDTO) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.dateSpecificAppointmentsByPatientId(appointmentDatePatientSearchDTO)));
     }
 
     @GetMapping("/appointments/list-physicians")
-    public ResponseEntity<ResponseDTO<String>> listPhysicians(@Valid @RequestBody PhysicianSearchDTO physicianSearchDTO) throws Exception {
-        userListingService.listPhysiciansForPatient(physicianSearchDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Physicians loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<PhysicianListingItemPatientDTO>>> listPhysicians(@Valid @RequestBody PhysicianSearchDTO physicianSearchDTO) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(true, userListingService.listPhysiciansForPatient(physicianSearchDTO)));
     }
 
 
@@ -107,27 +98,23 @@ public class PatientController {
     }
 
     @GetMapping("/claims/list-by-status")
-    public ResponseEntity<ResponseDTO<String>> listAllSolvedClaims(@Valid @RequestBody ClaimListingPatientDTO claimListingPatientDTO) throws Exception {
-        claimsService.listAllClaimsByStatusForPatient(claimListingPatientDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claims listed successfully"));
+    public ResponseEntity<ResponseDTO<List<ClaimItemPatientDTO>>> listAllSolvedClaims(@Valid @RequestBody ClaimListingPatientDTO claimListingPatientDTO) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.listAllClaimsByStatusForPatient(claimListingPatientDTO)));
     }
 
     @GetMapping("/claims/list-all/{patientPersonalId}")
-    public ResponseEntity<ResponseDTO<String>> listAllClaims(@PathVariable String patientPersonalId) throws Exception {
-        claimsService.listAllClaimsForPatient(patientPersonalId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claims listed successfully"));
+    public ResponseEntity<ResponseDTO<List<ClaimItemPatientDTO>>> listAllClaims(@PathVariable String patientPersonalId) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.listAllClaimsForPatient(patientPersonalId)));
     }
 
     @GetMapping("/claims/claim-search")
-    public ResponseEntity<ResponseDTO<String>> searchClaim(@Valid @RequestBody ClaimSearchDTO claimSearchDTO) throws Exception {
-        claimsService.searchClaimForPatient(claimSearchDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claim search completed successfully"));
+    public ResponseEntity<ResponseDTO<ClaimItemPatientDTO>> searchClaim(@Valid @RequestBody ClaimSearchDTO claimSearchDTO) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.searchClaimForPatient(claimSearchDTO)));
     }
 
     @GetMapping("/claims/claim-details")
-    public ResponseEntity<ResponseDTO<String>> seeClaimDetails(@Valid @RequestBody ClaimSearchDTO claimSearchDTO) throws Exception {
-        claimsService.seeClaimDetailsForPatient(claimSearchDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Claim details loaded successfully"));
+    public ResponseEntity<ResponseDTO<ClaimDetailedItemPatientDTO>> seeClaimDetails(@Valid @RequestBody ClaimSearchDTO claimSearchDTO) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.seeClaimDetailsForPatient(claimSearchDTO)));
     }
 
     //Membership
@@ -161,15 +148,13 @@ public class PatientController {
     }
 
     @PostMapping("/membership/view-charges")
-    public ResponseEntity<ResponseDTO<String>> getChargesFromMembership(ChargeListDTO chargeListDTO) throws Exception{
-        membershipService.getChargesFromMembership(chargeListDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Charges loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<ChargeDTO>>> getChargesFromMembership(ChargeListDTO chargeListDTO) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, membershipService.getChargesFromMembership(chargeListDTO)));
     }
 
     @PostMapping("/membership/view-payments")
-    public ResponseEntity<ResponseDTO<String>> getPaymentsFromCharge(PaymentListDTO paymentListDTO) throws Exception{
-        membershipService.getPaymentsFromCharge(paymentListDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Payments loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<PaymentDTO>>> getPaymentsFromCharge(PaymentListDTO paymentListDTO) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, membershipService.getPaymentsFromCharge(paymentListDTO)));
     }
 
 }

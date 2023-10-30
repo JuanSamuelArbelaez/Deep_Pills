@@ -18,13 +18,16 @@ import deep_pills.repositories.accounts.users.PhysicianRepository;
 import deep_pills.repositories.accounts.users.UserRepository;
 import deep_pills.services.interfaces.AccountUpdateService;
 import deep_pills.services.interfaces.EMailService;
+import deep_pills.services.interfaces.PicturesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -36,6 +39,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
     private final PasswordRecoveryRequestRepository passwordRecoveryRequestRepository;
     private final UserRepository userRepository;
     private final EMailService emailService;
+    private final PicturesService picturesService;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     @Override
     @Transactional
@@ -66,12 +70,16 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
         if(infoUpdatePhysicianDTO.name()!=null) physician.setName(infoUpdatePhysicianDTO.name());
         if(infoUpdatePhysicianDTO.lastName()!=null) physician.setLastName(infoUpdatePhysicianDTO.lastName());
         if(infoUpdatePhysicianDTO.phone()!=null) physician.setPhone(infoUpdatePhysicianDTO.phone());
-        //if(infoUpdatePhysicianDTO.pictureURL()!=null) physician.setPictureUrl(loadImg(infoUpdatePhysicianDTO.pictureURL()));
+        if(infoUpdatePhysicianDTO.pic()!=null) physician.setPictureUrl(loadPic(infoUpdatePhysicianDTO.pic()));
 
         // Save the updated physician information
         physicianRepository.save(physician);
 
         return "Physician info updates successfully";
+    }
+
+    private String loadPic(MultipartFile file) throws Exception {
+        return picturesService.subirImagen(file).get("url").toString();
     }
 
     @Override
@@ -106,7 +114,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
             patient.setEmail(infoUpdatePatientDTO.email());
         }
         if (infoUpdatePatientDTO.city() != null) patient.setCity(infoUpdatePatientDTO.city());
-        if (infoUpdatePatientDTO.pictureURL() != null) patient.setPictureUrl(infoUpdatePatientDTO.pictureURL());
+        if (infoUpdatePatientDTO.pic()!= null) patient.setPictureUrl(loadPic(infoUpdatePatientDTO.pic()));
         if (infoUpdatePatientDTO.bloodType() != null) patient.setBloodType(infoUpdatePatientDTO.bloodType());
         if (infoUpdatePatientDTO.eps() != null) patient.setEps(infoUpdatePatientDTO.eps());
         // Save the updated patient information

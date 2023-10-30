@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/deep_pills/api/physician")
@@ -18,27 +20,15 @@ import org.springframework.web.bind.annotation.*;
 public class PhysicianController {
     private final AccountUpdateService accountUpdateService;
     private final AppointmentService appointmentService;
-    private final UserManagementService userManagementService;
 
 
-    //Registration and Account Management
+    //Info Update
     @PostMapping("/account/info-update")
     public ResponseEntity<ResponseDTO<String>> patientInfoUpdate(@Valid @RequestBody InfoUpdatePhysicianDTO infoUpdatePhysicianDTO) throws Exception{
         accountUpdateService.updatePhysician(infoUpdatePhysicianDTO);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Physician info update completed"));
     }
 
-    @DeleteMapping("/account/delete-account/{physicianId}")
-    public ResponseEntity<ResponseDTO<String>> deletePatientAccount(@PathVariable Long physicianId) throws Exception{
-        userManagementService.disablePhysician(physicianId);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Physician account deleted"));
-    }
-
-    @PutMapping("/account/password-recovery/{physicianEmail}")
-    public ResponseEntity<ResponseDTO<String>> patientPasswordRecovery(@PathVariable String physicianEmail) throws Exception{
-        accountUpdateService.newPasswordRecoveryRequest(physicianEmail);
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Physician password recovery request successful"));
-    }
 
     //Appointments
     @PutMapping("/schedule/free-day-request")
@@ -54,26 +44,22 @@ public class PhysicianController {
     }
 
     @GetMapping ("/appointments/list-all/{physicianPersonalId}")
-    public ResponseEntity<ResponseDTO<String>> allAppointmentsByPhysicianId(@PathVariable String physicianPersonalId) throws Exception {
-        appointmentService.allAppointmentsByPhysicianId(physicianPersonalId);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Appointments loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> allAppointmentsByPhysicianId(@PathVariable String physicianPersonalId) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.allAppointmentsByPhysicianId(physicianPersonalId)));
     }
 
     @GetMapping("/appointments/list-upcoming/{physicianPersonalId}")
-    public ResponseEntity<ResponseDTO<String>> upcomingAppointmentsByPhysicianId(@PathVariable String physicianPersonalId) throws Exception {
-        appointmentService.upcomingAppointmentsByPhysicianId(physicianPersonalId);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Appointments loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> upcomingAppointmentsByPhysicianId(@PathVariable String physicianPersonalId) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.upcomingAppointmentsByPhysicianId(physicianPersonalId)));
     }
 
     @GetMapping("/appointments/list-past/{physicianPersonalId}")
-    public ResponseEntity<ResponseDTO<String>> pastAppointmentsByPhysicianId(@PathVariable String physicianPersonalId) throws Exception {
-        appointmentService.pastAppointmentsByPhysicianId(physicianPersonalId);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Appointments loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> pastAppointmentsByPhysicianId(@PathVariable String physicianPersonalId) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.pastAppointmentsByPhysicianId(physicianPersonalId)));
     }
 
     @GetMapping("/appointments/list-date")
-    public ResponseEntity<ResponseDTO<String>> dateSpecificAppointmentsByPhysicianId(@Valid @RequestBody AppointmentDatePhysicianSearchDTO appointmentDatePhysicianSearchDTO) throws Exception {
-        appointmentService.dateSpecificAppointmentsByPhysicianId(appointmentDatePhysicianSearchDTO);
-        return ResponseEntity.ok(new ResponseDTO<>(true, "Appointments loaded successfully"));
+    public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> dateSpecificAppointmentsByPhysicianId(@Valid @RequestBody AppointmentDatePhysicianSearchDTO appointmentDatePhysicianSearchDTO) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.dateSpecificAppointmentsByPhysicianId(appointmentDatePhysicianSearchDTO)));
     }
 }
