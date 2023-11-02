@@ -64,7 +64,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 "This JUAN from the DeepPills Team! We are happy that you decided to join us. Go to your dashboard so we can start giving you the care you deserve.",
                 "Welcome to DeepPills",
                 EMailType.REGISTRATION,
-                registeredPhysician.getId()
+                registration.getRegisterId()
                 ));
 
         return registeredPhysician.getId();
@@ -175,7 +175,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 "This JUAN from the DeepPills Team! We are happy that you decided to join us. Go to your dashboard so we can start giving you the care you deserve.",
                 "Welcome to DeepPills",
                 EMailType.REGISTRATION,
-                registeredPatient.getId()
+                registration.getRegisterId()
         ));
         return registeredPatient.getId();
     }
