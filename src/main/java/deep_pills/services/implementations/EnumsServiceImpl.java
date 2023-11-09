@@ -71,6 +71,10 @@ public class EnumsServiceImpl implements EnumsService {
             case "ScheduleState" -> Arrays.stream(ScheduleState.values())
                     .map(Enum::name)
                     .collect(Collectors.toList());
+
+            case "ShiftState" -> Arrays.stream(ShiftState.values())
+                    .map(Enum::name)
+                    .collect(Collectors.toList());
             case "TreatmentState" -> Arrays.stream(TreatmentState.values())
                     .map(Enum::name)
                     .collect(Collectors.toList());
