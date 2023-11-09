@@ -8,6 +8,8 @@ import deep_pills.dto.claims.admin.*;
 import deep_pills.dto.controllers.ResponseDTO;
 import deep_pills.dto.memberships.*;
 import deep_pills.dto.registrations.RegisterPhysicianDTO;
+import deep_pills.dto.schedule.GenericCalendarDTO;
+import deep_pills.dto.schedule.SpecificCalendarDTO;
 import deep_pills.model.enums.states.ClaimState;
 import deep_pills.services.interfaces.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -29,7 +31,7 @@ public class AdminController {
     private final PolicyService policyService;
     private final RegistrationService registrationService;
     private final UserListingService userListingService;
-    private final UserManagementService userManagementService;
+    private final ScheduleService scheduleService;
 
 
     //Physician Management
@@ -132,5 +134,17 @@ public class AdminController {
     @GetMapping("/policies/search-by-id/{policyId}")
     public ResponseEntity<ResponseDTO<PolicyDetailsDTO>> searchPolicyById(@PathVariable Long policyId) throws Exception{
         return ResponseEntity.ok(new ResponseDTO<>(false, policyService.searchPolicyById(policyId)));
+    }
+
+    //Schedules
+    @PutMapping("/schedules/create-schedule-for-specific-shift-on-month")
+    public ResponseEntity<ResponseDTO<String>> createScheduleForSpecificShiftOnMonth(@RequestBody SpecificCalendarDTO calendarDTO) throws Exception{
+        scheduleService.createSchedulesForSpecificShiftOnMonth(calendarDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(false, "Success"));
+    }
+    @PutMapping("/schedules/create-schedule-for-all-shifts-on-month")
+    public ResponseEntity<ResponseDTO<String>> createScheduleForAllShiftsOnMonth(@RequestBody GenericCalendarDTO calendarDTO) throws Exception{
+        scheduleService.createSchedulesForAllShiftsOnMonth(calendarDTO);
+        return ResponseEntity.ok(new ResponseDTO<>(false, "Success"));
     }
 }

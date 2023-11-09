@@ -1,6 +1,7 @@
 package deep_pills.model.entities.schedule;
 
 import deep_pills.model.entities.accounts.users.physicians.Physician;
+import deep_pills.model.enums.states.ShiftState;
 import deep_pills.model.enums.types.ShiftType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,5 +44,9 @@ public class Shift {
 
     @OneToMany(mappedBy = "shift")
     private List<Physician> physicianList;
+
+    @Enumerated
+    @Column(name = "state")
+    private ShiftState state;
 
 }

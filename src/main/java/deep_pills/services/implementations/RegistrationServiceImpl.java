@@ -2,11 +2,11 @@ package deep_pills.services.implementations;
 
 import deep_pills.dto.emails.EMailDTO;
 import deep_pills.dto.registrations.*;
+import deep_pills.dto.schedule.SpecificCalendarDTO;
 import deep_pills.model.entities.accounts.Account;
 import deep_pills.model.entities.accounts.users.patients.*;
 import deep_pills.model.entities.accounts.users.physicians.*;
 import deep_pills.model.entities.schedule.*;
-import deep_pills.model.enums.states.ScheduleState;
 import deep_pills.model.enums.types.EMailType;
 import deep_pills.model.enums.types.ShiftType;
 import deep_pills.model.enums.lists.Specialization;
@@ -18,13 +18,13 @@ import deep_pills.repositories.schedules.*;
 import deep_pills.repositories.specializations.*;
 import deep_pills.services.interfaces.EMailService;
 import deep_pills.services.interfaces.RegistrationService;
+import deep_pills.services.interfaces.ScheduleService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -37,9 +37,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final PhysicianRepository physicianRepository;
     private final PhysicianRegistrationRepository physicianRegistrationRepository;
     private final PhysicianSpecializationRepository physicianSpecializationRepository;
-    private final ScheduleRepository schedulerRepository;
     private final ShiftRepository shiftRepository;
-
+    private final ScheduleService scheduleService;
     private final EMailService eMailService;
 
     @Override
@@ -70,7 +69,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         return registeredPhysician.getId();
     }
 
-    private void shiftSetUp(Physician physicianEntity, RegisterPhysicianDTO physicianForm) {
+    private void shiftSetUp(Physician physicianEntity, RegisterPhysicianDTO physicianForm) throws Exception {
         Long shiftId = shiftRepository.findShiftIdByStartTimeAndEndTimeAndDays(physicianForm.shift().startTime(), physicianForm.shift().endTime(), physicianForm.shift().days());
         Shift shift;
         if(shiftId == null){
@@ -80,41 +79,19 @@ public class RegistrationServiceImpl implements RegistrationService {
             newShift.setShiftType(ShiftType.CUSTOM_SHIFT);
             newShift.setDays(physicianForm.shift().days());
             shift = shiftRepository.save(newShift);
-            createInitialSchedulesForShif(shift);
+            createInitialSchedulesForShift(shift);
         } else shift = shiftRepository.getReferenceById(shiftId);
         physicianEntity.setShift(shift);
     }
-    private void createInitialSchedulesForShif(Shift shift) {
-        String[] dayTokens = shift.getDays().split(" ");
-
+    private void createInitialSchedulesForShift(Shift shift) throws Exception {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.add(Calendar.MONTH, 2); // Move to two months ahead
-        calendar.set(Calendar.DAY_OF_MONTH, 1); // Move to the first day of that month
-        calendar.add(Calendar.DATE, -1); // Move to the last day of the previous month
-
-        Date lastDayOfFollowingMonth = calendar.getTime();
-
-        // Create Schedule entities for each day from today to the last day of the following month
-        Date currentDate = new Date();
-        while (currentDate.before(lastDayOfFollowingMonth)) {
-
-            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-            String dayOfWeekString = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(currentDate);
-
-            if (Arrays.asList(dayTokens).contains(dayOfWeekString)) {
-                Schedule schedule = new Schedule();
-                schedule.setShift(shift);
-                schedule.setDate(currentDate);
-                schedule.setScheduleState(ScheduleState.ACTIVE);
-                schedulerRepository.save(schedule);
-            }
-
-            // Move to the next day
-            calendar.setTime(currentDate);
-            calendar.add(Calendar.DATE, 1);
-            currentDate = calendar.getTime();
-        }
+        int i=0;
+        do{
+            scheduleService.createSchedulesForSpecificShiftOnMonth(new SpecificCalendarDTO(shift.getShiftId(), calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR)));
+            calendar.add(Calendar.MONTH, 1);
+            i++;
+        } while (i<=2);
     }
 
     private List<PhysicianSpecialization> specializationSetUp(Physician physicianEntity, RegisterPhysicianDTO physicianForm) throws Exception {
