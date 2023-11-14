@@ -28,7 +28,6 @@ public class PatientController {
     private final ClaimsService claimsService;
     private final MembershipService membershipService;
     private final UserListingService userListingService;
-    private final UserManagementService userManagementService;
 
 
     //Info update

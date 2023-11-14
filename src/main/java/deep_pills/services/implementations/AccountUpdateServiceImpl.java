@@ -171,7 +171,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
 
         if(!prr.getUser().getEmail().equals(passwordRecoveryDTO.email())) throw new Exception("Email provided does not match the one on the password recovery request");
 
-        if(!encoder.matches(passwordRecoveryDTO.code(), prr.getCode()) )throw new Exception("Incorrect password");
+        if(!encoder.matches(passwordRecoveryDTO.code(), prr.getCode()) )throw new Exception("Incorrect code");
 
         User user = prr.getUser();
         user.setPassword(encrypt(passwordRecoveryDTO.password()));
