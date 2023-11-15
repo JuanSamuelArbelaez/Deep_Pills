@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "deep_pills")
 public class ProyectoApplication {
 
     public static void main(String[] args) {

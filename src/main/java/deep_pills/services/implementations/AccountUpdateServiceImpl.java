@@ -1,6 +1,7 @@
 package deep_pills.services.implementations;
 
 import deep_pills.dto.accounts.PasswordRecoveryDTO;
+import deep_pills.dto.accounts.patient.InfoLoadPatientDTO;
 import deep_pills.dto.accounts.patient.InfoUpdatePatientDTO;
 import deep_pills.dto.accounts.physician.InfoUpdatePhysicianDTO;
 import deep_pills.dto.emails.EMailDTO;
@@ -19,6 +20,7 @@ import deep_pills.repositories.accounts.users.UserRepository;
 import deep_pills.services.interfaces.AccountUpdateService;
 import deep_pills.services.interfaces.EMailService;
 import deep_pills.services.interfaces.PicturesService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
 import java.util.Date;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -125,7 +126,29 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
 
     @Override
     @Transactional
-    public Long newPasswordRecoveryRequest(String email) throws Exception {
+    public InfoLoadPatientDTO loadPatientInfo(@NotNull Long patientId) throws Exception {
+        Optional<Patient> optional = patientRepository.findById(patientId);
+
+        if (optional.isEmpty()) throw new Exception("Patient with id: " + patientId + " not found");
+        Patient patient = optional.get();
+
+        return new InfoLoadPatientDTO(
+                patientId,
+                patient.getName(),
+                patient.getLastName(),
+                patient.getDateOfBirth(),
+                patient.getPhone(),
+                patient.getEmail(),
+                patient.getCity(),
+                patient.getPictureUrl(),
+                patient.getBloodType(),
+                patient.getEps()
+        );
+    }
+
+    @Override
+    @Transactional
+    public String newPasswordRecoveryRequest(String email) throws Exception {
         Optional<User> optional = userRepository.findByEmail(email);
         if (optional.isEmpty()) throw new Exception("Patient with email: " + email + " not found");
 
@@ -139,17 +162,19 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
         prr.setExpirationDateTime(new Date(prr.getDateTime().getTime() + 900000));
 
         Long id = passwordRecoveryRequestRepository.save(prr).getPasswordRecoveryRequestId();
+
+        String url = "http://localhost:4200/pswd-recovery/?email="+prr.getUser().getEmail()+"&id="+id;
         emailService.sendEmail(new EMailDTO(
                 prr.getUser().getEmail(),
                 "This JUAN from the DeepPills Team! We received your password reset request."
                         +"\nUse this code: "+code+" to reset your password at "
-                        +"https://www.deeppills.com/pswdRecovery?prrId=" + id + "&code=" + code + "&email=" + prr.getUser().getEmail()
+                        +url
                         +"\nThe code will expire in 15 minutes.",
                 "Password reset",
                 EMailType.PSWD_RECOVERY,
                 id
         ));
-        return id;
+        return url;
     }
 
     @Override

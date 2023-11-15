@@ -1,5 +1,6 @@
 package deep_pills.controllers;
 
+import deep_pills.dto.accounts.patient.InfoLoadPatientDTO;
 import deep_pills.dto.accounts.patient.InfoUpdatePatientDTO;
 import deep_pills.dto.accounts.physician.PhysicianListingItemPatientDTO;
 import deep_pills.dto.accounts.physician.PhysicianSearchDTO;
@@ -35,6 +36,11 @@ public class PatientController {
     public ResponseEntity<ResponseDTO<String>> patientInfoUpdate(@Valid @RequestBody InfoUpdatePatientDTO infoUpdatePatientDTO) throws Exception{
         accountUpdateService.updatePatient(infoUpdatePatientDTO);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Patient info update completed"));
+    }
+
+    @GetMapping("/account/load-info/{patientId}")
+    public ResponseEntity<ResponseDTO<InfoLoadPatientDTO>> patientInfoUpdate(@PathVariable Long patientId) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, accountUpdateService.loadPatientInfo(patientId)));
     }
 
 

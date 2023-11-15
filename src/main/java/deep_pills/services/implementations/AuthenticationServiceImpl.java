@@ -8,9 +8,11 @@ import deep_pills.model.entities.accounts.users.physicians.Physician;
 import deep_pills.repositories.accounts.AccountRepository;
 import deep_pills.services.interfaces.AuthenticationService;
 import deep_pills.utils.JWTUtils;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,5 +54,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         map.put("name", name);
         map.put("id", account.getId());
         return jwtUtils.generarToken(account.getEmail(), map);
+    }
+
+    @Override
+    @Transactional
+    public Claims decode(String jwtToken) {
+        return jwtUtils.decodeToken(jwtToken);
     }
 }

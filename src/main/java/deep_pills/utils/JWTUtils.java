@@ -36,4 +36,12 @@ public class JWTUtils {
         return new SecretKeySpec(Base64.getDecoder().decode(claveSecreta),
                 SignatureAlgorithm.HS256.getJcaName());
     }
+
+    public Claims decodeToken(String jwtString) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(jwtString)
+                .getBody();
+    }
 }

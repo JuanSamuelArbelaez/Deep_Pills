@@ -16,11 +16,16 @@ public class PasswordRecoveryController {
 
     @PutMapping("/{email}")
     public ResponseEntity<ResponseDTO<String>> userPasswordRecovery(@PathVariable String email) throws Exception{
-        return ResponseEntity.ok(new ResponseDTO<>(false, "Password recovery request successful: "+accountUpdateService.newPasswordRecoveryRequest(email)));
+        return ResponseEntity.ok(new ResponseDTO<>(false, accountUpdateService.newPasswordRecoveryRequest(email)));
     }
 
     @PostMapping("/accept")
     public ResponseEntity<ResponseDTO<String>> userPasswordRecovery(@Valid @RequestBody PasswordRecoveryDTO passwordRecoveryDTO) throws Exception{
         return ResponseEntity.ok(new ResponseDTO<>(false, "Password recovery: "+ accountUpdateService.acceptPasswordRecoveryCode(passwordRecoveryDTO)));
+    }
+
+    @RequestMapping(value = "/{email}", method = RequestMethod.OPTIONS)
+    public ResponseEntity<?> handleOptions() {
+        return ResponseEntity.ok().build();
     }
 }
