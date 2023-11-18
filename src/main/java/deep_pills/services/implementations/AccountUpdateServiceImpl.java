@@ -8,8 +8,10 @@ import deep_pills.dto.emails.EMailDTO;
 import deep_pills.model.entities.accounts.Account;
 import deep_pills.model.entities.accounts.users.User;
 import deep_pills.model.entities.accounts.users.patients.Patient;
+import deep_pills.model.entities.accounts.users.patients.PatientAllergy;
 import deep_pills.model.entities.accounts.users.physicians.Physician;
 import deep_pills.model.entities.passwordRecovery.PasswordRecoveryRequest;
+import deep_pills.model.enums.lists.Allergy;
 import deep_pills.model.enums.states.PasswordRecoveryRequestState;
 import deep_pills.model.enums.types.EMailType;
 import deep_pills.repositories.PasswordRecoveryRequestRepository;
@@ -17,6 +19,7 @@ import deep_pills.repositories.accounts.AccountRepository;
 import deep_pills.repositories.accounts.users.PatientRepository;
 import deep_pills.repositories.accounts.users.PhysicianRepository;
 import deep_pills.repositories.accounts.users.UserRepository;
+import deep_pills.repositories.appointments.PatientAllergyRepository;
 import deep_pills.services.interfaces.AccountUpdateService;
 import deep_pills.services.interfaces.EMailService;
 import deep_pills.services.interfaces.PicturesService;
@@ -28,7 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,6 +42,7 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
     private final PhysicianRepository physicianRepository;
     private final AccountRepository accountRepository;
     private final PatientRepository patientRepository;
+    private final PatientAllergyRepository patientAllergyRepository;
     private final PasswordRecoveryRequestRepository passwordRecoveryRequestRepository;
     private final UserRepository userRepository;
     private final EMailService emailService;
@@ -97,27 +103,42 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
         // Check if the email is already in use by another user
         Optional<Account> optional2 = accountRepository.findByEmail(infoUpdatePatientDTO.email());
         if (optional2.isPresent()){
-            if(optional2.get().getId().equals(infoUpdatePatientDTO.id())) {
+            if(!optional2.get().getId().equals(infoUpdatePatientDTO.id())) {
                 throw new Exception("Cannot update patient's email to: " + infoUpdatePatientDTO.email() + " because it is already in use by someone");
             }
         }
 
         // Update patient information based on the DTO
         if (infoUpdatePatientDTO.name() != null) patient.setName(infoUpdatePatientDTO.name());
-        if (infoUpdatePatientDTO.lastName() != null)patient.setLastName(infoUpdatePatientDTO.lastName());
+        if (infoUpdatePatientDTO.lastName() != null) patient.setLastName(infoUpdatePatientDTO.lastName());
         if (infoUpdatePatientDTO.dateOfBirth() != null) patient.setDateOfBirth(infoUpdatePatientDTO.dateOfBirth());
         if (infoUpdatePatientDTO.phone() != null) patient.setPhone(infoUpdatePatientDTO.phone());
-        if (infoUpdatePatientDTO.email() != null){
-            Optional<Account> op = accountRepository.findByEmail(infoUpdatePatientDTO.email());
-            if(op.isPresent()){
-                if(!op.get().getId().equals(patient.getId())) throw new Exception("Email already in use by another account");
-            }
-            patient.setEmail(infoUpdatePatientDTO.email());
-        }
+        if (infoUpdatePatientDTO.email() != null) patient.setEmail(infoUpdatePatientDTO.email());
         if (infoUpdatePatientDTO.city() != null) patient.setCity(infoUpdatePatientDTO.city());
-        if (infoUpdatePatientDTO.pic()!= null) patient.setPictureUrl(loadPic(infoUpdatePatientDTO.pic()));
+        if (infoUpdatePatientDTO.pic()!= null) //patient.setPictureUrl(loadPic(infoUpdatePatientDTO.pic()));
         if (infoUpdatePatientDTO.bloodType() != null) patient.setBloodType(infoUpdatePatientDTO.bloodType());
         if (infoUpdatePatientDTO.eps() != null) patient.setEps(infoUpdatePatientDTO.eps());
+        if (infoUpdatePatientDTO.allergies() != null) {
+            List<Allergy> patientAllergies = new ArrayList<>();
+
+            //To remove
+            for(PatientAllergy allergy: patient.getPatientAllergies()) {
+                if(!infoUpdatePatientDTO.allergies().contains(allergy.getAllergy())){
+                    patientAllergyRepository.delete(allergy);
+                }
+                patientAllergies.add(allergy.getAllergy());
+            }
+
+            //To add
+            for (Allergy allergy : infoUpdatePatientDTO.allergies()) {
+                if(!patientAllergies.contains(allergy)){
+                    PatientAllergy newAllergyEntity = new PatientAllergy();
+                    newAllergyEntity.setPatient(patient);
+                    newAllergyEntity.setAllergy(allergy);
+                    patientAllergyRepository.save(newAllergyEntity);
+                }
+            }
+        }
         // Save the updated patient information
         patientRepository.save(patient);
 
@@ -132,8 +153,14 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
         if (optional.isEmpty()) throw new Exception("Patient with id: " + patientId + " not found");
         Patient patient = optional.get();
 
+        List<Allergy> allergies = new ArrayList<>();
+        for(PatientAllergy allergy: patient.getPatientAllergies()){
+            allergies.add(allergy.getAllergy());
+        }
+
         return new InfoLoadPatientDTO(
                 patientId,
+                patient.getPersonalId(),
                 patient.getName(),
                 patient.getLastName(),
                 patient.getDateOfBirth(),
@@ -142,7 +169,8 @@ public class AccountUpdateServiceImpl implements AccountUpdateService {
                 patient.getCity(),
                 patient.getPictureUrl(),
                 patient.getBloodType(),
-                patient.getEps()
+                patient.getEps(),
+                allergies
         );
     }
 

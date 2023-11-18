@@ -9,6 +9,7 @@ import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.appointments.Appointment;
 import deep_pills.model.entities.claims.*;
 import deep_pills.model.entities.memberships.Membership;
+import deep_pills.model.enums.states.AppointmentState;
 import deep_pills.model.enums.states.ClaimState;
 import deep_pills.model.enums.types.EMailType;
 import deep_pills.model.enums.types.MessageType;
@@ -188,6 +189,20 @@ public class ClaimsServiceImpl implements ClaimsService {
     public ClaimDetailedItemPatientDTO seeClaimDetailsForPatient(ClaimSearchDTO claimSearchDTO) throws Exception {
         Claim claim = getClaimFromOptional(claimRepository.findByIdAndPatientPersonalId(claimSearchDTO.claimId(), claimSearchDTO.patientPersonalId()));
         if(claim == null ) throw new Exception("No claim found for Id: "+claimSearchDTO.claimId()+" for Patient: "+claimSearchDTO.patientPersonalId());
+
+        List<ClaimMessageDTO> messages = new ArrayList<>();
+
+        for(Message m : claim.getMessages()){
+            messages.add(new ClaimMessageDTO(
+                    claim.getClaimId(),
+                    m.getMessage(),
+                    m.getDate(),
+                    m.getSender().getId(),
+                    m.getRecipient().getId(),
+                    m.getMessageType()
+            ));
+        }
+
         return new ClaimDetailedItemPatientDTO(
                 claim.getClaimId(),
                 claim.getClaimInfo().getPatient().getPersonalId(),
@@ -195,7 +210,8 @@ public class ClaimsServiceImpl implements ClaimsService {
                 claim.getClaimDate(),
                 claim.getClaimType(),
                 claim.getDetails(),
-                claim.getClaimStatus()
+                claim.getClaimStatus(),
+                messages
         );
     }
 
@@ -208,12 +224,16 @@ public class ClaimsServiceImpl implements ClaimsService {
 
         Appointment appointment = appointmentOptional.get();
 
+        if(!appointment.getAppointmentId().equals(AppointmentState.COMPLETED)) throw new Exception("Cannot create a claim for an unserviced appointment");
+
         Optional<Patient> patientOptional = patientRepository.findByPersonalId(claimRegisterDTO.patientPersonalId());
         if(patientOptional.isEmpty())throw new Exception("No patient found for personalId: "+claimRegisterDTO.patientPersonalId());
 
         Patient patient = patientOptional.get();
-
-        if(claimRepository.countClaimsByStateAndPatientPersonalId(patient.getPersonalId(), ClaimState.ACTIVE)>3) throw new Exception("Cannot create new claims for appointment: " + claimRegisterDTO+" because there are already 3 active claims");
+        for(ClaimInfo cl: appointment.getClaimInfoList()){
+            if(cl.getClaim().getClaimStatus().equals(ClaimState.ACTIVE)) throw new Exception("Cannot create new claim for appointment: " + claimRegisterDTO.appointmentId()+ " because there is already an ACTIVE claim for it");
+        }
+        if(claimRepository.countClaimsByStateAndPatientPersonalId(patient.getPersonalId(), ClaimState.ACTIVE)>3) throw new Exception("Cannot create new claims because there are already 3 active claims");
 
         Claim claim = new Claim();
         claim.setClaimStatus(ClaimState.ACTIVE);

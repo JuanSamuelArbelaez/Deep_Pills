@@ -27,8 +27,8 @@ public class ProyectoApplication {
 
         @Override
         public void onApplicationEvent(ContextRefreshedEvent event) {
-            sendEmail("Deep-Pills Running", "Hello there! DeepPills is now up and running!",
-                    "juane.astaizaf@uqvirtual.edu.co", "no_reply@deep.pills.com");
+            //sendEmail("Deep-Pills Running", "Hello there! DeepPills is now up and running!",
+            //        "juane.astaizaf@uqvirtual.edu.co", "no_reply@deep.pills.com");
             sendEmail("Deep-Pills Running", "Hello there! DeepPills is now up and running!",
                     "deep.pills.org@gmail.com", "no_reply@deep.pills.com");
         }
@@ -49,8 +49,8 @@ public class ProyectoApplication {
 
         @Override
         public void onApplicationEvent(ContextClosedEvent event) {
-            sendEmail("Deep-Pills Down", "DeepPills is down!.",
-                    "juane.astaizaf@uqvirtual.edu.co", "no_reply@deep.pills.com");
+            //sendEmail("Deep-Pills Down", "DeepPills is down!.",
+            //        "juane.astaizaf@uqvirtual.edu.co", "no_reply@deep.pills.com");
             sendEmail("Deep-Pills Down", "DeepPills is down!.",
                     "deep.pills.org@gmail.com", "no_reply@deep.pills.com");
         }

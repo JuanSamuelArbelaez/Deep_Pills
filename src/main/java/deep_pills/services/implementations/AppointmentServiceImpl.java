@@ -1,14 +1,18 @@
 package deep_pills.services.implementations;
 
+import deep_pills.dto.accounts.physician.PhysicianListingItemPatientDTO;
 import deep_pills.dto.appointments.*;
+import deep_pills.dto.claims.patient.ClaimItemPatientDTO;
 import deep_pills.dto.emails.EMailDTO;
 import deep_pills.dto.schedule.FreeDayRequestDTO;
 import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.accounts.users.physicians.Physician;
 import deep_pills.model.entities.appointments.Appointment;
 import deep_pills.model.entities.appointments.AppointmentSymptoms;
+import deep_pills.model.entities.claims.ClaimInfo;
 import deep_pills.model.entities.memberships.Membership;
 import deep_pills.model.entities.memberships.Policy;
+import deep_pills.model.entities.notifications.EMail;
 import deep_pills.model.entities.schedule.FreeDay;
 import deep_pills.model.entities.schedule.PhysicianAppointmentSchedule;
 import deep_pills.model.entities.schedule.Schedule;
@@ -126,6 +130,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Transactional
     public String cancellAppointment(Long appointmentId) throws Exception {
         Appointment appointment = getAppointmentFromOptional(appointmentId);
+        if(appointment.getAppointmentState().equals(AppointmentState.CANCELLED) || appointment.getAppointmentState().equals(AppointmentState.COMPLETED)) throw new Exception("Cannot cancel an already cancelled or completed appointment");
         appointment.setAppointmentState(AppointmentState.CANCELLED);
         appointmentRepository.save(appointment);
         eMailService.sendEmail(new EMailDTO(appointment.getPatient().getEmail(),
@@ -388,7 +393,66 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Transactional
     public List<AppointmentGenericDTO> dateSpecificAppointmentsByPatientId(@NotNull AppointmentDatePatientSearchDTO appointmentDatePatientSearchDTO) throws Exception {
         Patient patient = getPatientFromOptional(appointmentDatePatientSearchDTO.patientPersonalId());
+        System.out.println(appointmentDatePatientSearchDTO.date());
         List<PhysicianAppointmentSchedule> appointments = appointmentRepository.findAppointmentsForPatientOnDate(patient.getId(), appointmentDatePatientSearchDTO.date());
         return mapAppointmentDTOS(appointments);
+    }
+
+    @Override
+    public AppointmentDetailsDTO getAppointmentDetails(@NotNull Long appointmentId) throws Exception {
+        Appointment appointment = getAppointmentFromOptional(appointmentId);
+
+        List<ClaimItemPatientDTO> claims = new ArrayList<>();
+        for(ClaimInfo clms: appointment.getClaimInfoList()){
+            claims.add(new ClaimItemPatientDTO(
+                    clms.getClaim().getClaimId(),
+                    clms.getClaim().getClaimDate(),
+                    clms.getClaim().getClaimType(),
+                    clms.getClaim().getClaimStatus()
+            ));
+        }
+
+        List<AppointmentTreatmentPlanDTO> treatments = new ArrayList<>();
+        for(TreatmentPlan treatment: appointment.getTreatmentPlanList()){
+            treatments.add(new AppointmentTreatmentPlanDTO(
+                    treatment.getTreatment().getTreatment(),
+                    treatment.getDiagnosis()
+            ));
+        }
+
+        List<Long> emails = new ArrayList<>();
+        for(EMail email: appointment.getEmails()){
+            emails.add(email.getEmailId());
+        }
+
+        Physician physician = appointment.getPhysicianAppointmentSchedule().getPhysician();
+        PhysicianListingItemPatientDTO physicianInfo = new PhysicianListingItemPatientDTO(
+                physician.getId(),
+                physician.getName(),
+                physician.getLastName()
+        );
+
+        List<Symptom> symptoms = new ArrayList<>();
+        for(AppointmentSymptoms symps: appointment.getAppointmentSymptoms()){
+            symptoms.add(symps.getSymptom());
+        }
+
+        return new AppointmentDetailsDTO(
+                appointmentId,
+                appointment.getPatient().getPersonalId(),
+                appointment.getDate(),
+                appointment.getTime(),
+                appointment.getLocation(),
+                appointment.getDuration(),
+                appointment.getRequestTime(),
+                appointment.getDetailedReasons(),
+                appointment.getDoctorsNotes(),
+                appointment.getAppointmentState(),
+                claims,
+                treatments,
+                emails,
+                physicianInfo,
+                symptoms
+        );
     }
 }

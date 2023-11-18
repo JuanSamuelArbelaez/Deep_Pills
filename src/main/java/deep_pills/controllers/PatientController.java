@@ -45,7 +45,7 @@ public class PatientController {
 
 
     //Appointments
-    @PostMapping("/appointments/cancel-appointment/{appointmentId}")
+    @GetMapping("/appointments/cancel-appointment/{appointmentId}")
     public ResponseEntity<ResponseDTO<String>> cancellAppointment(@PathVariable  Long appointmentId) throws Exception{
         appointmentService.cancellAppointment(appointmentId);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Appointment cancelled"));
@@ -78,14 +78,19 @@ public class PatientController {
         return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.pastAppointmentsByPatientId(patientPersonalId)));
     }
 
-    @GetMapping("/appointments/list-date")
+    @PostMapping("/appointments/list-date")
     public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> dateSpecificAppointmentsByPatientId(@Valid @RequestBody AppointmentDatePatientSearchDTO appointmentDatePatientSearchDTO) throws Exception {
         return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.dateSpecificAppointmentsByPatientId(appointmentDatePatientSearchDTO)));
     }
 
-    @GetMapping("/appointments/list-physicians")
+    @PostMapping("/appointments/list-physicians")
     public ResponseEntity<ResponseDTO<List<PhysicianListingItemPatientDTO>>> listPhysicians(@Valid @RequestBody PhysicianSearchDTO physicianSearchDTO) throws Exception {
         return ResponseEntity.ok(new ResponseDTO<>(true, userListingService.listPhysiciansForPatient(physicianSearchDTO)));
+    }
+
+    @GetMapping("/appointments/details/{appointmentId}")
+    public ResponseEntity<ResponseDTO<AppointmentDetailsDTO>> getAppointmentDetails(@PathVariable Long appointmentId ) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.getAppointmentDetails(appointmentId)));
     }
 
 
@@ -102,7 +107,7 @@ public class PatientController {
         return ResponseEntity.ok(new ResponseDTO<>(false, "New message added to the claim"));
     }
 
-    @GetMapping("/claims/list-by-status")
+    @PostMapping("/claims/list-by-status")
     public ResponseEntity<ResponseDTO<List<ClaimItemPatientDTO>>> listAllSolvedClaims(@Valid @RequestBody ClaimListingPatientDTO claimListingPatientDTO) throws Exception {
         return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.listAllClaimsByStatusForPatient(claimListingPatientDTO)));
     }
@@ -112,18 +117,18 @@ public class PatientController {
         return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.listAllClaimsForPatient(patientPersonalId)));
     }
 
-    @GetMapping("/claims/claim-search")
+    @PostMapping("/claims/claim-search")
     public ResponseEntity<ResponseDTO<ClaimItemPatientDTO>> searchClaim(@Valid @RequestBody ClaimSearchDTO claimSearchDTO) throws Exception {
         return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.searchClaimForPatient(claimSearchDTO)));
     }
 
-    @GetMapping("/claims/claim-details")
+    @PostMapping("/claims/claim-details")
     public ResponseEntity<ResponseDTO<ClaimDetailedItemPatientDTO>> seeClaimDetails(@Valid @RequestBody ClaimSearchDTO claimSearchDTO) throws Exception {
         return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.seeClaimDetailsForPatient(claimSearchDTO)));
     }
 
     //Membership
-    @PostMapping("/membership/add-patient")
+    @PutMapping("/membership/add-patient")
     public ResponseEntity<ResponseDTO<String>> addPatientToMembership(@Valid @RequestBody MembershipPatientModificationDTO membershipPatientModificationDTO) throws Exception{
         membershipService.addPatientToMembership(membershipPatientModificationDTO);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Patient added successfully to the membership"));
@@ -141,17 +146,16 @@ public class PatientController {
         return ResponseEntity.ok(new ResponseDTO<>(false, "Membership acquired successfully"));
     }
 
-    @PostMapping("/membership/resign-membership/{patientPersonalId}")
+    @DeleteMapping("/membership/resign-membership/{patientPersonalId}")
     public ResponseEntity<ResponseDTO<String>> resignMembership(@PathVariable String patientPersonalId) throws Exception{
         membershipService.resignMembership(patientPersonalId);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Membership resigned"));
     }
-    @PostMapping("/membership/pay-charge")
+    @PutMapping("/membership/pay-charge")
     public ResponseEntity<ResponseDTO<String>> makePaymentToMembershipCharge(@Valid @RequestBody MembershipPaymentDTO membershipPaymentDTO) throws Exception{
         membershipService.makePaymentToMembershipCharge(membershipPaymentDTO);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Payment applied to charge successfully"));
     }
-
     @PostMapping("/membership/view-charges")
     public ResponseEntity<ResponseDTO<List<ChargeDTO>>> getChargesFromMembership(ChargeListDTO chargeListDTO) throws Exception{
         return ResponseEntity.ok(new ResponseDTO<>(false, membershipService.getChargesFromMembership(chargeListDTO)));

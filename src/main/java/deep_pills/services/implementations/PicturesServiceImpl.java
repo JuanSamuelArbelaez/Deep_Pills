@@ -18,12 +18,11 @@ import java.util.Map;
 public class PicturesServiceImpl implements PicturesService {
     private final Cloudinary cloudinary;
     public PicturesServiceImpl(){
-        Map<String, String> config = new HashMap<>();
-        config.put("cloud_name", "dqa9pp8om");
-        config.put("api_key", "766135483155282");
-        config.put("api_secret", "Hqb1CxZLD7tmp4embwjwklgHM1A");
-
-        cloudinary = new Cloudinary(config);
+        cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dqa9pp8om",
+                "api_key", "766135483155282",
+                "api_secret", "Hqb1CxZLD7tmp4embwjwklgHM1A",
+                "secure", true));
     }
 
     @Override

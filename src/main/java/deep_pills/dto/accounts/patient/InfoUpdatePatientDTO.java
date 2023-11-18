@@ -1,5 +1,6 @@
 package deep_pills.dto.accounts.patient;
 
+import deep_pills.model.enums.lists.Allergy;
 import deep_pills.model.enums.lists.BloodType;
 import deep_pills.model.enums.lists.City;
 import deep_pills.model.enums.lists.EPS;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 
 public record InfoUpdatePatientDTO(
         @NotNull Long id,
@@ -19,5 +21,6 @@ public record InfoUpdatePatientDTO(
         City city,
         MultipartFile pic,
         BloodType bloodType,
-        EPS eps){
+        EPS eps,
+        List<Allergy> allergies){
 }
