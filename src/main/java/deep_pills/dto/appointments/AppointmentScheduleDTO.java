@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 public record AppointmentScheduleDTO(
-        @NotNull String patientPersonalId,
-        @NotNull String physicianPersonalId,
+        @NotNull Long patientId,
+        @NotNull Long physicianId,
         @NotNull String reasons,
         @NotNull Long scheduleId,
         @NotNull Date time) {

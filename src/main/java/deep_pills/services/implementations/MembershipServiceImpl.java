@@ -365,15 +365,35 @@ public class MembershipServiceImpl implements MembershipService {
 
     @Override
     @Transactional
-    public Long getPatientsMembership(String patientPersonId) throws Exception{
-        Patient patient = getPatientFromOptional(patientRepository.findByPersonalId(patientPersonId));
-        if(patient == null) throw new Exception("Patient by PID: " + patientPersonId+" not found");
+    public MembershipDTO getPatientsMembership(Long patientId) throws Exception{
+        if(!patientRepository.existsById(patientId)) throw new Exception("Patient not found");
+        Patient patient = patientRepository.getReferenceById(patientId);
+        Membership mem = null;
+        if(patient.getOwnedMembership() != null) mem = patient.getOwnedMembership();
+        if(patient.getBeneficiaryMembership() != null) mem = patient.getBeneficiaryMembership();
 
-        if(patient.getOwnedMembership() != null) return patient.getOwnedMembership().getMembershipId();
-        if(patient.getBeneficiaryMembership() != null) return patient.getBeneficiaryMembership().getMembershipId();
+        List<BeneficiaryDTO> benef = new ArrayList<>();
+        for(Patient p: mem.getBeneficiaries()){
+            benef.add(new BeneficiaryDTO(p.getPersonalId(), (p.getName()+" "+p.getLastName())));
+        }
 
-        return null;
+        return new MembershipDTO(
+                mem.getMembershipId(),
+                new BeneficiaryDTO(mem.getOwner().getPersonalId(), mem.getOwner().getName()+" "+mem.getOwner().getLastName()),
+                mem.getDate(),
+                new PolicyDetailsDTO(
+                        mem.getPolicy().getPolicyId(),
+                        mem.getPolicy().getName(),
+                        mem.getPolicy().getDescription(),
+                        mem.getPolicy().getCost(),
+                        mem.getPolicy().getMaxAppointments(),
+                        mem.getPolicy().getMaxPatients(),
+                        mem.getPolicy().getState()),
+                benef,
+                mem.getState()
+        );
     }
+
 
     private Long newTransaction(MembershipPayment payment) throws Exception {
         //Implement payment APIS

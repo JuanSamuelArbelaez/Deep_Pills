@@ -30,7 +30,7 @@ public interface PhysicianRepository extends JpaRepository<Physician, Long> {
     @Query("select ph from Physician ph where ph.shift = :shift")
     List<Physician> findByShift(Shift shift);
 
-    @Query("SELECT DISTINCT p FROM Physician p JOIN p.physicianSpecialization s WHERE s = :specialization")
+    @Query("SELECT DISTINCT p FROM Physician p JOIN PhysicianSpecialization s ON p.id = s.physician.id WHERE s.specialization = :specialization")
     List<Physician> findBySpecialization(Specialization specialization);
 
     @Query("SELECT DISTINCT p FROM Physician p JOIN p.city c WHERE c = :city")

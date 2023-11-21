@@ -18,4 +18,10 @@ public interface PhysicianAppointmentScheduleRepository extends JpaRepository<Ph
             "AND pas.schedule.scheduleId = :scheduleId "+
             "AND pas.appointment.appointmentState IN :states")
     int countByPhysicianPersonalIdAndDateAndStatus(@Param("physicianPersonalId") String physicianPersonalId, @Param("scheduleId") Long scheduleId, @Param("states") List<AppointmentState> states);
+
+    @Query("SELECT pas FROM PhysicianAppointmentSchedule pas "+
+            "WHERE pas.physician.personalId = :physicianPersonalId "+
+            "AND pas.schedule.scheduleId = :scheduleId "+
+            "AND pas.appointment.appointmentState IN :states")
+    List<PhysicianAppointmentSchedule> findByPhysicianPersonalIdAndDateAndStatus(@Param("physicianPersonalId") String physicianPersonalId, @Param("scheduleId") Long scheduleId, @Param("states") List<AppointmentState> states);
 }

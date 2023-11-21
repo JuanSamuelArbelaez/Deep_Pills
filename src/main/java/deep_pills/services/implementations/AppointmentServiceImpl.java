@@ -5,6 +5,9 @@ import deep_pills.dto.appointments.*;
 import deep_pills.dto.claims.patient.ClaimItemPatientDTO;
 import deep_pills.dto.emails.EMailDTO;
 import deep_pills.dto.schedule.FreeDayRequestDTO;
+import deep_pills.dto.schedule.HourOfferDTO;
+import deep_pills.dto.schedule.HourSearchDTO;
+import deep_pills.dto.schedule.ScheduleOfferDTO;
 import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.accounts.users.physicians.Physician;
 import deep_pills.model.entities.appointments.Appointment;
@@ -21,6 +24,7 @@ import deep_pills.model.entities.symptomsTreatmentDiagnosis.TreatmentPlan;
 import deep_pills.model.enums.lists.Symptom;
 import deep_pills.model.enums.states.AppointmentState;
 import deep_pills.model.enums.states.FreeDayStatus;
+import deep_pills.model.enums.states.ScheduleState;
 import deep_pills.model.enums.states.TreatmentState;
 import deep_pills.model.enums.types.EMailType;
 import deep_pills.repositories.accounts.users.PatientRepository;
@@ -35,7 +39,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +60,67 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
+    public List<HourOfferDTO> getHoursForScheduling(@NotNull HourSearchDTO hourSearchDTO) throws Exception{
+        if(!physicianRepository.existsById(hourSearchDTO.physicianId())) throw new Exception("No such Physician Id found: " + hourSearchDTO.physicianId());
+        if(!scheduleRepository.existsById(hourSearchDTO.scheduleId())) throw new Exception("No such Schedule Id found: "+ hourSearchDTO.scheduleId());
+
+        Physician physician = physicianRepository.getReferenceById(hourSearchDTO.physicianId());
+        Schedule schedule = scheduleRepository.getReferenceById(hourSearchDTO.scheduleId());
+        List<AppointmentState> states = new ArrayList<>();
+        states.add(AppointmentState.SCHEDULED);
+        states.add(AppointmentState.RESCHEDULED);
+
+        List<PhysicianAppointmentSchedule> results = physicianAppointmentScheduleRepository.findByPhysicianPersonalIdAndDateAndStatus(physician.getPersonalId(), schedule.getScheduleId(), states);
+        List<HourOfferDTO> availableHours = new ArrayList<>();
+
+        LocalTime startTime = schedule.getShift().getStartTime().toLocalTime();
+        LocalTime endTime = schedule.getShift().getEndTime().toLocalTime();
+
+        // Iterar en pasos de media hora
+        while (!startTime.isAfter(endTime)) {
+            LocalTime endTimeOfSlot = startTime.plusMinutes(30);
+
+            // Verificar si hay alguna coincidencia en el rango actual
+            LocalTime finalStartTime = startTime;
+            if (results.stream().noneMatch(s -> isOverlap(finalStartTime, endTimeOfSlot, s))) {
+                availableHours.add(new HourOfferDTO(schedule.getScheduleId(), startTime, endTimeOfSlot));
+            }
+
+            startTime = endTimeOfSlot;
+        }
+
+        return availableHours;
+    }
+
+    // Método para verificar si hay una coincidencia de rango entre la cita existente y el rango actual
+    private boolean isOverlap(LocalTime startTime, LocalTime endTime, PhysicianAppointmentSchedule schedule) {
+        LocalTime scheduleStartTime = schedule.getSchedule().getShift().getStartTime().toLocalTime();
+        LocalTime scheduleEndTime = schedule.getSchedule().getShift().getEndTime().toLocalTime();
+
+        return !(endTime.isBefore(scheduleStartTime) || startTime.isAfter(scheduleEndTime));
+    }
+
+    @Override
+    @Transactional
+    public List<ScheduleOfferDTO> getSchedulesForScheduling(Long physicianId) throws Exception{
+        if(!physicianRepository.existsById(physicianId)) throw new Exception("No such physician Id found: " + physicianId);
+
+        List<Object[]> results = scheduleRepository.getNonFreeDayUpcomingSchedulesWithPhysicianIdAndScheduleState(physicianId, ScheduleState.ACTIVE);
+
+        List<ScheduleOfferDTO> schedules = results.stream()
+                .map(result -> new ScheduleOfferDTO(
+                        (Long) result[0],
+                        (Date) result[1],
+                        (Time) result[2],
+                        (Time) result[3]
+                ))
+                .collect(Collectors.toList());
+
+        return schedules;
+    }
+
+    @Override
+    @Transactional
     public Long scheduleFreeDayForPhysician(FreeDayRequestDTO freeDayRequestDTO) throws Exception {
         Physician physician = getPhysicianFromOptional(freeDayRequestDTO.physicianPersonalId());
         Schedule schedule = getScheduleFromOptional(freeDayRequestDTO.scheduleId());
@@ -65,7 +133,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         states.add(AppointmentState.SCHEDULED);
         states.add(AppointmentState.RESCHEDULED);
 
-        if(physicianAppointmentScheduleRepository.countByPhysicianPersonalIdAndDateAndStatus(physician.getPersonalId(), freeDayRequestDTO.scheduleId(), states)>0) throw new Exception("Appointments already scheduled for this day");
+        if(physicianAppointmentScheduleRepository.countByPhysicianPersonalIdAndDateAndStatus(physician.getPersonalId(), freeDayRequestDTO.scheduleId(), states)>0) throw new Exception("Appointments already scheduled for this day and time");
 
         FreeDay freeDay = new FreeDay();
         freeDay.setFreeDayStatus(FreeDayStatus.SCHEDULED);
@@ -195,8 +263,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public Long scheduleAppointment(AppointmentScheduleDTO appointmentScheduleDTO) throws Exception {
-        Physician physician = getPhysicianFromOptional(appointmentScheduleDTO.physicianPersonalId());
-        Patient patient = getPatientFromOptional(appointmentScheduleDTO.patientPersonalId());
+
+        Physician physician;
+        Patient patient;
+        if(!physicianRepository.existsById(appointmentScheduleDTO.physicianId())) throw new Exception("Physician id:"+appointmentScheduleDTO.physicianId()+" not found");
+        else physician = physicianRepository.getReferenceById(appointmentScheduleDTO.physicianId());
+        if(!patientRepository.existsById(appointmentScheduleDTO.patientId())) throw new Exception("Patient id:"+appointmentScheduleDTO.patientId()+" not found");
+        else patient = patientRepository.getReferenceById(appointmentScheduleDTO.patientId());
         Schedule schedule = getScheduleFromOptional(appointmentScheduleDTO.scheduleId());
 
         if(freeDayRepository.findByPhysicianPersonalIdAndScheduleAndStatus(physician.getPersonalId(), schedule.getScheduleId(), FreeDayStatus.SCHEDULED).isPresent()) throw new Exception("This is a scheduled free day for the physician");

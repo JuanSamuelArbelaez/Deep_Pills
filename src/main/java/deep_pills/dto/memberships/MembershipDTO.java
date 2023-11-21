@@ -9,13 +9,9 @@ import java.util.List;
 public record MembershipDTO(
         @NotNull Long membershipID,
 
-        @NotNull Long ownerPatientID,
-
-        @NotNull List<Long> beneficiariesID,
-
+        @NotNull BeneficiaryDTO owner,
         @NotNull Date date,
-
-        @NotNull Long policyID,
-
+        @NotNull PolicyDetailsDTO policy,
+        @NotNull List<BeneficiaryDTO> beneficiaries,
         @NotNull MembershipState state) {
 }

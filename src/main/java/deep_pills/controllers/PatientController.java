@@ -9,6 +9,9 @@ import deep_pills.dto.claims.admin.ClaimAnswerDTO;
 import deep_pills.dto.claims.patient.*;
 import deep_pills.dto.controllers.ResponseDTO;
 import deep_pills.dto.memberships.*;
+import deep_pills.dto.schedule.HourOfferDTO;
+import deep_pills.dto.schedule.HourSearchDTO;
+import deep_pills.dto.schedule.ScheduleOfferDTO;
 import deep_pills.services.interfaces.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -58,39 +61,49 @@ public class PatientController {
     }
 
     @PutMapping("/appointments/schedule-appointment")
-    public ResponseEntity<ResponseDTO<String>> scheduleAppointment(AppointmentScheduleDTO appointmentScheduleDTO) throws Exception{
+    public ResponseEntity<ResponseDTO<String>> scheduleAppointment(@RequestBody AppointmentScheduleDTO appointmentScheduleDTO) throws Exception{
         appointmentService.scheduleAppointment(appointmentScheduleDTO);
         return ResponseEntity.ok(new ResponseDTO<>(false, "Appointment scheduled"));
     }
 
     @GetMapping ("/appointments/list-all/{patientPersonalId}")
     public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> allAppointmentsByPatientId(@PathVariable String patientPersonalId) throws Exception {
-        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.allAppointmentsByPatientId(patientPersonalId)));
+        return ResponseEntity.ok(new ResponseDTO<>(false, appointmentService.allAppointmentsByPatientId(patientPersonalId)));
     }
 
     @GetMapping("/appointments/list-upcoming/{patientPersonalId}")
     public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> upcomingAppointmentsByPatientId(@PathVariable String patientPersonalId) throws Exception {
-        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.upcomingAppointmentsByPatientId(patientPersonalId)));
+        return ResponseEntity.ok(new ResponseDTO<>(false, appointmentService.upcomingAppointmentsByPatientId(patientPersonalId)));
     }
 
     @GetMapping("/appointments/list-past/{patientPersonalId}")
     public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> pastAppointmentsByPatientId(@PathVariable String patientPersonalId) throws Exception {
-        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.pastAppointmentsByPatientId(patientPersonalId)));
+        return ResponseEntity.ok(new ResponseDTO<>(false, appointmentService.pastAppointmentsByPatientId(patientPersonalId)));
     }
 
     @PostMapping("/appointments/list-date")
     public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> dateSpecificAppointmentsByPatientId(@Valid @RequestBody AppointmentDatePatientSearchDTO appointmentDatePatientSearchDTO) throws Exception {
-        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.dateSpecificAppointmentsByPatientId(appointmentDatePatientSearchDTO)));
+        return ResponseEntity.ok(new ResponseDTO<>(false, appointmentService.dateSpecificAppointmentsByPatientId(appointmentDatePatientSearchDTO)));
     }
 
     @PostMapping("/appointments/list-physicians")
     public ResponseEntity<ResponseDTO<List<PhysicianListingItemPatientDTO>>> listPhysicians(@Valid @RequestBody PhysicianSearchDTO physicianSearchDTO) throws Exception {
-        return ResponseEntity.ok(new ResponseDTO<>(true, userListingService.listPhysiciansForPatient(physicianSearchDTO)));
+        return ResponseEntity.ok(new ResponseDTO<>(false, userListingService.listPhysiciansForPatient(physicianSearchDTO)));
+    }
+
+    @GetMapping ("/appointments/get-physician-schedules/{physicianId}")
+    public ResponseEntity<ResponseDTO<List<ScheduleOfferDTO>>> allAppointmentsByPatientId(@PathVariable Long physicianId) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(false, appointmentService.getSchedulesForScheduling(physicianId)));
+    }
+
+    @PostMapping ("/appointments/get-hours")
+    public ResponseEntity<ResponseDTO<List<HourOfferDTO>>> allAppointmentsByPatientId(@Valid @RequestBody HourSearchDTO hourSearchDTO) throws Exception {
+        return ResponseEntity.ok(new ResponseDTO<>(false, appointmentService.getHoursForScheduling(hourSearchDTO)));
     }
 
     @GetMapping("/appointments/details/{appointmentId}")
     public ResponseEntity<ResponseDTO<AppointmentDetailsDTO>> getAppointmentDetails(@PathVariable Long appointmentId ) throws Exception {
-        return ResponseEntity.ok(new ResponseDTO<>(true, appointmentService.getAppointmentDetails(appointmentId)));
+        return ResponseEntity.ok(new ResponseDTO<>(false, appointmentService.getAppointmentDetails(appointmentId)));
     }
 
 
@@ -157,13 +170,19 @@ public class PatientController {
         return ResponseEntity.ok(new ResponseDTO<>(false, "Payment applied to charge successfully"));
     }
     @PostMapping("/membership/view-charges")
-    public ResponseEntity<ResponseDTO<List<ChargeDTO>>> getChargesFromMembership(ChargeListDTO chargeListDTO) throws Exception{
+    public ResponseEntity<ResponseDTO<List<ChargeDTO>>> getChargesFromMembership(@Valid @RequestBody ChargeListDTO chargeListDTO) throws Exception{
         return ResponseEntity.ok(new ResponseDTO<>(false, membershipService.getChargesFromMembership(chargeListDTO)));
     }
 
     @PostMapping("/membership/view-payments")
-    public ResponseEntity<ResponseDTO<List<PaymentDTO>>> getPaymentsFromCharge(PaymentListDTO paymentListDTO) throws Exception{
+    public ResponseEntity<ResponseDTO<List<PaymentDTO>>> getPaymentsFromCharge(@Valid @RequestBody PaymentListDTO paymentListDTO) throws Exception{
         return ResponseEntity.ok(new ResponseDTO<>(false, membershipService.getPaymentsFromCharge(paymentListDTO)));
     }
 
+    @GetMapping("/membership/details/{patientId}")
+    public ResponseEntity<ResponseDTO<MembershipDTO>> getPaymentsFromCharge(@PathVariable Long patientId) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(false, membershipService.getPatientsMembership(patientId)));
+    }
+
 }
+

@@ -2,6 +2,9 @@ package deep_pills.services.interfaces;
 
 import deep_pills.dto.appointments.*;
 import deep_pills.dto.schedule.FreeDayRequestDTO;
+import deep_pills.dto.schedule.HourOfferDTO;
+import deep_pills.dto.schedule.HourSearchDTO;
+import deep_pills.dto.schedule.ScheduleOfferDTO;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +12,12 @@ import java.util.Date;
 import java.util.List;
 
 public interface AppointmentService {
+    @Transactional
+    List<HourOfferDTO> getHoursForScheduling(@NotNull HourSearchDTO hourSearchDTO) throws Exception;
+
+    @Transactional
+    List<ScheduleOfferDTO> getSchedulesForScheduling(Long physicianId) throws Exception;
+
     @Transactional
     Long scheduleFreeDayForPhysician(FreeDayRequestDTO freeDayRequestDTO) throws Exception;
 

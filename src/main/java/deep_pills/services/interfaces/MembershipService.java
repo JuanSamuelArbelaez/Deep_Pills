@@ -45,5 +45,6 @@ public interface MembershipService {
     List<PaymentDTO> getPaymentsFromCharge(PaymentListDTO paymentListDTO) throws Exception;
 
     @Transactional
-    Long getPatientsMembership(String patientPersonId) throws Exception;
+    MembershipDTO getPatientsMembership(Long patientId) throws Exception;
+
 }
