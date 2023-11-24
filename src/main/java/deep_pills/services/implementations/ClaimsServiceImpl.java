@@ -3,18 +3,17 @@ package deep_pills.services.implementations;
 import deep_pills.dto.claims.admin.*;
 import deep_pills.dto.claims.patient.*;
 import deep_pills.dto.emails.EMailDTO;
-import deep_pills.dto.memberships.MembershipStateUpdateDTO;
 import deep_pills.model.entities.accounts.Admin;
 import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.appointments.Appointment;
 import deep_pills.model.entities.claims.*;
-import deep_pills.model.entities.memberships.Membership;
 import deep_pills.model.enums.states.AppointmentState;
 import deep_pills.model.enums.states.ClaimState;
 import deep_pills.model.enums.types.EMailType;
 import deep_pills.model.enums.types.MessageType;
 import deep_pills.repositories.accounts.AdminRepository;
 import deep_pills.repositories.accounts.users.PatientRepository;
+import deep_pills.repositories.accounts.users.PhysicianRepository;
 import deep_pills.repositories.appointments.AppointmentRepository;
 import deep_pills.repositories.claims.*;
 import deep_pills.services.interfaces.ClaimsService;
@@ -36,6 +35,7 @@ public class ClaimsServiceImpl implements ClaimsService {
     private final PatientRepository patientRepository;
     private final AdminRepository adminRepository;
     private final EMailServiceImpl eMailService;
+    private final PhysicianRepository physicianRepository;
 
     @Override
     @Transactional
@@ -271,5 +271,33 @@ public class ClaimsServiceImpl implements ClaimsService {
                 claim.getClaimId()
         ));
         return claimRepository.save(claim).getClaimId();
+    }
+
+    @Override
+    @Transactional
+    public Float getPercentageOfSolvedClaims()throws Exception{
+        if(claimRepository.count()==0){
+            throw new Exception("Cannot calculate percentage, for there are no claims");
+        }
+        return 100*(claimRepository.countOfClaimsWithState(ClaimState.SOLVED)/claimRepository.count());
+    }
+
+    @Override
+    @Transactional
+    public List<ClaimItemAdminDTO> getClaimsByPhysicianId(@NotNull Long physicianId) throws Exception{
+        if(!physicianRepository.existsById(physicianId)){
+            throw new Exception("Physician with id " + physicianId + " not found");
+        }
+        List<ClaimItemAdminDTO> claims = new ArrayList<>();
+        for(Claim c: claimRepository.findByPhysicianId(physicianId)){
+            claims.add(new ClaimItemAdminDTO(
+                    c.getClaimId(),
+                    c.getClaimDate(),
+                    c.getClaimType(),
+                    c.getClaimInfo().getClaimInfoId(),
+                    c.getClaimStatus()
+            ));
+        }
+        return claims;
     }
 }

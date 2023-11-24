@@ -3,6 +3,7 @@ package deep_pills.repositories.appointments;
 import deep_pills.model.entities.accounts.users.patients.Patient;
 import deep_pills.model.entities.appointments.Appointment;
 import deep_pills.model.entities.schedule.PhysicianAppointmentSchedule;
+import deep_pills.model.enums.lists.Specialization;
 import deep_pills.model.enums.states.AppointmentState;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -76,7 +77,21 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             "WHERE a.appointmentId = :appointmentId " +
             "AND a.patient.personalId = :patientPersonalId "+
             "ORDER BY a.date")
-    Optional<Appointment> findAppointmentsByIdAndPatientPersonalId(@Param("appointmentId") Long appointmentId, @Param("patientPersonalId") String patientPersonalId);
+    Optional<Appointment> findAppointmentsByIdAndPatientPersonalId(
+            @Param("appointmentId") Long appointmentId,
+            @Param("patientPersonalId") String patientPersonalId);
+
+    @Query("SELECT a FROM Appointment a "+
+            "JOIN PhysicianAppointmentSchedule pas "+
+            "ON a.appointmentId=pas.appointment.appointmentId "+
+            "JOIN Physician p ON pas.physician.id=p.id "+
+            "JOIN PhysicianSpecialization ps ON p.id=ps.physician.id "+
+            "WHERE a.patient.id = :patientId "+
+            "AND ps.specialization = :specialization "+
+            "ORDER BY a.date")
+    List<Appointment> findByPatientIdAndPhysicianSpecialization(
+            @Param("patientId") Long patientId,
+            @Param("specialization") Specialization specialization);
 
 }
 

@@ -58,4 +58,10 @@ public interface AppointmentService {
 
     @Transactional
     AppointmentDetailsDTO getAppointmentDetails(Long appointmentId) throws Exception;
+
+    @Transactional
+    List<AppointmentGenericDTO>
+    getAppointmentsByPatientIdAndSpecialization(
+            @NotNull AppointmentSpecializationSearchDTO appointmentSpecializationSearchDTO)
+            throws Exception;
 }

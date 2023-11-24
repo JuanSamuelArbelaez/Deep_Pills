@@ -4,6 +4,8 @@ import deep_pills.dto.accounts.patient.PatientListingItemDTO;
 import deep_pills.dto.accounts.patient.PatientSearchDTO;
 import deep_pills.dto.accounts.physician.PhysicianListingItemAdminDTO;
 import deep_pills.dto.accounts.physician.PhysicianSearchDTO;
+import deep_pills.dto.appointments.AppointmentGenericDTO;
+import deep_pills.dto.appointments.AppointmentSpecializationSearchDTO;
 import deep_pills.dto.claims.admin.*;
 import deep_pills.dto.controllers.ResponseDTO;
 import deep_pills.dto.memberships.*;
@@ -32,6 +34,7 @@ public class AdminController {
     private final RegistrationService registrationService;
     private final UserListingService userListingService;
     private final ScheduleService scheduleService;
+    private final AppointmentService appointmentService;
 
 
     //Physician Management
@@ -51,8 +54,28 @@ public class AdminController {
         return ResponseEntity.ok(new ResponseDTO<>(false, userListingService.listPatients(patientSearchDTO)));
     }
 
+    //Appointment
+    @PostMapping("/appointment/get-appointments-by-patient-and-specialization")
+    public ResponseEntity<ResponseDTO<List<AppointmentGenericDTO>>> appointmentsByPatientIdAndSpecialization(
+            @Valid @RequestBody AppointmentSpecializationSearchDTO appointmentSpecializationSearchDTO) throws Exception{
+        return ResponseEntity.ok(new ResponseDTO<>(
+                false,
+                appointmentService.getAppointmentsByPatientIdAndSpecialization(appointmentSpecializationSearchDTO)));
+    }
 
     //Claim Management
+    @GetMapping("/claims/solved-claims-percentage")
+    public ResponseEntity<ResponseDTO<Float>> solvedClaimsPercentage() throws Exception{
+        return ResponseEntity.ok(
+                new ResponseDTO<>(false, claimsService.getPercentageOfSolvedClaims()));
+    }
+    @GetMapping("/claims/list-by-physician/{physicianId}")
+    public ResponseEntity<ResponseDTO<List<ClaimItemAdminDTO>>>
+        listClaimsByPhysicianId(@PathVariable Long physicianId) throws Exception{
+            return ResponseEntity.ok(
+                new ResponseDTO<>(false, claimsService.getClaimsByPhysicianId(physicianId)));
+    }
+
     @GetMapping("/claims/list-mine-by-status")
     public ResponseEntity<ResponseDTO<List<ClaimItemAdminDTO>>> listAllClaimsByStatusForAdmin(@Valid @RequestBody AdminClaimsSearchDTO adminClaimsSearchDTO) throws Exception{
         return ResponseEntity.ok(new ResponseDTO<>(false, claimsService.listAllClaimsByStatusForAdmin(adminClaimsSearchDTO)));

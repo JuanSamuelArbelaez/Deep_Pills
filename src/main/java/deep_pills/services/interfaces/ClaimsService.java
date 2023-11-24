@@ -3,6 +3,7 @@ package deep_pills.services.interfaces;
 import deep_pills.dto.claims.admin.*;
 import deep_pills.dto.claims.patient.*;
 import deep_pills.model.enums.states.ClaimState;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -27,4 +28,10 @@ public interface ClaimsService {
 
     //Generic
     Long addMessageToClaim(ClaimAnswerDTO claimAnswerDto) throws Exception;
+
+    @Transactional
+    Float getPercentageOfSolvedClaims()throws Exception;
+
+    @Transactional
+    List<ClaimItemAdminDTO> getClaimsByPhysicianId(@NotNull Long physicianId) throws Exception;
 }

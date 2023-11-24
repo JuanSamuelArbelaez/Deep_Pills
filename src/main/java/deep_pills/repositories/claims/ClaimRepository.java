@@ -51,4 +51,13 @@ public interface ClaimRepository extends JpaRepository<Claim, Long> {
             "WHERE c.claimStatus = :state " +
             "  AND p.personalId = :personalId")
     int countClaimsByStateAndPatientPersonalId(@Param("personalId") String personalId, @Param("state") ClaimState state);
+
+    @Query("SELECT cl FROM Claim cl " +
+            "WHERE cl.claimInfo.appointment.physicianAppointmentSchedule.physician.id = :physicianId "+
+            "ORDER BY cl.claimDate")
+    List<Claim> findByPhysicianId( @Param("physicianId") Long physicianId);
+
+    @Query("SELECT (COUNT(cl)) AS percent FROM Claim cl " +
+            "WHERE cl.claimStatus= :state ")
+    Float countOfClaimsWithState( @Param("state") ClaimState state);
 }

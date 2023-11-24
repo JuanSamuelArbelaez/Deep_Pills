@@ -21,6 +21,7 @@ import deep_pills.model.entities.schedule.PhysicianAppointmentSchedule;
 import deep_pills.model.entities.schedule.Schedule;
 import deep_pills.model.entities.symptomsTreatmentDiagnosis.Treatment;
 import deep_pills.model.entities.symptomsTreatmentDiagnosis.TreatmentPlan;
+import deep_pills.model.enums.lists.Specialization;
 import deep_pills.model.enums.lists.Symptom;
 import deep_pills.model.enums.states.AppointmentState;
 import deep_pills.model.enums.states.FreeDayStatus;
@@ -472,6 +473,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    @Transactional
     public AppointmentDetailsDTO getAppointmentDetails(@NotNull Long appointmentId) throws Exception {
         Appointment appointment = getAppointmentFromOptional(appointmentId);
 
@@ -528,4 +530,35 @@ public class AppointmentServiceImpl implements AppointmentService {
                 symptoms
         );
     }
+
+    @Override
+    @Transactional
+    public List<AppointmentGenericDTO>
+    getAppointmentsByPatientIdAndSpecialization(
+            @NotNull AppointmentSpecializationSearchDTO appointmentSpecializationSearchDTO)
+            throws Exception{
+                Long patientId = appointmentSpecializationSearchDTO.patientId();
+                String specialization = appointmentSpecializationSearchDTO.specialization();
+                if(!patientRepository.existsById(patientId)){
+                    throw new Exception("Patient " + patientId+" not found");
+                }
+                Specialization s = null;
+                for(int i=0; i<Specialization.values().length ; i++){
+                    if(Specialization.values()[i].name().equals(specialization)) s=Specialization.values()[i];
+                }
+                if(s==null) throw new Exception("Specialization not found");
+                List<AppointmentGenericDTO> appointments = new ArrayList<>();
+                for(Appointment a: appointmentRepository.findByPatientIdAndPhysicianSpecialization(patientId, s)){
+                    appointments.add(new AppointmentGenericDTO(
+                            a.getAppointmentId(),
+                            a.getPatient().getPersonalId(),
+                            a.getDate(),
+                            a.getTime(),
+                            a.getDuration(),
+                            a.getAppointmentState()
+                    ));
+                }
+                return appointments;
+    }
+
 }
